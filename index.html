@@ -1369,7 +1369,7 @@ const msalReady = (async () => {
   }
   try {
     await msalTimeout(loadMsalScript(), 15000, "MSAL script load");
-    const cfg = { auth:{ clientId:CLIENT_ID, authority:`https://login.microsoftonline.com/${TENANT_ID}`, redirectUri:"https://static.ekx.cloud.sap" }, cache:{ cacheLocation:"sessionStorage", storeAuthStateInCookie:false } };
+    const cfg = { auth:{ clientId:CLIENT_ID, authority:`https://login.microsoftonline.com/${TENANT_ID}`, redirectUri:"https://macdc06.github.io/USD-MNL-Leave-Consumption/" }, cache:{ cacheLocation:"sessionStorage", storeAuthStateInCookie:false } };
     const inst = new msal.PublicClientApplication(cfg);
     if (typeof inst.initialize === "function") await msalTimeout(inst.initialize(), 10000, "MSAL initialize");
     try {
