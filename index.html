@@ -96,6 +96,30 @@
     .snav-sub-item:hover{background:rgba(255,255,255,.07);color:rgba(255,255,255,.9);}
     .snav-sub-item.active{background:rgba(27,144,255,.2);color:#89D1FF;border-left-color:#1B90FF;font-weight:600;}
     .snav-sub-icon{flex-shrink:0;opacity:.5;}
+    .snav-preview-header{display:flex;align-items:center;gap:9px;padding:9px 18px;font-size:13px;font-weight:500;
+      color:rgba(255,255,255,.7);cursor:pointer;border-left:3px solid transparent;transition:all .15s;user-select:none;}
+    .snav-preview-header:hover{background:rgba(255,255,255,.09);color:#FFF;}
+    .snav-preview-header.open{background:rgba(27,144,255,.18);color:#89D1FF;border-left-color:#1B90FF;font-weight:700;}
+    .snav-preview-body{padding:10px 14px 14px;border-left:3px solid rgba(27,144,255,.3);margin:0 0 6px 0;
+      background:rgba(0,0,0,.18);}
+    .snav-preview-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;
+      color:rgba(255,255,255,.4);margin-bottom:4px;display:block;}
+    .snav-preview-select{width:100%;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);
+      border-radius:4px;padding:5px 7px;font-size:12px;color:#FFF;font-family:var(--font);cursor:pointer;
+      margin-bottom:8px;outline:none;}
+    .snav-preview-select:focus{border-color:rgba(27,144,255,.8);}
+    .snav-preview-select option{background:#002A86;color:#FFF;}
+    .snav-btn-preview{width:100%;background:var(--sap-blue);color:#FFF;border:none;border-radius:4px;
+      padding:6px 0;font-size:12px;font-weight:600;font-family:var(--font);cursor:pointer;
+      transition:background .15s;margin-bottom:6px;}
+    .snav-btn-preview:hover{background:var(--sap-blue-dark);}
+    .snav-btn-exit{width:100%;background:transparent;color:rgba(255,255,255,.6);border:1px solid rgba(255,255,255,.22);
+      border-radius:4px;padding:5px 0;font-size:11px;font-weight:600;font-family:var(--font);cursor:pointer;
+      transition:all .15s;display:none;}
+    .snav-btn-exit:hover{background:rgba(255,255,255,.1);color:#FFF;}
+    .snav-preview-status{font-size:10px;color:#FCD09A;font-weight:600;margin-top:6px;display:none;
+      line-height:1.4;word-break:break-word;}
+    [data-theme="dark"] .snav-preview-select option{background:#1a1d24;}
     .snav-sub-item:hover .snav-sub-icon{opacity:.85;}
     .snav-sub-item.active .snav-sub-icon{opacity:1;}
     /* ── Collapsible side nav ── */
@@ -203,6 +227,21 @@
     .table-search:focus{outline:2px solid var(--sap-blue);border-color:transparent;}
     .table-count{font-size:12px;color:var(--text-muted);}
     .table-wrap{overflow-x:auto;max-height:900px;overflow-y:auto;}
+    #rlsTableWrap{overflow-x:visible;max-height:900px;overflow-y:auto;}
+    #rlsTableWrap table{table-layout:fixed;width:100%;font-size:11px;}
+    #rlsTableWrap thead th{padding:8px 5px;font-size:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    #rlsTableWrap tbody td{padding:7px 5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    #rlsTableWrap col.c-num   {width:30px;}
+    #rlsTableWrap col.c-name  {width:10%;}
+    #rlsTableWrap col.c-email {width:15%;}
+    #rlsTableWrap col.c-fn    {width:6%;}
+    #rlsTableWrap col.c-grp   {width:5%;}
+    #rlsTableWrap col.c-role  {width:5%;}
+    #rlsTableWrap col.c-tl    {width:9%;}
+    #rlsTableWrap col.c-num2  {width:4%;}
+    #rlsTableWrap col.c-site  {width:4%;}
+    #rlsTableWrap col.c-stat  {width:5%;}
+    #rlsTableWrap col.c-act   {width:7%;}
     table{width:100%;border-collapse:collapse;font-size:12.5px;}
     thead{position:sticky;top:0;z-index:10;}
     thead th{background:var(--sap-deep-navy);color:#FFF;padding:10px 14px;text-align:left;
@@ -382,6 +421,14 @@
     .empty-state p{font-size:14px;}
     #toastMsg{position:fixed;bottom:24px;right:24px;background:var(--sap-deep-navy);color:#FFF;padding:12px 20px;border-radius:6px;font-size:13px;z-index:9999;opacity:0;transition:opacity .3s;pointer-events:none;max-width:360px;}
     #toastMsg.show{opacity:1;}
+    .preview-mode-bar{display:none;align-items:center;gap:12px;padding:8px 24px;
+      background:#B45309;color:#FFF;font-size:12px;font-weight:600;position:sticky;top:56px;z-index:99;
+      border-bottom:2px solid #92400E;flex-wrap:wrap;}
+    .preview-mode-bar svg{flex-shrink:0;}
+    .btn-exit-preview{background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.4);color:#FFF;
+      border-radius:4px;padding:4px 14px;font-size:11px;font-weight:700;font-family:var(--font);
+      cursor:pointer;transition:background .15s;white-space:nowrap;}
+    .btn-exit-preview:hover{background:rgba(255,255,255,.35);}
     .footer{text-align:center;padding:20px;font-size:11px;color:var(--text-muted);border-top:1px solid var(--border);margin-top:16px;}
   </style>
 </head>
@@ -425,6 +472,13 @@ function _sapLogoSVG(gid, style='') {
     </div>
   </div>
 </header>
+
+<!-- ── Preview Mode Banner ── -->
+<div class="preview-mode-bar" id="previewModeBanner">
+  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+  <span id="previewModeLabel">Preview Mode Active</span>
+  <button class="btn-exit-preview" onclick="exitViewPreview()">Exit Preview</button>
+</div>
 
 <!-- ── Login Screen ── -->
 <div id="loginScreen">
@@ -507,6 +561,39 @@ function _sapLogoSVG(gid, style='') {
         <div class="snav-sub-item" id="snav-navsub-admin" style="display:none" onclick="navGoLeaveTab('admin')">
           <svg class="snav-sub-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
           <span class="snav-label">Admin</span>
+        </div>
+      </div>
+      <!-- View Preview — admin only -->
+      <div id="snav-preview-section" style="display:none">
+        <div class="snav-section-title">Admin Tools</div>
+        <div class="snav-item" id="snav-tools-access" onclick="navGoAdminSub('admin-access')" title="Access Management">
+          <svg class="snav-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          <span class="snav-label">Access Management</span>
+        </div>
+        <div class="snav-item" id="snav-tools-roster" style="display:none" onclick="navGoAdminSub('admin-roster')" title="Roster">
+          <svg class="snav-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          <span class="snav-label">Roster</span>
+        </div>
+        <div>
+          <div class="snav-preview-header" id="snavPreviewHeader" onclick="toggleSnavPreview()" title="View Preview">
+            <svg class="snav-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            <span class="snav-label">View Preview</span>
+          </div>
+          <div class="snav-preview-body" id="snavPreviewBody" style="display:none">
+            <span class="snav-preview-label">Select Role</span>
+            <select class="snav-preview-select" id="previewRole" onchange="populatePreviewNames()">
+              <option value="">— Role —</option>
+              <option value="agent">Agent</option>
+              <option value="tl">Team Lead</option>
+            </select>
+            <span class="snav-preview-label">Name</span>
+            <select class="snav-preview-select" id="previewName">
+              <option value="">— Select Name —</option>
+            </select>
+            <button class="snav-btn-preview" onclick="applyViewPreview()">Preview</button>
+            <button class="snav-btn-exit" id="btnExitPreviewCard" onclick="exitViewPreview()">Exit Preview</button>
+            <div class="snav-preview-status" id="previewCardBanner"></div>
+          </div>
         </div>
       </div>
     </nav>
@@ -866,6 +953,7 @@ function _sapLogoSVG(gid, style='') {
                     <button class="btn-add-admin" onclick="addAdmin()">Add Admin</button>
                   </div>
                 </div>
+
               </div>
 
               <!-- Admin: Roster (WFM only) -->
@@ -910,25 +998,38 @@ function _sapLogoSVG(gid, style='') {
                     <span id="rlsTableCount" style="font-size:11px;color:var(--text-muted);white-space:nowrap"></span>
                     <button class="fb-clear" onclick="clearRLSFilters()">Clear Filters</button>
                   </div>
-                  <div class="table-wrap">
+                  <div class="table-wrap" id="rlsTableWrap">
                     <table>
+                      <colgroup>
+                        <col class="c-num">
+                        <col class="c-name">
+                        <col class="c-email">
+                        <col class="c-fn">
+                        <col class="c-grp"><col class="c-grp">
+                        <col class="c-role">
+                        <col class="c-tl"><col class="c-tl">
+                        <col class="c-num2"><col class="c-num2"><col class="c-num2"><col class="c-num2">
+                        <col class="c-site">
+                        <col class="c-stat">
+                        <col class="c-act">
+                      </colgroup>
                       <thead>
                         <tr>
                           <th>#</th>
-                          <th>Name</th>
-                          <th>Email</th>
-                          <th>Function</th>
-                          <th class="tc">Group 2026</th>
-                          <th class="tc">Group 2027</th>
-                          <th>Role</th>
-                          <th>TL 2026</th>
-                          <th>TL 2027</th>
-                          <th class="tc">ENT 26</th>
-                          <th class="tc">CF 26</th>
-                          <th class="tc">ENT 27</th>
-                          <th class="tc">CF 27</th>
-                          <th>Site</th>
-                          <th class="tc">Status</th>
+                          <th class="th-sortable" onclick="sortRLSTable('name')">Name <span class="th-sort-icon" id="rlsh-name">⇅</span></th>
+                          <th class="th-sortable" onclick="sortRLSTable('email')">Email <span class="th-sort-icon" id="rlsh-email">⇅</span></th>
+                          <th class="th-sortable" onclick="sortRLSTable('funcRaw')">Function <span class="th-sort-icon" id="rlsh-funcRaw">⇅</span></th>
+                          <th class="th-sortable tc" onclick="sortRLSTable('group2026')">Group 2026 <span class="th-sort-icon" id="rlsh-group2026">⇅</span></th>
+                          <th class="th-sortable tc" onclick="sortRLSTable('group2027')">Group 2027 <span class="th-sort-icon" id="rlsh-group2027">⇅</span></th>
+                          <th class="th-sortable" onclick="sortRLSTable('role')">Role <span class="th-sort-icon" id="rlsh-role">⇅</span></th>
+                          <th class="th-sortable" onclick="sortRLSTable('teamLead2026')">TL 2026 <span class="th-sort-icon" id="rlsh-teamLead2026">⇅</span></th>
+                          <th class="th-sortable" onclick="sortRLSTable('teamLead2027')">TL 2027 <span class="th-sort-icon" id="rlsh-teamLead2027">⇅</span></th>
+                          <th class="th-sortable tc" onclick="sortRLSTable('ent2026')">ENT 26 <span class="th-sort-icon" id="rlsh-ent2026">⇅</span></th>
+                          <th class="th-sortable tc" onclick="sortRLSTable('cf2026')">CF 26 <span class="th-sort-icon" id="rlsh-cf2026">⇅</span></th>
+                          <th class="th-sortable tc" onclick="sortRLSTable('ent2027')">ENT 27 <span class="th-sort-icon" id="rlsh-ent2027">⇅</span></th>
+                          <th class="th-sortable tc" onclick="sortRLSTable('cf2027')">CF 27 <span class="th-sort-icon" id="rlsh-cf2027">⇅</span></th>
+                          <th class="th-sortable" onclick="sortRLSTable('site')">Site <span class="th-sort-icon" id="rlsh-site">⇅</span></th>
+                          <th class="th-sortable tc" onclick="sortRLSTable('status')">Status <span class="th-sort-icon" id="rlsh-status">⇅</span></th>
                           <th>Actions</th>
                         </tr>
                       </thead>
@@ -1936,8 +2037,8 @@ async function loadData() {
     }
     _applyHeaderBadge();
     currentUserFunction=(rlsData[currentUserEmail]||{}).funcRaw||'';
-    if(isAdmin()){const b=document.getElementById("btn-tab-admin");if(b)b.style.display="inline-block";const n=document.getElementById("snav-navsub-admin");if(n)n.style.display="";}
-    if(isWFM()){const rb=document.getElementById("btn-admin-roster");if(rb)rb.style.display="";}
+    if(isAdmin()){const b=document.getElementById("btn-tab-admin");if(b)b.style.display="inline-block";const n=document.getElementById("snav-navsub-admin");if(n)n.style.display="";const ps=document.getElementById("snav-preview-section");if(ps)ps.style.display="";}
+    if(isWFM()){const rb=document.getElementById("btn-admin-roster");if(rb)rb.style.display="";const sr=document.getElementById("snav-tools-roster");if(sr)sr.style.display="";}
     updateLoadingText("Loading leave records from CSV...");
     // Build name-based RLS lookup (used to infer agentEmail / tlEmail from CSV Name field)
     const rlsDataByName={};
@@ -3708,6 +3809,124 @@ function viewAllSSAdmin(){
   _openTableWindow(`Pending Slide/Swap (${rows.length})`,"Pending Slide/Swap requests",'<th>#</th><th>Requestor</th><th>Type</th><th>Status</th><th>Shift Date</th><th>Orig. Schedule</th><th>Req. Schedule</th><th>Swap Name</th><th>Team Lead</th><th>Reason</th><th>Plotted</th>',(r,i)=>`<tr><td style="color:#999">${i+1}</td><td><strong>${_esc(r.requestorName||r.title)}</strong></td><td>${_esc(r.reqType)}</td><td>${_esc(r.status)}</td><td>${_fmtD(r.shiftDate)}</td><td>${_esc(r.originalSchedule)}</td><td>${_esc(r.requestedSchedule)}</td><td>${_esc(r.swapName)}</td><td>${_esc(r.teamLead)}</td><td>${_esc(r.reason)}</td><td>${_plotBadge(r.plotted)}</td></tr>`,rows);
 }
 
+/* ══════════════ VIEW PREVIEW (Admin Role Simulation) ══════════════ */
+let _previewActive=false;
+let _prevLeave,_prevFull,_prevAdmin,_prevCal,_prevSS,_prevRole,_prevEmail,_prevName;
+
+function navGoAdminSub(subId){
+  showSection('leave',document.getElementById('snav-leave'));
+  const adminBtn=document.getElementById('btn-tab-admin');
+  if(adminBtn)switchTab('admin',adminBtn);
+  renderAdminTab();
+  const subBtn=document.querySelector(`[onclick*="switchAdminSub('${subId}'"]`);
+  switchAdminSub(subId,subBtn||null);
+  if(subId==='admin-roster')renderRLSTable();
+  // Highlight active sidenav item
+  document.querySelectorAll('#snav-tools-access,#snav-tools-roster').forEach(el=>el.classList.remove('active'));
+  const active=document.getElementById(subId==='admin-access'?'snav-tools-access':'snav-tools-roster');
+  if(active)active.classList.add('active');
+}
+function toggleSnavPreview(){
+  const body=document.getElementById("snavPreviewBody");
+  const hdr=document.getElementById("snavPreviewHeader");
+  if(!body)return;
+  const open=body.style.display==="none"||body.style.display==="";
+  body.style.display=open?"block":"none";
+  if(hdr){if(open)hdr.classList.add("open");else hdr.classList.remove("open");}
+}
+function populatePreviewNames(){
+  const role=document.getElementById("previewRole").value;
+  const sel=document.getElementById("previewName");
+  sel.innerHTML='<option value="">— Select Name —</option>';
+  if(!role)return;
+  const entries=Object.values(rlsData)
+    .filter(r=>r.role===role&&r.name)
+    .sort((a,b)=>(a.name||'').localeCompare(b.name||''));
+  entries.forEach(r=>{
+    const o=document.createElement("option");
+    o.value=r.email;
+    o.textContent=r.name;
+    sel.appendChild(o);
+  });
+}
+
+function applyViewPreview(){
+  const role=document.getElementById("previewRole").value;
+  const email=document.getElementById("previewName").value;
+  if(!role||!email){showToast("Please select both a role and a name.");return;}
+  const person=rlsData[email];
+  if(!person){showToast("Person not found in roster.");return;}
+
+  // Save originals only on first preview (not on re-preview)
+  if(!_previewActive){
+    _prevLeave=[...allLeaveData];_prevFull=[...allFullData];
+    _prevAdmin=[...allAdminData];_prevCal=[...allCalendarData];
+    _prevSS=[...allSSData];
+    _prevRole=currentUserRole;_prevEmail=currentUserEmail;_prevName=currentUserName;
+  } else {
+    // Re-preview: restore originals first so RLS filter starts clean
+    allLeaveData=[..._prevLeave];allFullData=[..._prevFull];
+    allAdminData=[..._prevAdmin];allCalendarData=[..._prevCal];
+    allSSData=[..._prevSS];
+  }
+
+  // Apply simulated identity
+  currentUserRole=role;currentUserEmail=email;currentUserName=person.name||email;
+
+  _applyRLSToLeaveData();
+  _applyRLSToSSData();
+  ssAdminData=allSSData.filter(r=>(r.status||'').trim().toUpperCase()==='PENDING');
+
+  // Re-render all sections
+  populateFilters();applyFilters();
+  ssPopulateFilters();ssApplyRoleUI();ssApplyFilters();
+  calRendered=false;
+
+  _previewActive=true;
+
+  // Show banners
+  const roleLabel=role==='tl'?'Team Lead':'Agent';
+  const msg=`Previewing as ${person.name} · ${roleLabel}`;
+  const topBar=document.getElementById("previewModeBanner");
+  const topLbl=document.getElementById("previewModeLabel");
+  const cardBanner=document.getElementById("previewCardBanner");
+  const exitCard=document.getElementById("btnExitPreviewCard");
+  if(topBar){topBar.style.display="flex";}
+  if(topLbl)topLbl.textContent=msg;
+  if(cardBanner){cardBanner.style.display="block";cardBanner.style.cssText="display:block";cardBanner.textContent=msg;}
+  if(exitCard)exitCard.style.display="block";
+  showToast("Preview active: "+person.name);
+}
+
+function exitViewPreview(){
+  if(!_previewActive)return;
+
+  // Restore admin identity & data
+  currentUserRole=_prevRole;currentUserEmail=_prevEmail;currentUserName=_prevName;
+  allLeaveData=[..._prevLeave];allFullData=[..._prevFull];
+  allAdminData=[..._prevAdmin];allCalendarData=[..._prevCal];
+  allSSData=[..._prevSS];
+  ssAdminData=allSSData.filter(r=>(r.status||'').trim().toUpperCase()==='PENDING');
+
+  _previewActive=false;
+
+  // Re-render
+  populateFilters();applyFilters();
+  ssPopulateFilters();ssApplyRoleUI();ssApplyFilters();
+  calRendered=false;
+
+  // Hide banners
+  const topBar=document.getElementById("previewModeBanner");
+  const cardBanner=document.getElementById("previewCardBanner");
+  const exitCard=document.getElementById("btnExitPreviewCard");
+  if(topBar)topBar.style.display="none";
+  if(cardBanner){cardBanner.style.display="none";cardBanner.textContent="";}
+  if(exitCard)exitCard.style.display="none";
+  document.getElementById("previewRole").value="";
+  document.getElementById("previewName").innerHTML='<option value="">— Select Name —</option>';
+  showToast("Preview exited. Admin view restored.");
+}
+
 /* ══════════════ PAGINATION ══════════════ */
 function renderPagination(el,cur,total,goFn){
   if(!el)return;
@@ -3897,7 +4116,9 @@ let rlsEditingEmail=null; // null = add mode, string = edit mode
 let rlsDeleteEmail=null;
 let rlsPageNum=1; const RLS_PAGE=50;
 let rlsFilterFn='', rlsFilterTL='', rlsFilterSite='', rlsFilterStatus='';
+let rlsSortKey='name', rlsSortDir=1;
 
+function sortRLSTable(key){if(rlsSortKey===key)rlsSortDir*=-1;else{rlsSortKey=key;rlsSortDir=1;}rlsPageNum=1;renderRLSTable();}
 function renderRLSTable(){
   const q=(document.getElementById('rlsSearch')?.value||'').toLowerCase().trim();
   rlsFilterFn=(document.getElementById('rlsFilterFunction')?.value||'');
@@ -3914,7 +4135,13 @@ function renderRLSTable(){
       if(rlsFilterStatus&&(r.status||'Active').toLowerCase()!==rlsFilterStatus.toLowerCase()) return false;
       return true;
     });
-  entries.sort((a,b)=>(a.name||'').localeCompare(b.name||''));
+  entries.sort((a,b)=>{
+    const numKeys=['ent2026','cf2026','ent2027','cf2027'];
+    const av=a[rlsSortKey]??'', bv=b[rlsSortKey]??'';
+    if(numKeys.includes(rlsSortKey)){const an=parseFloat(av),bn=parseFloat(bv);return((isNaN(an)?-Infinity:an)-(isNaN(bn)?-Infinity:bn))*rlsSortDir;}
+    return String(av).localeCompare(String(bv))*rlsSortDir;
+  });
+  _updateSortIcons("rlsh-",rlsSortKey,rlsSortDir,["name","email","funcRaw","group2026","group2027","role","teamLead2026","teamLead2027","ent2026","cf2026","ent2027","cf2027","site","status"]);
   const cnt=document.getElementById('rlsTableCount');
   if(cnt)cnt.textContent=`${entries.length} entr${entries.length!==1?'ies':'y'}`;
   const total=Math.ceil(entries.length/RLS_PAGE)||1;
