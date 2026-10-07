@@ -4,6 +4,7 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
   <title>USD MNL - Leave Consumption and Scheduling Tool</title>
+  <meta http-equiv="Content-Security-Policy" content="connect-src 'self' https://graph.microsoft.com https://login.microsoftonline.com https://sap.sharepoint.com https://alcdn.msauth.net; frame-src 'self' https://login.microsoftonline.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com"/>
   <script>(function(){try{var t=localStorage.getItem("usd_dashboard_theme_v1")||"light";document.documentElement.setAttribute("data-theme",t);}catch(e){}})()</script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
   <style>
@@ -34,6 +35,9 @@
     [data-theme="dark"] .confirm-card{background:var(--bg-card);}
     [data-theme="dark"] .btn-page{background:var(--bg-card);color:var(--text-primary);}
     [data-theme="dark"] tbody tr:hover{background:var(--sap-blue-sky);}
+    [data-theme="dark"] .exp-highlight-row{background:#3D1F00 !important;color:#FFD199 !important;}
+    [data-theme="dark"] .exp-highlight-row td{color:#FFD199 !important;}
+    [data-theme="dark"] .exp-highlight-row:hover{background:#4D2900 !important;}
     [data-theme="dark"] .error-banner{background:#4a2020;border-color:#7a3a3a;color:#ffaaaa;}
     body,.header,.kpi-card,.chart-card,.table-card,.table-header,
     .modal-panel,.confirm-card,.filters-bar,.ent-controls,.access-card,
@@ -105,9 +109,33 @@
     .side-panel.collapsed .snav-item{justify-content:center;padding:10px 0;}
     .side-panel.collapsed .snav-toggle-btn{justify-content:center;padding:8px 0;}
     .page-wrapper{max-width:1400px;margin:0 auto;padding:28px 24px 40px;}
-    .page-banner{background:linear-gradient(135deg,var(--sap-navy) 0%,var(--sap-blue) 100%);border-radius:var(--radius);
-      padding:24px 28px;margin-bottom:24px;color:#FFF;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;}
-    .page-banner h1{font-size:20px;font-weight:700;margin-bottom:4px;}
+    .page-banner{background:linear-gradient(135deg,#002A86 0%,#1B90FF 100%);border-radius:var(--radius);
+      padding:24px 28px;margin-bottom:24px;color:#FFF;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;
+      background-size:400% 400%;animation:banner-colors 40s ease infinite;}
+    @keyframes banner-colors{
+      0%  {background:linear-gradient(135deg,#000D33 0%,#00164A 100%);}
+      5%  {background:linear-gradient(135deg,#00164A 0%,#00245F 100%);}
+      10% {background:linear-gradient(135deg,#00245F 0%,#003577 100%);}
+      15% {background:linear-gradient(135deg,#003577 0%,#00478F 100%);}
+      20% {background:linear-gradient(135deg,#00478F 0%,#0057C2 100%);}
+      25% {background:linear-gradient(135deg,#0057C2 0%,#0066D9 100%);}
+      30% {background:linear-gradient(135deg,#0066D9 0%,#0070F2 100%);}
+      35% {background:linear-gradient(135deg,#0070F2 0%,#1680F8 100%);}
+      40% {background:linear-gradient(135deg,#1680F8 0%,#1B88FC 100%);}
+      45% {background:linear-gradient(135deg,#1B88FC 0%,#1B90FF 100%);}
+      50% {background:linear-gradient(135deg,#1B90FF 0%,#1B88FC 100%);}
+      55% {background:linear-gradient(135deg,#1B88FC 0%,#1680F8 100%);}
+      60% {background:linear-gradient(135deg,#1680F8 0%,#0070F2 100%);}
+      65% {background:linear-gradient(135deg,#0070F2 0%,#0066D9 100%);}
+      70% {background:linear-gradient(135deg,#0066D9 0%,#0057C2 100%);}
+      75% {background:linear-gradient(135deg,#0057C2 0%,#00478F 100%);}
+      80% {background:linear-gradient(135deg,#00478F 0%,#003577 100%);}
+      85% {background:linear-gradient(135deg,#003577 0%,#00245F 100%);}
+      90% {background:linear-gradient(135deg,#00245F 0%,#00164A 100%);}
+      95% {background:linear-gradient(135deg,#00164A 0%,#000D33 100%);}
+      100%{background:linear-gradient(135deg,#000D33 0%,#00164A 100%);}}
+    .page-banner h1{font-size:20px;font-weight:700;margin-bottom:4px;display:inline-block;animation:marquee-slide 20s linear infinite;}
+    @keyframes marquee-slide{0%{transform:translateX(0);}45%{transform:translateX(160px);}50%{transform:translateX(160px);}95%{transform:translateX(0);}100%{transform:translateX(0);}}
     .page-banner p{font-size:13px;opacity:.85;}
     .banner-badge{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);border-radius:20px;
       padding:6px 18px;font-size:12px;font-weight:600;color:#FFF;white-space:nowrap;}
@@ -174,7 +202,7 @@
     .table-search{border:1px solid var(--border);border-radius:4px;padding:6px 12px;font-size:13px;font-family:var(--font);width:220px;}
     .table-search:focus{outline:2px solid var(--sap-blue);border-color:transparent;}
     .table-count{font-size:12px;color:var(--text-muted);}
-    .table-wrap{overflow-x:auto;max-height:480px;overflow-y:auto;}
+    .table-wrap{overflow-x:auto;max-height:900px;overflow-y:auto;}
     table{width:100%;border-collapse:collapse;font-size:12.5px;}
     thead{position:sticky;top:0;z-index:10;}
     thead th{background:var(--sap-deep-navy);color:#FFF;padding:10px 14px;text-align:left;
@@ -526,6 +554,7 @@ function _sapLogoSVG(gid, style='') {
             <select class="fb-select" id="filterGroup" onchange="applyFilters()"><option value="">All Groups</option></select>
             <select class="fb-select" id="filterLeaveType" onchange="applyFilters()"><option value="">All Leave Types</option></select>
             <div class="fb-spacer"></div>
+            <button class="fb-clear" onclick="clearGlobalFilters()">Clear</button>
             <button class="btn-refresh" onclick="loadData()">
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
               Refresh
@@ -707,10 +736,9 @@ function _sapLogoSVG(gid, style='') {
                         <th class="th-sortable tc" onclick="sortExpTable('carryForward')">2026 CF <span class="th-sort-icon" id="exh-carryForward">⇅</span></th>
                         <th class="th-sortable tc" onclick="sortExpTable('total')">Total <span class="th-sort-icon" id="exh-total">⇅</span></th>
                         <th class="th-sortable tc" onclick="sortExpTable('used')">Used <span class="th-sort-icon" id="exh-used">⇅</span></th>
-                        <th class="th-sortable tc" onclick="sortExpTable('remaining')">Remaining <span class="th-sort-icon" id="exh-remaining">⇅</span></th>
+                        <th class="th-sortable tc" onclick="sortExpTable('remaining')">Remaining 2026 <span class="th-sort-icon" id="exh-remaining">⇅</span></th>
                         <th class="th-sortable tc" onclick="sortExpTable('cf2027')">CF 2027 <span class="th-sort-icon" id="exh-cf2027">⇅</span></th>
                         <th class="th-sortable tc" onclick="sortExpTable('forfNum')">FORF. COUNT <span class="th-sort-icon" id="exh-forfNum">⇅</span></th>
-                        <th class="th-sortable" onclick="sortExpTable('urgency')">Urgency <span class="th-sort-icon" id="exh-urgency">⇅</span></th>
                       </tr>
                     </thead>
                     <tbody id="expTableBody"></tbody>
@@ -977,7 +1005,7 @@ function _sapLogoSVG(gid, style='') {
           <div id="ssDashboardContent" style="display:none">
             <div class="tab-nav">
               <button class="tab-btn active" onclick="ssSwitchTab('ss-tab-records',this)">Records</button>
-              <button class="tab-btn" onclick="ssSwitchTab('ss-tab-frequency',this);renderSSFrequency()">Frequency</button>
+              <button class="tab-btn" id="btn-ss-tab-frequency" onclick="ssSwitchTab('ss-tab-frequency',this);renderSSFrequency()">Frequency</button>
               <button class="tab-btn" id="btn-ss-tab-admin" style="display:none;color:#B45309" onclick="ssSwitchTab('ss-tab-admin',this);renderSSAdminTable()">Admin</button>
             </div>
 
@@ -1453,7 +1481,7 @@ function _sapLogoSVG(gid, style='') {
           </select>
         </div>
         <div class="form-group full-width"><label class="form-label">Reason</label><textarea class="form-control" id="sfReason"></textarea></div>
-        <div class="form-group full-width"><label class="form-label">Agent Remarks</label><textarea class="form-control" id="sfAgentRemarks"></textarea></div>
+        <div class="form-group full-width"><label class="form-label">WFM Remarks</label><textarea class="form-control" id="sfAgentRemarks"></textarea></div>
       </div>
     </div>
     <div class="modal-footer">
@@ -1607,7 +1635,7 @@ const msalReady = (async () => {
   }
   try {
     await msalTimeout(loadMsalScript(), 15000, "MSAL script load");
-    const cfg = { auth:{ clientId:CLIENT_ID, authority:`https://login.microsoftonline.com/${TENANT_ID}`, redirectUri:" https://macdc06.github.io/USD-MNL-Leave-Consumption/" }, cache:{ cacheLocation:"sessionStorage", storeAuthStateInCookie:false } };
+    const cfg = { auth:{ clientId:CLIENT_ID, authority:`https://login.microsoftonline.com/${TENANT_ID}`, redirectUri:"https://macdc06.github.io/USD-MNL-Leave-Consumption/" }, cache:{ cacheLocation:"sessionStorage", storeAuthStateInCookie:false } };
     const inst = new msal.PublicClientApplication(cfg);
     if (typeof inst.initialize === "function") await msalTimeout(inst.initialize(), 10000, "MSAL initialize");
     try {
@@ -1656,7 +1684,7 @@ function onLoginSuccess(account) {
 function _applyHeaderBadge(){
   const ROLE_LABELS={author:'Admin',manager:'Manager',tl:'Team Lead',agent:'Agent'};
   const badge=currentUserRole?`<span style="background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.32);border-radius:10px;padding:2px 9px;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-left:2px">${ROLE_LABELS[currentUserRole]||currentUserRole}</span>`:"";
-  document.getElementById("headerRight").innerHTML=`<div class="user-info"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>${escHtml(currentUserName)}${badge}<button class="btn-logout" onclick="signOut()">Sign Out</button></div>`;
+  const _hdr=document.getElementById("headerRight");_hdr.innerHTML=`<div class="user-info"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>${escHtml(currentUserName)}${badge}</div>`;const _btnOut=document.createElement("button");_btnOut.className="btn-logout";_btnOut.textContent="Sign Out";_btnOut.addEventListener("click",signOut);_hdr.querySelector(".user-info").appendChild(_btnOut);
 }
 
 /* ══════════════ GRAPH HELPERS ══════════════ */
@@ -1987,7 +2015,7 @@ async function loadSSData() {
     const items=await getListItems(ssSiteIdCache,LIST_SS_ID,"Title,RequestorName,ReqType,field_2,ShiftDate,Plotted_x003f_,field_3,OriginalRD,field_5,RequestedRD,field_4,field_9,Remarks,Reason,field_7,field_6,field_8,Created,Modified");
     allSSData=items.map(i=>{
       const f=i.fields||{};
-      return {_itemId:i.id||"",title:f.Title||"",requestorName:f.RequestorName||"",reqType:f.ReqType||"",status:f.field_2||"",shiftDate:f.ShiftDate||"",plotted:f.Plotted_x003f_!=null?String(f.Plotted_x003f_):"",originalSchedule:f.field_3||"",originalRD:f.OriginalRD||"",requestedSchedule:f.field_5||"",requestedRD:f.RequestedRD||"",swapName:f.field_4||"",swapAck:f.field_9||"",agentRemarks:f.Remarks||"",reason:f.Reason||"",teamLead:normTL(f.field_7||""),swapEmail:f.field_6||"",swapTL:normTL(f.field_8||""),created:f.Created||i.createdDateTime||""};
+      return {_itemId:i.id||"",title:f.Title||"",requestorName:f.RequestorName||"",reqType:f.ReqType||"",status:f.field_2||"",shiftDate:f.ShiftDate||"",plotted:f.Plotted_x003f_!=null?String(f.Plotted_x003f_):"",originalSchedule:f.field_3||"",originalRD:f.OriginalRD||"",requestedSchedule:f.field_5||"",requestedRD:f.RequestedRD||"",swapName:f.field_4||"",swapAck:f.field_9||"",agentRemarks:f.Reason||"",reason:f.Remarks||"",teamLead:normTL(f.field_7||""),swapEmail:f.field_6||"",swapTL:normTL(f.field_8||""),created:f.Created||i.createdDateTime||""};
     });
     // ── Apply RLS visibility filter to SS data ──
     _applyRLSToSSData();
@@ -2075,6 +2103,8 @@ function populateFilters() {
 function applyFilters() {
   const yr=document.getElementById("filterYear").value,mo=document.getElementById("filterMonth").value,
         gr=document.getElementById("filterGroup").value,lt=document.getElementById("filterLeaveType").value;
+
+  /* ── Records tab (renderTable reads global filter DOM directly) ── */
   filteredData=allLeaveData.filter(r=>{
     const d=parseDate(r.requestedDate);
     if(yr&&d&&String(d.getFullYear())!==yr) return false;
@@ -2084,6 +2114,27 @@ function applyFilters() {
     return true;
   });
   currentPage=1; populateRecordsFilterDropdowns(); renderTable();
+
+  /* ── Entitlement tab – also sync per-tab dropdown so it shows correct value,
+       then re-render (renderEntitlementTable reads filterGroup directly as fallback) ── */
+  const entGrpEl=document.getElementById("entGroup");
+  if(entGrpEl) entGrpEl.value=gr;
+  renderEntitlementTable();
+
+  /* ── Expiring Credits tab – sync per-tab dropdown + re-render ── */
+  const expGrpEl=document.getElementById("expGroup");
+  if(expGrpEl) expGrpEl.value=gr;
+  renderExpiringTable();
+
+  /* ── Calendar tab – set calGroupFilter variable + sync DOM dropdown, re-render if open ── */
+  calGroupFilter=gr;
+  const calGrpEl=document.getElementById("calGroupFilter");
+  if(calGrpEl) calGrpEl.value=gr;
+  if(calRendered) calRender();
+}
+function clearGlobalFilters(){
+  ["filterYear","filterMonth","filterGroup","filterLeaveType"].forEach(id=>{const el=document.getElementById(id);if(el)el.value="";});
+  applyFilters();
 }
 function ssPopulateFilters() {
   const years=[...new Set(allSSData.map(r=>{const d=parseDate(r.shiftDate);return d?d.getFullYear():null;}).filter(Boolean))].sort();
@@ -2220,12 +2271,22 @@ function populateRecordsFilterDropdowns(){
   if(gSel){const p=gSel.value;const g=[...new Set(src.map(r=>r.group).filter(Boolean))].sort();gSel.innerHTML='<option value="">All Groups</option>'+g.map(x=>`<option value="${escHtml(x)}">${escHtml(x)}</option>`).join("");gSel.value=g.includes(p)?p:"";}
 }
 function renderTable(){
+  // ── Global filter bar values ──────────────────────────────
+  const _gyr=(document.getElementById("filterYear")||{value:""}).value||"";
+  const _gmo=(document.getElementById("filterMonth")||{value:""}).value||"";
+  const _ggr=(document.getElementById("filterGroup")||{value:""}).value||"";
+  const _glt=(document.getElementById("filterLeaveType")||{value:""}).value||"";
+  // ──────────────────────────────────────────────────────────
   let rows=allFullData.filter(r=>{
+    const _d=parseDate(r.requestedDate);
+    if(_gyr&&(!_d||String(_d.getFullYear())!==_gyr)) return false;
+    if(_gmo&&(!_d||String(_d.getMonth()+1)!==_gmo)) return false;
+    if(_ggr&&r.group!==_ggr) return false;
+    if(_glt&&r.leaveType!==_glt) return false;
     if(tableNameFilter&&!(r.name||"").toLowerCase().includes(tableNameFilter))return false;
     if(tableStatusFilter&&(r.status||"").toLowerCase()!==tableStatusFilter.toLowerCase())return false;
     if(tableGroupFilter&&r.group!==tableGroupFilter)return false;
     if(tableLeaveTypeFilter&&r.leaveType!==tableLeaveTypeFilter)return false;
-
     if(tableTeamLeadFilter){const tl=(rlsData[(r.agentEmail||"").toLowerCase()]||{}).teamLead||r.tlEmail||"";if(tl!==tableTeamLeadFilter)return false;}
     if(tablePlottedFilter){const pv=String(r.plotted??"").toLowerCase();const isY=pv==="yes"||pv==="true"||pv==="1";if(tablePlottedFilter==="yes"&&!isY)return false;if(tablePlottedFilter==="no"&&isY)return false;}
     return true;
@@ -2258,7 +2319,9 @@ function initEntitlementTab(){
   renderEntitlementTable();
 }
 function renderEntitlementTable(){
-  const yr=document.getElementById("entYear").value,gr=document.getElementById("entGroup").value;
+  const yr=document.getElementById("entYear")?.value||"";
+  // Prefer per-tab entGroup; fall back to global filterGroup so the global bar always works
+  const gr=(document.getElementById("entGroup")?.value||"")||(document.getElementById("filterGroup")?.value||"");
   const nm=(document.getElementById("entName").value||'').toLowerCase().trim();
   const tl=document.getElementById("entTL").value;
   const st=document.getElementById("entStatus").value;
@@ -2338,7 +2401,8 @@ function renderExpiringTable(){
   function daysUntilExpiry(){return Math.ceil((expDate-today)/86400000);}
   const d2exp=daysUntilExpiry();
   const nm=(document.getElementById("expName")?.value||'').toLowerCase().trim();
-  const gr=document.getElementById("expGroup")?.value||'';
+  // Prefer per-tab expGroup; fall back to global filterGroup
+  const gr=(document.getElementById("expGroup")?.value||"")||(document.getElementById("filterGroup")?.value||"");
   const tl=document.getElementById("expTL")?.value||'';
   const urg=document.getElementById("expUrgency")?.value||'';
   // Build ALL employees — no urgency gate
@@ -2372,7 +2436,7 @@ function renderExpiringTable(){
   document.getElementById("expStripCritical").textContent=expiringRows.filter(r=>r.urgency==="high").length;
   document.getElementById("expStripRisk").textContent=expiringRows.filter(r=>r.urgency==="medium").length;
   const tbody=document.getElementById("expTableBody");if(!tbody)return;
-  if(!rows.length){tbody.innerHTML=`<tr><td colspan="12" class="empty-state"><p>No records found.</p></td></tr>`;return;}
+  if(!rows.length){tbody.innerHTML=`<tr><td colspan="11" class="empty-state"><p>No records found.</p></td></tr>`;return;}
   tbody.innerHTML=rows.map((r,i)=>{
     const hasExp=r.urgency!=="none";
     const urgCls=r.urgency==="high"?"badge-urgency-high":r.urgency==="medium"?"badge-urgency-medium":r.urgency==="low"?"badge-urgency-low":"badge-nodata";
@@ -2381,7 +2445,7 @@ function renderExpiringTable(){
     const cf2027Cell=r.cf2027!=null?`<strong>${r.cf2027}</strong>`:"—";
     const forfCell=r.forfNum>0?`<span class="forf-flag forf-flag-${r.urgency}">${r.forfNum}</span>`:hasExp?'<span class="forf-flag-none">0</span>':"—";
     const urgCell=hasExp?`<span class="badge ${urgCls}">${urgLbl}</span>`:"<span style='color:var(--text-muted)'>—</span>";
-    return`<tr${rowCls}><td style="color:var(--text-muted)">${i+1}</td><td><strong>${escHtml(r.name||r.email)}</strong></td><td><span class="badge badge-group">${escHtml(r.group)}</span></td><td>${escHtml(r.teamLead)}</td><td class="tc">${r.entitlement??'—'}</td><td class="tc">${r.carryForward??'—'}</td><td class="tc">${r.total??'—'}</td><td class="tc">${r.used}</td><td class="tc">${r.remaining??'—'}</td><td class="tc">${cf2027Cell}</td><td class="tc">${forfCell}</td><td>${urgCell}</td></tr>`;
+    return`<tr${rowCls}><td style="color:var(--text-muted)">${i+1}</td><td><strong>${escHtml(r.name||r.email)}</strong></td><td><span class="badge badge-group">${escHtml(r.group)}</span></td><td>${escHtml(r.teamLead)}</td><td class="tc">${r.entitlement??'—'}</td><td class="tc">${r.carryForward??'—'}</td><td class="tc">${r.total??'—'}</td><td class="tc">${r.used}</td><td class="tc">${r.remaining??'—'}</td><td class="tc">${cf2027Cell}</td><td class="tc">${forfCell}</td></tr>`;
   }).join("");
 }
 function sortExpTable(key){if(expSortKey===key)expSortDir*=-1;else{expSortKey=key;expSortDir=1;}renderExpiringTable();}
@@ -2454,6 +2518,9 @@ function renderCalendarTab(){
         <div class="cal-legend-item"><div class="cal-legend-dot" style="background:#C7820A"></div>Holiday</div>
       </div>
     </div>`;
+  // Reflect any pre-set calGroupFilter in the dropdown
+  const _calGrpDom=document.getElementById("calGroupFilter");
+  if(_calGrpDom&&calGroupFilter) _calGrpDom.value=calGroupFilter;
   calRender();
 }
 function calApplyFilters(){
@@ -2622,7 +2689,8 @@ function renderAllRecordsTable(){
 }
 function renderAccessManagement(){
   const list=getAdminList();const ul=document.getElementById("adminList");if(!ul)return;
-  ul.innerHTML=list.map(em=>{const isYou=em===currentUserEmail;return`<li class="admin-list-item${isYou?" is-you":""}"><div class="admin-email">${escHtml(em)}${isYou?`<span class="admin-you-tag">You</span>`:""}</div>${isYou?"":`<button class="btn-remove-admin" onclick="removeAdmin('${escHtml(em)}')">Remove</button>`}</li>`;}).join("");
+  ul.innerHTML=list.map(em=>{const isYou=em===currentUserEmail;return`<li class="admin-list-item${isYou?" is-you":""}"><div class="admin-email">${escHtml(em)}${isYou?`<span class="admin-you-tag">You</span>`:""}</div>${isYou?"":`<button class="btn-remove-admin" data-email="${escHtml(em)}">Remove</button>`}</li>`;}).join("");
+  ul.querySelectorAll(".btn-remove-admin").forEach(btn=>btn.addEventListener("click",()=>removeAdmin(btn.dataset.email)));
 }
 function addAdmin(){
   const inp=document.getElementById("addAdminInput");if(!inp)return;
@@ -2853,9 +2921,10 @@ function ssRenderTable(){
   if(!page.length){tbody.innerHTML=`<tr><td colspan="${_admin?17:16}" class="empty-state"><p>No records found.</p></td></tr>`;document.getElementById("ssTablePagination").innerHTML="";return;}
   tbody.innerHTML=page.map((r,i)=>{
     const idx=allSSData.indexOf(r);
-    const editCell=_admin?`<td><button class="btn-edit-record" onclick="openSSEditModal(${idx})">Edit</button></td>`:'';
+    const editCell=_admin?`<td><button class="btn-edit-record" data-idx="${idx}">Edit</button></td>`:'';
     return`<tr><td style="color:var(--text-muted)">${start+i+1}</td><td><strong>${escHtml(r.requestorName||r.title)}</strong></td><td>${ssReqTypeBadge(r.reqType)}</td><td>${ssStatusBadge(r.status)}</td><td>${formatDate(r.shiftDate)}</td><td style="white-space:normal;max-width:130px;font-size:12px">${escHtml(r.originalSchedule)}</td><td>${escHtml(r.originalRD)}</td><td style="white-space:normal;max-width:130px;font-size:12px">${escHtml(r.requestedSchedule)}</td><td>${escHtml(r.requestedRD)}</td><td>${escHtml(r.swapName)}</td><td>${escHtml(r.swapAck)}</td><td>${escHtml(r.teamLead)}</td><td style="font-size:11px">${escHtml(r.swapEmail)}</td><td>${plottedBadge(r.plotted)}</td><td style="max-width:140px;white-space:normal;font-size:12px">${escHtml(r.reason)}</td><td style="max-width:140px;white-space:normal;font-size:12px">${escHtml(r.agentRemarks)}</td>${editCell}</tr>`;
   }).join("");
+  tbody.querySelectorAll(".btn-edit-record[data-idx]").forEach(btn=>btn.addEventListener("click",()=>openSSEditModal(+btn.dataset.idx)));
   renderPagination(document.getElementById("ssTablePagination"),ssCurrentPage,total,(p)=>{ssCurrentPage=p;ssRenderTable();const tw=document.querySelector("#ss-tab-records .table-wrap");if(tw)tw.scrollTop=0;});
 }
 function ssFilterAdminTable(){
@@ -2889,7 +2958,8 @@ function renderSSAdminTable(){
   const total=Math.ceil(rows.length/SS_ADMIN_PAGE_SIZE)||1;const start=(ssAdminPage-1)*SS_ADMIN_PAGE_SIZE;const page=rows.slice(start,start+SS_ADMIN_PAGE_SIZE);
   const tbody=document.getElementById("ssAdminTableBody");if(!tbody)return;
   if(!page.length){tbody.innerHTML=`<tr><td colspan="12" class="empty-state"><p>No pending records.</p></td></tr>`;document.getElementById("ssAdminPagination").innerHTML="";return;}
-  tbody.innerHTML=page.map((r,i)=>{const idx=allSSData.indexOf(r);return`<tr><td style="color:var(--text-muted)">${start+i+1}</td><td><strong>${escHtml(r.requestorName||r.title)}</strong></td><td>${ssReqTypeBadge(r.reqType)}</td><td>${ssStatusBadge(r.status)}</td><td>${formatDate(r.shiftDate)}</td><td style="white-space:normal;max-width:120px;font-size:12px">${escHtml(r.originalSchedule)}</td><td style="white-space:normal;max-width:120px;font-size:12px">${escHtml(r.requestedSchedule)}</td><td>${escHtml(r.swapName)}</td><td>${escHtml(r.teamLead)}</td><td style="max-width:130px;white-space:normal;font-size:12px">${escHtml(r.reason)}</td><td>${plottedBadge(r.plotted)}</td><td><button class="btn-edit-record" onclick="openSSEditModal(${idx})">Edit</button></td></tr>`;}).join("");
+  tbody.innerHTML=page.map((r,i)=>{const idx=allSSData.indexOf(r);return`<tr><td style="color:var(--text-muted)">${start+i+1}</td><td><strong>${escHtml(r.requestorName||r.title)}</strong></td><td>${ssReqTypeBadge(r.reqType)}</td><td>${ssStatusBadge(r.status)}</td><td>${formatDate(r.shiftDate)}</td><td style="white-space:normal;max-width:120px;font-size:12px">${escHtml(r.originalSchedule)}</td><td style="white-space:normal;max-width:120px;font-size:12px">${escHtml(r.requestedSchedule)}</td><td>${escHtml(r.swapName)}</td><td>${escHtml(r.teamLead)}</td><td style="max-width:130px;white-space:normal;font-size:12px">${escHtml(r.reason)}</td><td>${plottedBadge(r.plotted)}</td><td><button class="btn-edit-record" data-idx="${idx}">Edit</button></td></tr>`;}).join("");
+  tbody.querySelectorAll(".btn-edit-record[data-idx]").forEach(btn=>btn.addEventListener("click",()=>openSSEditModal(+btn.dataset.idx)));
   renderPagination(document.getElementById("ssAdminPagination"),ssAdminPage,total,(p)=>{ssAdminPage=p;renderSSAdminTable();});
 }
 
@@ -3163,14 +3233,14 @@ async function saveSSRecord(){
   const tl=document.getElementById("sfTeamLead").value.trim();if(tl)f.field_7=tl;
   const se=document.getElementById("sfSwapEmail").value.trim();if(se)f.field_6=se;
   const st=document.getElementById("sfSwapTL").value.trim();if(st)f.field_8=st;
-  const ar=document.getElementById("sfAgentRemarks").value.trim();if(ar)f.Remarks=ar;
-  const re=document.getElementById("sfReason").value.trim();if(re)f.Reason=re;
+  const ar=document.getElementById("sfAgentRemarks").value.trim();if(ar)f.Reason=ar;
+  const re=document.getElementById("sfReason").value.trim();if(re)f.Remarks=re;
   const pv=document.getElementById("sfPlotted").value;
   if(pv==="true")f["Plotted_x003f_"]=true;else if(pv==="false")f["Plotted_x003f_"]=false;
   const url=`https://graph.microsoft.com/v1.0/sites/${ssSiteIdCache}/lists/${LIST_SS_ID}/items/${editingSSRecord._itemId}/fields`;
   try {
     await graphPatch(url,f);
-    Object.assign(editingSSRecord,{reqType:f.ReqType,status:f.field_2,...(f.ShiftDate?{shiftDate:f.ShiftDate}:{}),...(f.field_3?{originalSchedule:f.field_3}:{}),...(f.OriginalRD?{originalRD:f.OriginalRD}:{}),...(f.field_5?{requestedSchedule:f.field_5}:{}),...(f.RequestedRD?{requestedRD:f.RequestedRD}:{}),...(f.field_4?{swapName:f.field_4}:{}),...(f.field_9?{swapAck:f.field_9}:{}),...(f.field_7?{teamLead:f.field_7}:{}),...(f.field_6?{swapEmail:f.field_6}:{}),...(f.field_8?{swapTL:f.field_8}:{}),...(f.Remarks?{agentRemarks:f.Remarks}:{}),...(f.Reason?{reason:f.Reason}:{}),...(pv!==""?{plotted:String(pv==="true")}:{})});
+    Object.assign(editingSSRecord,{reqType:f.ReqType,status:f.field_2,...(f.ShiftDate?{shiftDate:f.ShiftDate}:{}),...(f.field_3?{originalSchedule:f.field_3}:{}),...(f.OriginalRD?{originalRD:f.OriginalRD}:{}),...(f.field_5?{requestedSchedule:f.field_5}:{}),...(f.RequestedRD?{requestedRD:f.RequestedRD}:{}),...(f.field_4?{swapName:f.field_4}:{}),...(f.field_9?{swapAck:f.field_9}:{}),...(f.field_7?{teamLead:f.field_7}:{}),...(f.field_6?{swapEmail:f.field_6}:{}),...(f.field_8?{swapTL:f.field_8}:{}),...(f.Reason?{agentRemarks:f.Reason}:{}),...(f.Remarks?{reason:f.Remarks}:{}),...(pv!==""?{plotted:String(pv==="true")}:{})});
     ssAdminData=allSSData.filter(r=>(r.status||"").trim().toUpperCase()==="PENDING");
     msg.textContent="Saved.";msg.style.color="#1B7A3A";btn.disabled=false;
     renderSSAdminTable();ssApplyFilters();
@@ -3643,11 +3713,17 @@ function renderPagination(el,cur,total,goFn){
   if(!el)return;
   if(total<=1){el.innerHTML="";return;}
   let h=`<span class="page-info">Page ${cur} of ${total}</span>`;
-  h+=`<button class="btn-page" onclick="(${goFn.toString()})(${cur-1})" ${cur===1?"disabled":""}>&#8249;</button>`;
+  h+=`<button class="btn-page" data-page="${cur-1}" ${cur===1?"disabled":""}>&#8249;</button>`;
   let rs=Math.max(1,cur-2),re=Math.min(total,rs+4);rs=Math.max(1,re-4);
-  for(let p=rs;p<=re;p++) h+=`<button class="btn-page ${p===cur?"active":""}" onclick="(${goFn.toString()})(${p})">${p}</button>`;
-  h+=`<button class="btn-page" onclick="(${goFn.toString()})(${cur+1})" ${cur===total?"disabled":""}>&#8250;</button>`;
+  for(let p=rs;p<=re;p++) h+=`<button class="btn-page ${p===cur?"active":""}" data-page="${p}">${p}</button>`;
+  h+=`<button class="btn-page" data-page="${cur+1}" ${cur===total?"disabled":""}>&#8250;</button>`;
   el.innerHTML=h;
+  el.querySelectorAll("button.btn-page[data-page]").forEach(btn=>{
+    btn.addEventListener("click",()=>{
+      const p=+btn.dataset.page;
+      if(!btn.disabled&&p>=1&&p<=total)goFn(p);
+    });
+  });
 }
 
 
@@ -3685,11 +3761,13 @@ function renderRLSTable(){
       <td>${escHtml(r.site||'—')}</td>
       <td class="tc">${stBadge}</td>
       <td style="white-space:nowrap">
-        <button class="btn-edit-record" onclick="openRLSEditModal('${escHtml(r.email||'')}')">Edit</button>
-        <button class="btn-edit-record" style="color:var(--sap-red,#c00);margin-left:4px" onclick="confirmRLSDelete('${escHtml(r.email||'')}')">Remove</button>
+        <button class="btn-edit-record" data-action="edit" data-email="${escHtml(r.email||'')}">Edit</button>
+        <button class="btn-edit-record" data-action="del" style="color:var(--sap-red,#c00);margin-left:4px" data-email="${escHtml(r.email||'')}">Remove</button>
       </td>
     </tr>`;
   }).join('');
+  tbody.querySelectorAll('[data-action="edit"]').forEach(btn=>btn.addEventListener('click',()=>openRLSEditModal(btn.dataset.email)));
+  tbody.querySelectorAll('[data-action="del"]').forEach(btn=>btn.addEventListener('click',()=>confirmRLSDelete(btn.dataset.email)));
 }
 
 function openRLSEditModal(email){
@@ -3870,11 +3948,13 @@ function renderRLSTable(){
       <td>${escHtml(r.site||'—')}</td>
       <td class="tc">${stBadge}</td>
       <td style="white-space:nowrap">
-        <button class="btn-edit-record" onclick="openRLSEditModal('${escHtml(r.email||'')}')">Edit</button>
-        <button class="btn-edit-record" style="background:#FFE8E8;color:#CC0000;border-color:#FFBBBB;margin-left:4px" onclick="confirmRLSDelete('${escHtml(r.email||'')}')">Remove</button>
+        <button class="btn-edit-record" data-action="edit" data-email="${escHtml(r.email||'')}">Edit</button>
+        <button class="btn-edit-record" data-action="del" style="background:#FFE8E8;color:#CC0000;border-color:#FFBBBB;margin-left:4px" data-email="${escHtml(r.email||'')}">Remove</button>
       </td>
     </tr>`;
   }).join('');
+  tbody.querySelectorAll('[data-action="edit"]').forEach(btn=>btn.addEventListener('click',()=>openRLSEditModal(btn.dataset.email)));
+  tbody.querySelectorAll('[data-action="del"]').forEach(btn=>btn.addEventListener('click',()=>confirmRLSDelete(btn.dataset.email)));
   renderPagination(document.getElementById('rlsPagination'),rlsPageNum,total,(p)=>{rlsPageNum=p;renderRLSTable();});
 }
 
