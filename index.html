@@ -22,8 +22,8 @@
       --text-muted:#868B94;--border:#5A5D63;--shadow:0 2px 8px rgba(0,0,0,.25);
       --sap-blue-sky:#3A4A5C;--sap-navy:#6DC0FF;--sap-deep-navy:#3A4A5C;--sap-indigo:#A0CCFF;
       --chart-3:#6DC0FF;--chart-5:#A0CCFF;--chart-8:#3A4A5C;}
-    [data-theme="dark"] .login-card{background:var(--bg-card);}
-    [data-theme="dark"] .login-card h2{color:var(--text-primary);}
+    [data-theme="dark"] .login-card{background:#0F1E5C;}
+    [data-theme="dark"] .login-card h2{color:#4CB1FF;}
     [data-theme="dark"] .filter-select{background:var(--bg-card);color:var(--text-primary);}
     [data-theme="dark"] .table-search{background:var(--bg-card);color:var(--text-primary);}
     [data-theme="dark"] .fb{background:var(--bg-secondary);}
@@ -65,15 +65,18 @@
     .btn-logout:hover{background:rgba(255,255,255,.1);}
     .user-info{display:flex;align-items:center;gap:10px;color:var(--sap-blue-light);font-size:12px;}
     #loginScreen{min-height:calc(100vh - 56px);display:flex;align-items:center;justify-content:center;
-      background:linear-gradient(135deg,#00144A 0%,#002A86 50%,#0070F2 100%);}
-    .login-card{background:#FFF;border-radius:12px;padding:48px 56px;text-align:center;max-width:440px;width:90%;box-shadow:0 24px 64px rgba(0,0,0,.25);}
-    .login-card .login-icon{width:120px;height:60px;margin:0 auto 24px;display:flex;align-items:center;justify-content:center;}
-    .login-card h2{font-size:22px;font-weight:700;color:var(--sap-deep-navy);margin-bottom:8px;}
-    .login-card p{color:var(--text-secondary);font-size:13px;line-height:1.6;margin-bottom:28px;}
-    .login-card .btn-login-main{background:var(--sap-blue);color:#FFF;border:none;padding:12px 32px;
-      border-radius:6px;font-size:14px;font-weight:600;font-family:var(--font);cursor:pointer;width:100%;transition:background .2s;}
-    .login-card .btn-login-main:hover{background:var(--sap-blue-dark);}
-    .login-note{margin-top:16px;font-size:11px;color:var(--text-muted);}
+      background:#FFFFFF;}
+    .login-card{background:#00144A;border-radius:16px;padding:56px 64px 10px;text-align:center;max-width:600px;width:90%;border:1px solid rgba(27,144,255,.18);box-shadow:0 32px 80px rgba(0,0,20,.55);}
+    .login-card .login-icon{display:none;}
+    .login-title{font-size:55px;font-weight:900;color:#FFF;letter-spacing:-.01em;line-height:1;margin-bottom:8px;}
+    .login-accent{width:230px;height:4px;background:#1B90FF;border-radius:2px;margin:0 auto 18px;}
+    .login-rule{width:100%;height:1px;background:rgba(255,255,255,.15);margin-bottom:22px;}
+    .login-card h2{font-size:17px;font-weight:800;color:#4CB1FF;margin-bottom:32px;letter-spacing:.1em;text-transform:uppercase;white-space:nowrap;}
+    .login-card p{color:rgba(255,255,255,.5);font-size:13px;line-height:1.6;margin-bottom:28px;}
+    .login-card .btn-login-main{background:#1B90FF;color:#FFF;border:none;padding:17px 32px;
+      border-radius:8px;font-size:14px;font-weight:700;font-family:var(--font);cursor:pointer;width:60%;transition:background .2s;}
+    .login-card .btn-login-main:hover{background:#0070F2;}
+    .login-note{margin-top:20px;font-size:11px;color:rgba(255,255,255,.25);letter-spacing:.06em;text-transform:uppercase;}
     #mainContent{display:none;}
     .app-layout{display:flex;min-height:calc(100vh - 56px);}
     .side-panel{width:200px;flex-shrink:0;background:#00144A;border-right:1px solid rgba(255,255,255,.07);
@@ -411,6 +414,8 @@
     .th-sort-icon{display:inline-block;margin-left:4px;font-size:10px;opacity:.4;vertical-align:middle;}
     th.sort-asc .th-sort-icon,th.sort-desc .th-sort-icon{opacity:1;color:#89D1FF;}
     .btn-edit-record{background:var(--sap-blue);color:#FFF;border:none;border-radius:3px;padding:3px 10px;font-size:11px;font-weight:600;font-family:var(--font);cursor:pointer;transition:background .15s;white-space:nowrap;}
+    .btn-approve-ss{background:#1B7A3A;color:#FFF;border:none;border-radius:3px;padding:3px 10px;font-size:11px;font-weight:600;font-family:var(--font);cursor:pointer;transition:background .15s;white-space:nowrap;}
+    .btn-approve-ss:hover{background:#145C2B;}
     .btn-edit-record:hover{background:var(--sap-blue-dark);}
     .btn-delete-record{background:#c00;color:#FFF;border:none;border-radius:3px;padding:3px 8px;font-size:11px;font-weight:600;font-family:var(--font);cursor:pointer;transition:background .15s;white-space:nowrap;}
     .btn-delete-record:hover{background:#900;}
@@ -430,6 +435,78 @@
       cursor:pointer;transition:background .15s;white-space:nowrap;}
     .btn-exit-preview:hover{background:rgba(255,255,255,.35);}
     .footer{text-align:center;padding:20px;font-size:11px;color:var(--text-muted);border-top:1px solid var(--border);margin-top:16px;}
+
+    /* ── Swap search clear btn ── */
+    .srch-wrap{position:relative;}
+    .srch-clear{position:absolute;top:50%;right:8px;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:#999;font-size:15px;line-height:1;padding:2px 4px;display:none;}
+    .srch-clear:hover{color:#CC0000;}
+    .srch-wrap input:not(:placeholder-shown) ~ .srch-clear{display:block;}
+    .srch-list{position:absolute;top:100%;left:0;right:0;max-height:180px;overflow-y:auto;background:#FFF;border:1px solid #B0CAFF;border-top:none;border-radius:0 0 6px 6px;box-shadow:0 4px 14px rgba(0,0,0,.12);z-index:9999;display:none;}
+    .srch-list-item{padding:7px 12px;font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:8px;}
+    .srch-list-item:hover,.srch-list-item.active{background:#EFF8FF;}
+    .srch-list-item .srch-name{font-weight:600;color:var(--sap-navy);}
+    .srch-list-item .srch-meta{font-size:11px;color:#999;white-space:nowrap;}
+    .srch-empty{padding:9px 12px;font-size:12px;color:#999;font-style:italic;}
+
+    /* ── App Notification Strip ── */
+    .notif-strip{background:#FFF;border:1px solid #D1E4FF;border-radius:8px;padding:10px 14px;margin-bottom:14px;display:none;animation:fadeInDown .3s ease;}
+    @keyframes fadeInDown{from{opacity:0;transform:translateY(-6px);}to{opacity:1;transform:translateY(0);}}
+    .notif-header{display:flex;align-items:center;gap:8px;margin-bottom:6px;}
+    .notif-badge{background:#1B90FF;color:#FFF;border-radius:20px;padding:2px 10px;font-size:10px;font-weight:700;letter-spacing:.06em;white-space:nowrap;}
+    .notif-ver{font-size:10px;color:#999;margin-left:auto;white-space:nowrap;}
+    .notif-dismiss{background:none;border:none;cursor:pointer;color:#999;font-size:16px;line-height:1;padding:0 2px;margin-left:6px;}
+    .notif-dismiss:hover{color:#CC0000;}
+    .notif-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:3px;}
+    .notif-list li{font-size:12px;color:#1D2329;line-height:1.5;padding-left:14px;position:relative;}
+    .notif-list li::before{content:"•";position:absolute;left:3px;color:#1B90FF;font-weight:700;}
+    .notif-list li strong{color:#00144A;}
+
+    /* ── Notification Bell ── */
+    .btn-notif{position:relative;background:none;border:none;cursor:pointer;color:rgba(255,255,255,.75);padding:6px 8px;border-radius:6px;display:flex;align-items:center;justify-content:center;transition:background .15s,color .15s;}
+    .btn-notif:hover{background:rgba(255,255,255,.12);color:#FFF;}
+    .notif-dot{position:absolute;top:5px;right:5px;width:8px;height:8px;background:#FF4444;border-radius:50%;border:1.5px solid #00144A;display:none;}
+    .notif-dot.active{display:block;}
+    .notif-panel{position:absolute;top:calc(100% + 10px);right:0;width:370px;background:#FFF;border-radius:10px;box-shadow:0 8px 28px rgba(0,0,0,.2);border:1px solid #D1E4FF;z-index:9999;overflow:hidden;display:none;animation:notifFadeIn .2s ease;}
+    @keyframes notifFadeIn{from{opacity:0;transform:translateY(-6px);}to{opacity:1;transform:translateY(0);}}
+    .notif-panel-hdr{background:#00144A;padding:12px 16px;display:flex;align-items:center;gap:8px;}
+    .notif-panel-hdr-title{font-size:13px;font-weight:700;color:#FFF;flex:1;}
+    .notif-panel-hdr-ver{font-size:10px;color:rgba(255,255,255,.5);white-space:nowrap;}
+    .notif-mark-read{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);color:#FFF;border-radius:6px;padding:3px 10px;font-size:10.5px;font-weight:600;cursor:pointer;white-space:nowrap;}
+    .notif-mark-read:hover{background:rgba(255,255,255,.25);}
+    .notif-items{padding:8px 0;}
+    .notif-item{padding:9px 16px;border-bottom:1px solid #F0F4FF;display:flex;gap:10px;align-items:flex-start;}
+    .notif-item:last-child{border-bottom:none;}
+    .notif-item-dot{width:7px;height:7px;border-radius:50%;background:#1B90FF;flex-shrink:0;margin-top:5px;}
+    .notif-item-dot.read{background:#D0D5DD;}
+    .notif-item-body{font-size:12px;color:#1D2329;line-height:1.55;}
+    .notif-item-body strong{color:#00144A;}
+    .notif-item-tag{display:inline-block;background:#EEF4FF;color:#0057C2;border-radius:8px;padding:1px 7px;font-size:10px;font-weight:700;margin-right:4px;}
+
+    /* ── Notif panel requests section ── */
+    .notif-section-label{padding:7px 16px 4px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#999;background:#F8FAFE;border-bottom:1px solid #EEF2FF;border-top:1px solid #EEF2FF;}
+    .notif-item-req{padding:9px 14px;border-bottom:1px solid #F0F4FF;display:flex;gap:10px;align-items:flex-start;cursor:pointer;transition:background .12s;}
+    .notif-item-req:hover{background:#EFF8FF;}
+    .notif-item-req:last-child{border-bottom:none;}
+    .notif-req-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;margin-top:5px;}
+    .notif-req-dot.ack{background:#B45309;}
+    .notif-req-dot.pending{background:#1B90FF;}
+    .notif-req-dot.wfm{background:#188918;}
+    .notif-req-num{font-size:10.5px;font-weight:700;color:var(--sap-navy,#00144A);white-space:nowrap;}
+    .notif-req-body{font-size:11.5px;color:#1D2329;line-height:1.5;flex:1;}
+    .notif-req-meta{font-size:10.5px;color:#999;margin-top:1px;}
+    .notif-req-action{font-size:10.5px;font-weight:700;white-space:nowrap;}
+    .notif-req-action.ack{color:#B45309;}
+    .notif-req-action.wfm{color:#188918;}
+    .notif-req-action.view{color:#1B90FF;}
+    .notif-empty-req{padding:12px 16px;font-size:12px;color:#999;font-style:italic;text-align:center;}
+    .notif-panel-footer{padding:8px 16px;font-size:11px;color:#999;text-align:center;border-top:1px solid #EAECEE;background:#FAFBFF;}
+    #notifCount{position:absolute;top:4px;right:3px;min-width:16px;height:16px;background:#FF4444;color:#FFF;border-radius:8px;font-size:9px;font-weight:700;display:none;align-items:center;justify-content:center;padding:0 3px;border:1.5px solid #00144A;}
+    #notifCount.active{display:flex;}
+
+    /* ── Date range filter ── */
+    .fb-date{font-size:12px;padding:5px 8px;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--bg-card);color:var(--text-main);font-family:var(--font);cursor:pointer;height:32px;}
+    .fb-date:focus{outline:none;border-color:var(--sap-blue);box-shadow:0 0 0 2px rgba(27,144,255,.15);}
+    .fb-date-wrap{display:flex;align-items:center;gap:5px;font-size:11.5px;color:var(--text-muted);}
   </style>
 </head>
 <body>
@@ -467,7 +544,32 @@ function _sapLogoSVG(gid, style='') {
         <span id="themeLabel">Light</span>
       </button>
     </div>
-    <div id="headerRight">
+        <div style="position:relative" id="headerNotifWrap">
+      <button class="btn-notif" id="btnNotifBell" onclick="toggleNotifPanel(event)" title="What's New">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        <span id="notifCount"></span>
+      </button>
+      <div class="notif-panel" id="notifPanel">
+        <div class="notif-panel-hdr">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.7)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          <span class="notif-panel-hdr-title">What's New</span>
+          <span class="notif-panel-hdr-ver">v2.4 &nbsp;·&nbsp; Oct 2026</span>
+          <button class="notif-mark-read" onclick="notifMarkRead()">Mark as read</button>
+        </div>
+        <div class="notif-items">
+          <div class="notif-item"><div class="notif-item-dot" id="ndot0"></div><div class="notif-item-body"><span class="notif-item-tag">SWAP</span><strong>Multi-party Acknowledgment</strong> — Swap Partner and both Team Leaders now acknowledge directly in the system via the <em>For My Acknowledgment</em> tab.</div></div>
+          <div class="notif-item"><div class="notif-item-dot" id="ndot1"></div><div class="notif-item-body"><span class="notif-item-tag">SWAP</span><strong>WFM Visibility</strong> — WFM can now monitor all pending swap acknowledgments across the entire team.</div></div>
+          <div class="notif-item"><div class="notif-item-dot" id="ndot2"></div><div class="notif-item-body"><span class="notif-item-tag">FORM</span><strong>Searchable Swap Partner</strong> — Partner Name is now a live search dropdown that auto-fills Email and Team Lead.</div></div>
+          <div class="notif-item"><div class="notif-item-dot" id="ndot3"></div><div class="notif-item-body"><span class="notif-item-tag">LEAVE</span><strong>BIRTHDAY counted as VL</strong> — Status <em>BIRTHDAY + Vacation Leave</em> is now included in entitlement usage calculations.</div></div>
+          <div class="notif-item"><div class="notif-item-dot" id="ndot4"></div><div class="notif-item-body"><span class="notif-item-tag">UI</span><strong>Sortable Popup Tables</strong> — All "View All in New Window" tables now support click-to-sort on every column.</div></div>
+        </div>
+        <!-- Requests section -->
+        <div class="notif-section-label">Slide / Swap Requests</div>
+        <div id="notifRequests"><div class="notif-empty-req">Loading requests…</div></div>
+        <div class="notif-panel-footer">Click a request to navigate directly</div>
+      </div>
+    </div>
+<div id="headerRight">
       <button class="btn-login" id="btnHeaderLogin" onclick="signIn()" disabled>Initializing...</button>
     </div>
   </div>
@@ -483,20 +585,14 @@ function _sapLogoSVG(gid, style='') {
 <!-- ── Login Screen ── -->
 <div id="loginScreen">
   <div class="login-card">
-    <div class="login-icon">
-      <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 412.4 204" xml:space="preserve" style="height:56px;width:auto;display:block;">
-        <defs><linearGradient id="sapGrad_login" gradientUnits="userSpaceOnUse" x1="206.19" y1="206" x2="206.19" y2="2" gradientTransform="matrix(1 0 0 -1 0 206)"><stop offset="0" style="stop-color:#00B8F1"/><stop offset="0.31" style="stop-color:#0D90D9"/><stop offset="0.58" style="stop-color:#1775C8"/><stop offset="1" style="stop-color:#1E5FBB"/></linearGradient></defs>
-        <polyline style="fill-rule:evenodd;clip-rule:evenodd;fill:url(#sapGrad_login)" points="0,204 208.4,204 412.4,0 0,0 0,204"/>
-        <path style="fill-rule:evenodd;clip-rule:evenodd;fill:#FFFFFF" d="M244.7,38.4h-40.6v96.5l-35.5-96.6h-35.2l-30.3,80.7C100,98.7,79,91.7,62.4,86.4C51.5,82.9,39.8,77.7,40,72c0.1-4.7,6.2-9,18.4-8.4c8.2,0.4,15.4,1.1,29.7,8l14.1-24.5c-13.1-6.6-31.2-10.9-46-10.9h-0.1c-17.3,0-31.7,5.6-40.6,14.8c-6.2,6.3-9.7,14.8-9.7,23.7C5.5,87.2,10.1,96,19.7,103c8.1,5.9,18.5,9.8,27.6,12.6c11.3,3.5,20.5,6.5,20.4,13c-0.1,2.4-1,4.7-2.7,6.4c-2.8,2.9-7.1,4-13.1,4.1c-11.5,0.2-20-1.6-33.6-9.6L5.8,154.4c14,8,29.9,12.2,46,12.2h2.1c14.2-0.2,25.7-4.3,34.9-11.7c0.5-0.4,1-0.8,1.5-1.3l-4.1,10.9H123l6.2-18.8c7,2.3,14.3,3.5,21.7,3.4c7.2,0,14.3-1.1,21.2-3.2l6,18.6h60.1v-39h13.1c31.7,0,50.5-16.2,50.5-43.2C301.7,52.2,283.5,38.4,244.7,38.4z M150.9,121c-4.4,0-8.8-0.7-13-2.3l12.9-40.6h0.2l12.6,40.7C159.6,120.3,155.2,121,150.9,121z M247.1,97.7h-8.9V64.9h8.9c11.9,0,21.4,4,21.4,16.1C268.5,93.7,259,97.6,247.1,97.7"/>
-      </svg>
-    </div>
-    <div style="font-size:22px;font-weight:700;color:var(--sap-deep-navy);margin-bottom:2px;letter-spacing:.01em;">USD MNL</div>
-    <div style="font-size:13px;font-weight:600;color:var(--sap-blue-dark);margin-bottom:16px;letter-spacing:.04em;text-transform:uppercase;">Leave Consumption and Scheduling Tool</div>
+    <div class="login-icon"></div>
+    <div class="login-title">USD MNL</div>
+    <div class="login-accent"></div>
+    <div class="login-rule"></div>
     <h2>Leave Consumption and Scheduling Tool</h2>
-    <p>Sign in with your SAP account to load leave data from SharePoint and manage leave consumption and scheduling for USD MNL.</p>
     <button class="btn-login-main" id="btnMainLogin" onclick="signIn()" disabled>Initializing...</button>
-    <p id="loginError" style="display:none;margin-top:12px;color:#c00;font-size:12px;background:#fff0f0;border:1px solid #f5c6c6;border-radius:6px;padding:8px 12px;text-align:left;"></p>
-    <p class="login-note">USD MNL &nbsp;&middot;&nbsp; Leave Consumption and Scheduling Tool &nbsp;|&nbsp; Secure sign-in via Microsoft Identity Platform</p>
+    <p id="loginError" style="display:none;margin-top:12px;color:#ffaaaa;font-size:12px;background:rgba(200,0,0,.15);border:1px solid rgba(200,0,0,.3);border-radius:6px;padding:8px 12px;text-align:left;"></p>
+    <p class="login-note">USD Manila &nbsp;·&nbsp; SAP Concur</p>
   </div>
 </div>
 
@@ -531,6 +627,10 @@ function _sapLogoSVG(gid, style='') {
         <div class="snav-sub-item active" id="snav-navsub-ss-tab-records" onclick="navGoSSTab('ss-tab-records')">
           <svg class="snav-sub-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
           <span class="snav-label">Records</span>
+        </div>
+        <div class="snav-sub-item" id="snav-navsub-ss-tab-myack" onclick="navGoSSTab('ss-tab-myack')">
+          <svg class="snav-sub-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          <span class="snav-label">For My Acknowledgment</span>
         </div>
         <div class="snav-sub-item" id="snav-navsub-ss-tab-frequency" onclick="navGoSSTab('ss-tab-frequency')">
           <svg class="snav-sub-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
@@ -585,6 +685,7 @@ function _sapLogoSVG(gid, style='') {
               <option value="">— Role —</option>
               <option value="agent">Agent</option>
               <option value="tl">Team Lead</option>
+              <option value="manager">Manager</option>
             </select>
             <span class="snav-preview-label">Name</span>
             <select class="snav-preview-select" id="previewName">
@@ -616,6 +717,24 @@ function _sapLogoSVG(gid, style='') {
             <span class="banner-badge" id="approvedBadge">Loading...</span>
           </div>
 
+
+          <!-- App Notification Strip -->
+          <div class="notif-strip" id="appNotifStrip">
+            <div class="notif-header">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1B90FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+              <span class="notif-badge">WHAT'S NEW</span>
+              <span class="notif-ver">v2.4 &nbsp;·&nbsp; Oct 2026</span>
+              <button class="notif-dismiss" onclick="appNotifDismiss()" title="Dismiss">&#215;</button>
+            </div>
+            <ul class="notif-list">
+              <li><strong>Swap Acknowledgment —</strong> Swap Partner and both Team Leaders now acknowledge directly in the system via the <em>For My Acknowledgment</em> tab.</li>
+              <li><strong>WFM Visibility —</strong> WFM can monitor all pending swap acknowledgments in one place.</li>
+              <li><strong>Swap Filing Form —</strong> Partner Name is now a searchable dropdown with auto-fill for Email and Team Lead.</li>
+              <li><strong>BIRTHDAY Leave —</strong> Status <em>BIRTHDAY</em> is now counted as Approved Vacation Leave in entitlement usage.</li>
+              <li><strong>Sort in New Window —</strong> All "View All in New Window" tables now support click-to-sort on every column.</li>
+            </ul>
+          </div>
+
           <!-- Loading -->
           <div id="loadingState">
             <div class="spinner"></div>
@@ -640,6 +759,12 @@ function _sapLogoSVG(gid, style='') {
             </select>
             <select class="fb-select" id="filterGroup" onchange="applyFilters()"><option value="">All Groups</option></select>
             <select class="fb-select" id="filterLeaveType" onchange="applyFilters()"><option value="">All Leave Types</option></select>
+            <div class="fb-date-wrap">
+              <span>From</span>
+              <input type="date" class="fb-date" id="leaveDateFrom" onchange="applyFilters()" title="Leave date from"/>
+              <span>To</span>
+              <input type="date" class="fb-date" id="leaveDateTo" onchange="applyFilters()" title="Leave date to"/>
+            </div>
             <div class="fb-spacer"></div>
             <button class="fb-clear" onclick="clearGlobalFilters()">Clear</button>
             <button class="btn-refresh" onclick="loadData()">
@@ -1065,6 +1190,24 @@ function _sapLogoSVG(gid, style='') {
             </div>
           </div>
 
+
+          <!-- App Notification Strip -->
+          <div class="notif-strip" id="appNotifStripSS">
+            <div class="notif-header">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1B90FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+              <span class="notif-badge">WHAT'S NEW</span>
+              <span class="notif-ver">v2.4 &nbsp;·&nbsp; Oct 2026</span>
+              <button class="notif-dismiss" onclick="appNotifDismiss()" title="Dismiss">&#215;</button>
+            </div>
+            <ul class="notif-list">
+              <li><strong>Swap Acknowledgment —</strong> Swap Partner and both Team Leaders now acknowledge directly in the system via the <em>For My Acknowledgment</em> tab.</li>
+              <li><strong>WFM Visibility —</strong> WFM can monitor all pending swap acknowledgments in one place.</li>
+              <li><strong>Swap Filing Form —</strong> Partner Name is now a searchable dropdown with auto-fill for Email and Team Lead.</li>
+              <li><strong>BIRTHDAY Leave —</strong> Status <em>BIRTHDAY</em> is now counted as Approved Vacation Leave in entitlement usage.</li>
+              <li><strong>Sort in New Window —</strong> All "View All in New Window" tables now support click-to-sort on every column.</li>
+            </ul>
+          </div>
+
           <!-- Loading -->
           <div id="ssLoadingState">
             <div class="spinner"></div>
@@ -1095,8 +1238,15 @@ function _sapLogoSVG(gid, style='') {
               <option value="rejected">Rejected</option>
               <option value="cancelled">Cancelled</option>
             </select>
+            <div class="fb-date-wrap">
+              <span>From</span>
+              <input type="date" class="fb-date" id="ssDateFrom" onchange="ssApplyFilters()" title="Shift date from"/>
+              <span>To</span>
+              <input type="date" class="fb-date" id="ssDateTo" onchange="ssApplyFilters()" title="Shift date to"/>
+            </div>
+            <button class="fb-clear" onclick="clearSSFilters()">Clear</button>
             <div class="fb-spacer"></div>
-            <button class="btn-refresh" onclick="loadSSData()">
+            <button class="btn-refresh" onclick="location.reload()">
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
               Refresh
             </button>
@@ -1106,8 +1256,9 @@ function _sapLogoSVG(gid, style='') {
           <div id="ssDashboardContent" style="display:none">
             <div class="tab-nav">
               <button class="tab-btn active" onclick="ssSwitchTab('ss-tab-records',this)">Records</button>
+              <button class="tab-btn" id="btn-ss-tab-myack" onclick="ssSwitchTab('ss-tab-myack',this);renderMyAckTable()">For My Acknowledgment <span id="myAckCount" style="display:none;background:#CC0000;color:#FFF;border-radius:10px;padding:1px 7px;font-size:10px;font-weight:700;margin-left:4px"></span></button>
               <button class="tab-btn" id="btn-ss-tab-frequency" onclick="ssSwitchTab('ss-tab-frequency',this);renderSSFrequency()">Frequency</button>
-              <button class="tab-btn" id="btn-ss-tab-admin" style="display:none;color:#B45309" onclick="ssSwitchTab('ss-tab-admin',this);renderSSAdminTable()">Admin</button>
+              <button class="tab-btn" id="btn-ss-tab-admin" style="display:none;color:#B45309" onclick="ssSwitchTab('ss-tab-admin',this);ssFilterAdminTable()">Admin</button>
             </div>
 
             <!-- SS Tab: Records -->
@@ -1143,19 +1294,6 @@ function _sapLogoSVG(gid, style='') {
                 <div class="fb fb-global">
                   <span class="fb-label">Filter</span>
                   <input  class="fb-input"  id="ssNameFilter"    placeholder="Search name…"   oninput="ssApplyTableFilters()" style="min-width:200px">
-                  <select class="fb-select" id="ssTableYearFilter"  onchange="ssApplyTableFilters()"><option value="">All Years</option></select>
-                  <select class="fb-select" id="ssTableMonthFilter" onchange="ssApplyTableFilters()">
-                    <option value="">All Months</option>
-                    <option value="1">January</option><option value="2">February</option><option value="3">March</option>
-                    <option value="4">April</option><option value="5">May</option><option value="6">June</option>
-                    <option value="7">July</option><option value="8">August</option><option value="9">September</option>
-                    <option value="10">October</option><option value="11">November</option><option value="12">December</option>
-                  </select>
-                  <select class="fb-select" id="ssTableTypeFilter" onchange="ssApplyTableFilters()">
-                    <option value="">All Types</option>
-                    <option value="slide">Slide</option>
-                    <option value="swap">Swap</option>
-                  </select>
                   <select class="fb-select" id="ssTLFilter"      onchange="ssApplyTableFilters()"><option value="">All TLs</option></select>
                   <select class="fb-select" id="ssPlottedFilter" onchange="ssApplyTableFilters()">
                     <option value="">All Plotted</option>
@@ -1169,6 +1307,7 @@ function _sapLogoSVG(gid, style='') {
                     <thead>
                       <tr>
                         <th>#</th>
+                        <th class="th-sortable" onclick="sortSSTable('title')">Req. No. <span class="th-sort-icon" id="ssth-title">⇅</span></th>
                         <th class="th-sortable" onclick="sortSSTable('requestorName')">Requestor <span class="th-sort-icon" id="ssth-requestorName">⇅</span></th>
                         <th class="th-sortable" onclick="sortSSTable('reqType')">Type <span class="th-sort-icon" id="ssth-reqType">⇅</span></th>
                         <th class="th-sortable" onclick="sortSSTable('status')">Status <span class="th-sort-icon" id="ssth-status">⇅</span></th>
@@ -1180,7 +1319,6 @@ function _sapLogoSVG(gid, style='') {
                         <th class="th-sortable" onclick="sortSSTable('swapName')">Swap Name <span class="th-sort-icon" id="ssth-swapName">⇅</span></th>
                         <th class="th-sortable" onclick="sortSSTable('swapAck')">Swap Ack <span class="th-sort-icon" id="ssth-swapAck">⇅</span></th>
                         <th class="th-sortable" onclick="sortSSTable('teamLead')">Team Lead <span class="th-sort-icon" id="ssth-teamLead">⇅</span></th>
-                        <th class="th-sortable" onclick="sortSSTable('swapEmail')">Swap Email <span class="th-sort-icon" id="ssth-swapEmail">⇅</span></th>
                         <th class="th-sortable" onclick="sortSSTable('plotted')">Plotted <span class="th-sort-icon" id="ssth-plotted">⇅</span></th>
                         <th class="th-sortable" onclick="sortSSTable('reason')">Reason <span class="th-sort-icon" id="ssth-reason">⇅</span></th>
                         <th class="th-sortable" onclick="sortSSTable('agentRemarks')">Remarks <span class="th-sort-icon" id="ssth-agentRemarks">⇅</span></th>
@@ -1195,6 +1333,45 @@ function _sapLogoSVG(gid, style='') {
             </div>
 
             <!-- SS Tab: Frequency -->
+            <!-- SS Tab: For My Acknowledgment -->
+            <div id="ss-tab-myack" class="tab-pane">
+              <div style="background:var(--sap-blue-sky);border:1px solid var(--sap-blue-light);border-radius:var(--radius);padding:10px 16px;margin-bottom:16px;font-size:12px;color:var(--sap-navy);display:flex;align-items:center;gap:8px">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                Swap requests where you are named as the <strong>&nbsp;swap partner&nbsp;</strong> and your acknowledgment is required.
+              </div>
+              <div class="table-card">
+                <div class="table-header">
+                  <div style="display:flex;align-items:center;gap:10px">
+                    <strong style="font-size:13px">Swaps Awaiting My Acknowledgment</strong>
+                    <span class="table-count" id="myAckTableCount"></span>
+                  </div>
+                  <button class="btn-refresh" onclick="renderMyAckTable()">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+                    Refresh
+                  </button>
+                </div>
+                <div class="table-wrap">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>#</th>
+                        <th>Req. No.</th>
+                        <th>Requestor</th>
+                        <th>Swap Name</th>
+                        <th>Shift Date</th>
+                        <th>Their Schedule</th>
+                        <th>Your Requested Schedule</th>
+                        <th>Reason</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody id="myAckTableBody"></tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
             <div id="ss-tab-frequency" class="tab-pane">
               <div style="background:var(--sap-blue-sky);border:1px solid var(--sap-blue-light);border-radius:var(--radius);padding:10px 16px;margin-bottom:16px;font-size:12px;color:var(--sap-navy);display:flex;align-items:center;gap:8px">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
@@ -1283,30 +1460,32 @@ function _sapLogoSVG(gid, style='') {
 
             <!-- SS Tab: Admin -->
             <div id="ss-tab-admin" class="tab-pane">
+              <!-- SS Admin Sub-nav -->
+              <div class="admin-sub-nav" id="ssAdminSubNav">
+                <button class="admin-sub-btn active" id="btn-ssadmin-pending" onclick="switchSSAdminSub('ssadmin-pending',this)">Pending Requests</button>
+                <button class="admin-sub-btn" id="btn-ssadmin-history" onclick="switchSSAdminSub('ssadmin-history',this);loadSSHistory()">Activity History</button>
+              </div>
+
+              <!-- Sub-pane: Pending Requests -->
+              <div class="admin-sub-pane active" id="ssadmin-pending">
               <div class="table-card">
                 <div class="table-header">
                   <div style="display:flex;align-items:center;gap:10px">
                     <strong style="font-size:13px">Pending Slide / Swap Requests</strong>
                     <span class="table-count" id="ssAdminTableCount"></span>
+                    <span id="ssAdminSelCount" style="display:none;font-size:12px;font-weight:600;color:#B45309;background:#FFF3E0;border:1px solid #FCD09A;border-radius:10px;padding:2px 10px"></span>
                   </div>
-                  <button class="btn-view-all" onclick="viewAllSSAdmin()">View All in New Window</button>
+                  <div style="display:flex;align-items:center;gap:8px">
+                    <button class="btn-approve-ss" id="btnApproveSelected" onclick="approveSelectedSSRequests()" style="padding:5px 14px;font-size:12px;display:none">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right:4px;vertical-align:-1px"><polyline points="20 6 9 17 4 12"/></svg>
+                      Approve Selected
+                    </button>
+                    <button class="btn-view-all" onclick="viewAllSSAdmin()">View All in New Window</button>
+                  </div>
                 </div>
                 <div class="fb">
                   <span class="fb-label">Filter</span>
                   <input class="fb-input" id="ssAdminSearch" placeholder="Search name…" oninput="ssFilterAdminTable()" style="min-width:200px"/>
-                  <select class="fb-select" id="ssAdminYearFilter" onchange="ssFilterAdminTable()"><option value="">All Years</option></select>
-                  <select class="fb-select" id="ssAdminMonthFilter" onchange="ssFilterAdminTable()">
-                    <option value="">All Months</option>
-                    <option value="1">January</option><option value="2">February</option><option value="3">March</option>
-                    <option value="4">April</option><option value="5">May</option><option value="6">June</option>
-                    <option value="7">July</option><option value="8">August</option><option value="9">September</option>
-                    <option value="10">October</option><option value="11">November</option><option value="12">December</option>
-                  </select>
-                  <select class="fb-select" id="ssAdminTypeFilter" onchange="ssFilterAdminTable()">
-                    <option value="">All Types</option>
-                    <option value="slide">Slide</option>
-                    <option value="swap">Swap</option>
-                  </select>
                   <select class="fb-select" id="ssAdminTLFilter" onchange="ssFilterAdminTable()"><option value="">All TLs</option></select>
                   <select class="fb-select" id="ssAdminPlottedFilter" onchange="ssFilterAdminTable()">
                     <option value="">All Plotted</option>
@@ -1320,25 +1499,85 @@ function _sapLogoSVG(gid, style='') {
                     <thead>
                       <tr>
                         <th>#</th>
-                        <th class="th-sortable" onclick="sortSSAdminTable('requestorName')">Requestor <span class="th-sort-icon" id="ssath-requestorName">⇅</span></th>
+                        <th style="width:32px;text-align:center"><input type="checkbox" id="ssAdminSelectAll" title="Select / deselect all" onchange="ssAdminToggleAll(this.checked)" style="cursor:pointer;accent-color:#1B90FF"/></th>
+                        <th style="white-space:nowrap" class="th-sortable" onclick="sortSSAdminTable('requestorName')">Requestor <span class="th-sort-icon" id="ssath-requestorName">⇅</span></th>
                         <th class="th-sortable" onclick="sortSSAdminTable('reqType')">Type <span class="th-sort-icon" id="ssath-reqType">⇅</span></th>
-                        <th class="th-sortable" onclick="sortSSAdminTable('status')">Status <span class="th-sort-icon" id="ssath-status">⇅</span></th>
-                        <th class="th-sortable" onclick="sortSSAdminTable('shiftDate')">Shift Date <span class="th-sort-icon" id="ssath-shiftDate">⇅</span></th>
-                        <th class="th-sortable" onclick="sortSSAdminTable('originalSchedule')">Orig. Schedule <span class="th-sort-icon" id="ssath-originalSchedule">⇅</span></th>
-                        <th class="th-sortable" onclick="sortSSAdminTable('requestedSchedule')">Req. Schedule <span class="th-sort-icon" id="ssath-requestedSchedule">⇅</span></th>
-                        <th class="th-sortable" onclick="sortSSAdminTable('swapName')">Swap Name <span class="th-sort-icon" id="ssath-swapName">⇅</span></th>
-                        <th class="th-sortable" onclick="sortSSAdminTable('teamLead')">Team Lead <span class="th-sort-icon" id="ssath-teamLead">⇅</span></th>
-                        <th class="th-sortable" onclick="sortSSAdminTable('reason')">Reason <span class="th-sort-icon" id="ssath-reason">⇅</span></th>
-                        <th class="th-sortable" onclick="sortSSAdminTable('plotted')">Plotted <span class="th-sort-icon" id="ssath-plotted">⇅</span></th>
-                        <th>Edit</th>
+                        <th style="white-space:nowrap" class="th-sortable" onclick="sortSSAdminTable('status')">Status <span class="th-sort-icon" id="ssath-status">⇅</span></th>
+                        <th style="white-space:nowrap" class="th-sortable" onclick="sortSSAdminTable('shiftDate')">Shift Date <span class="th-sort-icon" id="ssath-shiftDate">⇅</span></th>
+                        <th style="white-space:nowrap" class="th-sortable" onclick="sortSSAdminTable('originalSchedule')">Orig. Schedule <span class="th-sort-icon" id="ssath-originalSchedule">⇅</span></th>
+                        <th style="white-space:nowrap" class="th-sortable" onclick="sortSSAdminTable('requestedSchedule')">Req. Schedule <span class="th-sort-icon" id="ssath-requestedSchedule">⇅</span></th>
+                        <th style="white-space:nowrap" class="th-sortable" onclick="sortSSAdminTable('swapName')">Swap Name <span class="th-sort-icon" id="ssath-swapName">⇅</span></th>
+                        <th style="white-space:nowrap" class="th-sortable" onclick="sortSSAdminTable('teamLead')">Team Lead <span class="th-sort-icon" id="ssath-teamLead">⇅</span></th>
+                        <th style="white-space:nowrap" class="th-sortable" onclick="sortSSAdminTable('reason')">Reason <span class="th-sort-icon" id="ssath-reason">⇅</span></th>
+                        <th style="white-space:nowrap" class="th-sortable" onclick="sortSSAdminTable('plotted')">Plotted <span class="th-sort-icon" id="ssath-plotted">⇅</span></th>
+                        <th style="white-space:nowrap">Actions</th>
                       </tr>
                     </thead>
                     <tbody id="ssAdminTableBody"></tbody>
                   </table>
                 </div>
                 <div class="pagination" id="ssAdminPagination"></div>
-              </div>
-            </div>
+              </div><!-- /table-card -->
+              </div><!-- /ssadmin-pending -->
+
+              <!-- Sub-pane: Activity History -->
+              <div class="admin-sub-pane" id="ssadmin-history">
+                <div class="table-card">
+                  <div class="table-header">
+                    <div style="display:flex;align-items:center;gap:10px">
+                      <strong style="font-size:13px">Activity History</strong>
+                      <span class="table-count" id="ssHistoryCount"></span>
+                    </div>
+                    <button class="btn-refresh" id="btnRefreshHistory" onclick="loadSSHistory()">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+                      Refresh
+                    </button>
+                  </div>
+                  <div class="fb">
+                    <span class="fb-label">Filter</span>
+                    <select class="fb-select" id="histActivityFilter" onchange="renderSSHistory()">
+                      <option value="">All Activities</option>
+                      <option value="Submitted">Submitted</option>
+                      <option value="Edited">Edited</option>
+                      <option value="Deleted">Deleted</option>
+                    </select>
+                    <select class="fb-select" id="histTypeFilter" onchange="renderSSHistory()">
+                      <option value="">All Types</option>
+                      <option value="Slide">Slide</option>
+                      <option value="Swap">Swap</option>
+                    </select>
+                    <input class="fb-input" id="histNameFilter" placeholder="Search requestor…" oninput="renderSSHistory()" style="min-width:180px"/>
+                    <div class="fb-spacer"></div>
+                    <button class="fb-clear" onclick="clearHistFilters()">Clear</button>
+                  </div>
+                  <div id="ssHistoryLoading" style="display:none;text-align:center;padding:40px 20px">
+                    <div class="spinner"></div>
+                    <div class="loading-text">Loading history…</div>
+                  </div>
+                  <div class="table-wrap">
+                    <table>
+                      <thead>
+                        <tr>
+                          <th>#</th>
+                          <th>Timestamp</th>
+                          <th>Activity</th>
+                          <th>Request No.</th>
+                          <th>Type</th>
+                          <th>Requestor</th>
+                          <th>Status</th>
+                          <th>Shift Date</th>
+                          <th>Performed By</th>
+                          <th>Remarks</th>
+                        </tr>
+                      </thead>
+                      <tbody id="ssHistoryBody"></tbody>
+                    </table>
+                  </div>
+                  <div class="pagination" id="ssHistoryPagination"></div>
+                </div>
+              </div><!-- /ssadmin-history -->
+
+            </div><!-- /ss-tab-admin -->
           </div><!-- /ssDashboardContent -->
         </div><!-- /page-wrapper -->
         <div class="footer">USD MNL &nbsp;&middot;&nbsp; Slide / Swap Scheduling Tool &nbsp;&middot;&nbsp; Powered by Microsoft Graph API</div>
@@ -1417,6 +1656,10 @@ function _sapLogoSVG(gid, style='') {
     </div>
     <div class="modal-body">
       <div class="form-grid">
+        <div class="form-group full-width" style="margin-bottom:4px">
+          <label class="form-label">Request Number</label>
+          <input class="form-control" id="arfReqNum" readonly style="background:var(--bg-secondary);color:var(--sap-blue-dark);font-weight:700;letter-spacing:.06em;cursor:default;"/>
+        </div>
         <div class="form-group">
           <label class="form-label">Request Type <span style="color:#CC0000">*</span></label>
           <select class="form-control" id="arfReqType" onchange="ssApplyTypeChange()">
@@ -1426,19 +1669,19 @@ function _sapLogoSVG(gid, style='') {
         </div>
         <div class="form-group">
           <label class="form-label" id="arfNameLabel">Your Name <span style="color:#CC0000">*</span></label>
-          <input class="form-control" id="arfNameInput" placeholder="Full name"/>
-          <select class="form-control" id="arfNameSelect" style="display:none"><option value="">— Select Team Member —</option></select>
+          <input class="form-control" id="arfNameInput" placeholder="Full name" oninput="arfAutoTL(this.value)" onchange="arfAutoTL(this.value)"/>
+          <select class="form-control" id="arfNameSelect" style="display:none" onchange="arfAutoTL(this.value)"><option value="">— Select Team Member —</option></select>
         </div>
         <div class="form-group">
           <label class="form-label">Shift Date <span style="color:#CC0000">*</span></label>
           <input class="form-control" id="arfShiftDate" type="date"/>
         </div>
         <div class="form-group">
-          <label class="form-label">Team Lead</label>
+          <label class="form-label">Team Lead <span style="color:#CC0000">*</span></label>
           <select class="form-control" id="arfTeamLead"><option value="">— Select TL —</option></select>
         </div>
         <div class="form-group">
-          <label class="form-label">Original Schedule</label>
+          <label class="form-label">Original Schedule <span style="color:#CC0000">*</span></label>
           <select class="form-control" id="arfOrigSched">
             <option value="">— Select Schedule —</option>
             <option>12:00 AM–09:00 AM</option><option>12:30 AM–09:30 AM</option>
@@ -1468,11 +1711,11 @@ function _sapLogoSVG(gid, style='') {
           </select>
         </div>
         <div class="form-group">
-          <label class="form-label">Original RD</label>
+          <label class="form-label">Original RD <span style="color:#CC0000">*</span></label>
           <select class="form-control" id="arfOrigRD"><option value="">— Select RD —</option><option>FRI-SAT</option><option>SAT-SUN</option><option>SUN-MON</option><option>MON-TUE</option><option>TUE-WED</option><option>WED-THU</option><option>THU-FRI</option></select>
         </div>
         <div class="form-group">
-          <label class="form-label">Requested Schedule</label>
+          <label class="form-label">Requested Schedule <span style="color:#CC0000">*</span></label>
           <select class="form-control" id="arfReqSched">
             <option value="">— Select Schedule —</option>
             <option>12:00 AM–09:00 AM</option><option>12:30 AM–09:30 AM</option>
@@ -1502,7 +1745,7 @@ function _sapLogoSVG(gid, style='') {
           </select>
         </div>
         <div class="form-group">
-          <label class="form-label">Requested RD</label>
+          <label class="form-label">Requested RD <span style="color:#CC0000">*</span></label>
           <select class="form-control" id="arfReqRD"><option value="">— Select RD —</option><option>FRI-SAT</option><option>SAT-SUN</option><option>SUN-MON</option><option>MON-TUE</option><option>TUE-WED</option><option>WED-THU</option><option>THU-FRI</option></select>
         </div>
         <!-- Swap-only fields -->
@@ -1513,25 +1756,38 @@ function _sapLogoSVG(gid, style='') {
           </div>
           <div class="form-grid" style="padding:0">
             <div class="form-group">
-              <label class="form-label">Swap Partner Name</label>
-              <input class="form-control" id="arfSwapName"/>
+              <label class="form-label">Swap Partner Name <span style="color:#CC0000">*</span></label>
+              <div class="srch-wrap">
+                <input class="form-control" id="arfSwapName" placeholder="Type to search…" autocomplete="off"
+                  oninput="arfSwapSearch(this.value)"
+                  onfocus="arfSwapSearch(this.value)"
+                  onkeydown="arfSwapKeyNav(event)"
+                  onblur="setTimeout(arfSwapHide,200)" style="padding-right:28px"/>
+                <button type="button" class="srch-clear" title="Clear" onclick="arfSwapClear()">&#215;</button>
+                <div class="srch-list" id="arfSwapNameList"></div>
+              </div>
             </div>
             <div class="form-group">
-              <label class="form-label">Swap Partner Email</label>
+              <label class="form-label">Swap Partner Email <span style="color:#CC0000">*</span></label>
               <input class="form-control" id="arfSwapEmail" type="email"/>
             </div>
             <div class="form-group">
-              <label class="form-label">Swap Partner TL</label>
-              <input class="form-control" id="arfSwapTL"/>
-            </div>
-            <div class="form-group">
-              <label class="form-label">Swap Acknowledgment</label>
-              <input class="form-control" id="arfSwapAck"/>
+              <label class="form-label">Swap Partner TL <span style="color:#CC0000">*</span></label>
+              <select class="form-control" id="arfSwapTL"><option value="">— Select TL —</option></select>
             </div>
           </div>
+          <!-- Process flow note -->
+          <div style="background:#EFF8FF;border-left:4px solid #1B90FF;border-radius:0 6px 6px 0;padding:10px 14px;margin-top:10px;font-size:12px;color:#004A8F;line-height:1.6">
+            <strong>What happens after you submit:</strong><br>
+            1&nbsp;→&nbsp;Your request is filed as <em>For Acknowledgement</em>.<br>
+            2&nbsp;→&nbsp;The <strong>Swap Partner</strong>, <strong>your Team Lead</strong>, and the <strong>Swap Partner's Team Lead</strong> each log in and acknowledge via the <em>For My Acknowledgment</em> tab.<br>
+            3&nbsp;→&nbsp;Once all parties acknowledge, the request moves to <em>Pending</em> for <strong>WFM approval</strong>.
+          </div>
+          <!-- Hidden ack field for backwards compat -->
+          <input type="hidden" id="arfSwapAck" value="pending"/>
         </div>
         <div class="form-group full-width">
-          <label class="form-label">Reason</label>
+          <label class="form-label">Reason <span style="color:#CC0000">*</span></label>
           <textarea class="form-control" id="arfReason" rows="3" placeholder="Describe the reason for your request…"></textarea>
         </div>
       </div>
@@ -1553,6 +1809,10 @@ function _sapLogoSVG(gid, style='') {
     </div>
     <div class="modal-body">
       <div class="form-grid">
+        <div class="form-group full-width" style="margin-bottom:4px">
+          <label class="form-label">Request Number</label>
+          <input class="form-control" id="sfReqNum" readonly style="background:var(--bg-secondary);color:var(--sap-blue-dark);font-weight:700;letter-spacing:.06em;cursor:default;"/>
+        </div>
         <div class="form-group"><label class="form-label">Requestor Name</label><input class="form-control" id="sfRequestorName" readonly/></div>
         <div class="form-group">
           <label class="form-label">Request Type</label>
@@ -1702,7 +1962,7 @@ const LIST_SS_ID     = "3DBD32E0-DA53-4351-885E-8D57B3EB2EA4";
 const CSV_FOLDER     = "USD New Leave Tool";
 const CSV_FILENAME   = "leave-records-approved.csv";
 const CSV_RLS_FILENAME = "UserRLS.csv";
-const SCOPES         = ["https://graph.microsoft.com/Sites.ReadWrite.All"];
+const SCOPES         = ["https://graph.microsoft.com/Sites.ReadWrite.All","https://graph.microsoft.com/Mail.Send"];
 const SAP_COLORS     = ["#1B90FF","#0070F2","#002A86","#89D1FF","#00144A","#4CB1FF","#0134BF","#D1EFFF","#6BB8FF","#003DC8"];
 
 /* ══════════════ MSAL ══════════════ */
@@ -1736,7 +1996,7 @@ const msalReady = (async () => {
   }
   try {
     await msalTimeout(loadMsalScript(), 15000, "MSAL script load");
-    const cfg = { auth:{ clientId:CLIENT_ID, authority:`https://login.microsoftonline.com/${TENANT_ID}`, redirectUri:"https://macdc06.github.io/USD-MNL-Leave-Consumption/" }, cache:{ cacheLocation:"sessionStorage", storeAuthStateInCookie:false } };
+    const cfg = { auth:{ clientId:CLIENT_ID, authority:`https://login.microsoftonline.com/${TENANT_ID}`, redirectUri:"https://macdc06.github.io/USD-MNL-Leave-Consumption/" }, cache:{ cacheLocation:"sessionStorage", storeAuthStateInCookie:false }, system:{ allowRedirectInIframe:true } };
     const inst = new msal.PublicClientApplication(cfg);
     if (typeof inst.initialize === "function") await msalTimeout(inst.initialize(), 10000, "MSAL initialize");
     try {
@@ -1758,13 +2018,23 @@ const msalReady = (async () => {
 
 async function signIn() {
   const inst = await msalReady;
+  // If running inside an iframe or popup, use redirect instead of popup
+  const inIframe = window !== window.top;
   try {
+    if (inIframe) {
+      inst.loginRedirect({ scopes: SCOPES });
+      return; // redirect navigates away — no further code runs
+    }
     const resp = await inst.loginPopup({ scopes: SCOPES });
     onLoginSuccess(resp.account);
   } catch(e) {
     const code = e.errorCode||"";
-    if (code==="popup_window_error"||code==="empty_window_error") inst.loginRedirect({scopes:SCOPES});
-    else if (code!=="user_cancelled") showToast("Sign-in failed: "+(e.message||String(e)));
+    // block_nested_popups, popup_window_error, empty_window_error → fall back to redirect
+    if (code==="block_nested_popups"||code==="popup_window_error"||code==="empty_window_error") {
+      inst.loginRedirect({ scopes: SCOPES });
+    } else if (code!=="user_cancelled") {
+      showToast("Sign-in failed: "+(e.message||String(e)));
+    }
   }
 }
 async function signOut() { const inst=await msalReady; await inst.logoutPopup(); location.reload(); }
@@ -1932,7 +2202,7 @@ let currentPage=1; const PAGE_SIZE=50;
 let allSSData=[],ssAdminData=[],ssFilteredData=[],ssSiteIdCache="",ssCurrentPage=1,ssAdminPage=1;
 const SS_PAGE_SIZE=50,SS_ADMIN_PAGE_SIZE=50;
 let ssSearchQuery="",ssAdminSearchQuery="",ssFrequencyRendered=false;
-let ssNameFilter="",ssTLFilter="",ssPlottedFilter="",ssTableYearFilter="",ssTableMonthFilter="",ssTableTypeFilter="";
+let ssNameFilter="",ssTLFilter="",ssPlottedFilter="";
 let ssAdminYearFilter="",ssAdminMonthFilter="",ssAdminTypeFilter="",ssAdminTLFilter="",ssAdminPlottedFilter="";
 let currentUserEmail="",currentUserName="",siteIdCache="",currentUserRole="",currentUserFunction="";
 let allRecordsPage=1; const ALL_REC_PAGE_SIZE=50;
@@ -2001,6 +2271,17 @@ const TL_NAMES={
 };
 function normTL(s){if(!s)return"";const k=(s||"").toLowerCase().trim();return TL_NAMES[k]||s;}
 function _useWt(r){return (r.leaveType||"").toLowerCase().trim()==="halfday vacation leave"?0.5:1;}
+/* Counts as Vacation Leave consumption when:
+   Leave Type = Vacation Leave / Halfday Vacation Leave  AND  Status = Approved or BIRTHDAY.
+   (BIRTHDAY is treated exactly like an Approved Vacation Leave → counts as 1) */
+function _isVL(r){
+  const lt=(r.leaveType||"").toLowerCase().trim();
+  const st=(r.status||"").toLowerCase().trim();
+  const isVLType=lt==="vacation leave"||lt==="halfday vacation leave";
+  // Tolerant match: handles "Approved", "Approved Leave", "BIRTHDAY", "Birthday", trailing spaces, etc.
+  const isCountedStatus=st.includes("approved")||st.includes("birthday");
+  return isVLType&&isCountedStatus;
+}
 
 /* ══════════════ LOAD DATA ══════════════ */
 async function loadData() {
@@ -2065,7 +2346,7 @@ async function loadData() {
     const rlsHasData=Object.keys(rlsDataByName).length>0;
     if(!rlsHasData) console.warn('[LEAVE] rlsDataByName is empty — RLS name-match skipped, filtering by group only');
     const _inRLS=row=>!rlsHasData||!!rlsDataByName[(row['Name']||'').trim().toLowerCase()];
-    allLeaveData=csvRows.filter(row=>{const g=(row['Group']||'').trim();const st=(row['Status']||'').trim().toLowerCase();return st==='approved'&&(g==='USD'||g==='APA')&&_inRLS(row);}).map(mapCSVLeave).filter(r=>r.tlEmail);
+    allLeaveData=csvRows.filter(row=>{const g=(row['Group']||'').trim();const st=(row['Status']||'').trim().toLowerCase();return (st==='approved'||st.includes('birthday'))&&(g==='USD'||g==='APA')&&_inRLS(row);}).map(mapCSVLeave).filter(r=>r.tlEmail);
     allAdminData=csvRows.filter(row=>{const g=(row['Group']||'').trim();const st=(row['Status']||'').trim().toLowerCase();return st==='pending'&&(g==='USD'||g==='APA')&&_inRLS(row);}).map(mapCSVLeave).filter(r=>r.tlEmail);
     allFullData=csvRows.filter(row=>{const g=(row['Group']||'').trim();const st=(row['Status']||'').trim();return (g==='USD'||g==='APA')&&st&&_inRLS(row);}).map(mapCSVLeave).filter(r=>r.tlEmail);
     allCalendarData=csvRows.filter(row=>{const g=(row['Group']||'').trim();const st=(row['Status']||'').trim();return (g==='USD'||g==='APA')&&st&&_inRLS(row);}).map(row=>{
@@ -2094,6 +2375,8 @@ async function loadData() {
     _applyRLSToLeaveData();
     populateFilters(); applyFilters(); initEntitlementTab(); initExpiringTab(); initCalendarTab(); populateRecordsFilterDropdowns();
     document.getElementById("bannerSubtitle").textContent=`USD MNL  |  Leave Consumption and Scheduling Tool  |  CSV  |  ${allLeaveData.length} approved records  ·  ${Object.keys(rlsData).length} RLS entries`;
+    notifInit();
+    appNotifInit();
     document.getElementById("approvedBadge").textContent=`${allLeaveData.length} Approved`;
     showLoading(false);
     document.getElementById("dashboardContent").style.display="block";
@@ -2125,6 +2408,7 @@ async function loadSSData() {
     ssApplyRoleUI();
     document.getElementById("ssBannerSubtitle").textContent=`USD MNL  |  Slide / Swap Scheduling Tool  |  SharePoint  |  ${allSSData.length} records loaded`;
     document.getElementById("ssBadge").textContent=`${allSSData.length} Records`;
+    notifUpdateRequests();
     const ab=document.getElementById("btnApplyRequest");if(ab)ab.style.display="inline-flex";
     ssShowLoading(false);
     document.getElementById("ssDashboardContent").style.display="block";
@@ -2183,7 +2467,8 @@ function navGoSSTab(tabId) {
   if(!cur||cur.id!=="section-slideswap") showSection("slideswap",document.getElementById("snav-slideswap"));
   ssSwitchTab(tabId,null);
   if(tabId==="ss-tab-frequency") renderSSFrequency();
-  if(tabId==="ss-tab-admin")     renderSSAdminTable();
+  if(tabId==="ss-tab-admin")     ssFilterAdminTable();
+  if(tabId==="ss-tab-myack")     renderMyAckTable();
 }
 
 /* ══════════════ FILTERS ══════════════ */
@@ -2206,12 +2491,16 @@ function applyFilters() {
         gr=document.getElementById("filterGroup").value,lt=document.getElementById("filterLeaveType").value;
 
   /* ── Records tab (renderTable reads global filter DOM directly) ── */
+  leaveDateFrom=document.getElementById("leaveDateFrom")?.value||"";
+  leaveDateTo=document.getElementById("leaveDateTo")?.value||"";
   filteredData=allLeaveData.filter(r=>{
     const d=parseDate(r.requestedDate);
     if(yr&&d&&String(d.getFullYear())!==yr) return false;
     if(mo&&d&&String(d.getMonth()+1)!==mo) return false;
     if(gr&&r.group!==gr) return false;
     if(lt&&r.leaveType!==lt) return false;
+    if(leaveDateFrom){if(!d||d<new Date(leaveDateFrom))return false;}
+    if(leaveDateTo){if(!d||d>new Date(leaveDateTo+"T23:59:59"))return false;}
     return true;
   });
   currentPage=1; populateRecordsFilterDropdowns(); renderTable();
@@ -2245,16 +2534,18 @@ function ssPopulateFilters() {
   // Populate table-level TL dropdown
   const tlEl=document.getElementById("ssTLFilter");
   if(tlEl)tlEl.innerHTML='<option value="">All TLs</option>'+ALLOWED_TLS.map(t=>`<option value="${escHtml(t)}">${escHtml(t)}</option>`).join("");
-  // Populate table-level Year dropdown
-  const tyEl=document.getElementById("ssTableYearFilter");
-  if(tyEl){tyEl.innerHTML='<option value="">All Years</option>';years.forEach(y=>{const o=document.createElement("option");o.value=y;o.textContent=y;tyEl.appendChild(o);});}
-  // Populate SS Admin filter dropdowns
-  const aYEl=document.getElementById("ssAdminYearFilter");
-  if(aYEl){aYEl.innerHTML='<option value="">All Years</option>';years.forEach(y=>{const o=document.createElement("option");o.value=y;o.textContent=y;aYEl.appendChild(o);});}
+  // Populate SS Admin TL dropdown
   const aTLEl=document.getElementById("ssAdminTLFilter");
   if(aTLEl)aTLEl.innerHTML='<option value="">All TLs</option>'+ALLOWED_TLS.map(t=>`<option value="${escHtml(t)}">${escHtml(t)}</option>`).join("");
 }
+function clearSSFilters(){
+  ["ssFilterYear","ssFilterMonth","ssFilterType","ssFilterStatus","ssDateFrom","ssDateTo"].forEach(id=>{const el=document.getElementById(id);if(el)el.value="";});
+  ssDateFrom=""; ssDateTo="";
+  ssApplyFilters();
+}
 function ssApplyFilters() {
+  ssDateFrom=document.getElementById("ssDateFrom")?.value||"";
+  ssDateTo=document.getElementById("ssDateTo")?.value||"";
   const yr=document.getElementById("ssFilterYear").value,mo=document.getElementById("ssFilterMonth").value,
         tp=(document.getElementById("ssFilterType").value||"").toLowerCase(),st=(document.getElementById("ssFilterStatus").value||"").toLowerCase();
   ssFilteredData=allSSData.filter(r=>{
@@ -2263,13 +2554,20 @@ function ssApplyFilters() {
     if(mo&&d&&String(d.getMonth()+1)!==mo) return false;
     if(tp&&(r.reqType||"").toLowerCase()!==tp) return false;
     if(st&&(r.status||"").toLowerCase()!==st) return false;
+    if(ssDateFrom){if(!d||d<new Date(ssDateFrom))return false;}
+    if(ssDateTo){if(!d||d>new Date(ssDateTo+"T23:59:59"))return false;}
     return true;
   });
   ssRenderKPIs(); ssCurrentPage=1;
   ssFrequencyRendered=false;
-  ssNameFilter="";ssTLFilter="";ssPlottedFilter="";ssTableYearFilter="";ssTableMonthFilter="";ssTableTypeFilter="";
-  ["ssNameFilter","ssTLFilter","ssPlottedFilter","ssTableYearFilter","ssTableMonthFilter","ssTableTypeFilter"].forEach(id=>{const el=document.getElementById(id);if(el)el.value="";}); 
+  ssNameFilter="";ssTLFilter="";ssPlottedFilter="";
+  ["ssNameFilter","ssTLFilter","ssPlottedFilter"].forEach(id=>{const el=document.getElementById(id);if(el)el.value="";}); 
   ssRenderTable();
+  if(typeof updateMyAckCount==='function') updateMyAckCount();
+  if(typeof notifUpdateRequests==='function') notifUpdateRequests();
+  // Keep Pending table in sync when global filters change
+  const _ap=document.getElementById('ss-tab-admin');
+  if(_ap&&_ap.classList.contains('active')) ssFilterAdminTable();
 }
 
 /* ══════════════ KPIs ══════════════ */
@@ -2308,14 +2606,21 @@ function _applyRLSToLeaveData(){
 }
 function _applyRLSToSSData(){
   if(currentUserRole==='author'||currentUserRole==='manager') return;
+  const _emailL=(currentUserEmail||'').toLowerCase().trim();
   if(currentUserRole==='tl'){
-    const myName=_rlsMyName();
-    allSSData=allSSData.filter(r=>(r.teamLead||'')===myName||(r.requestorName||'').toLowerCase().trim()===myName.toLowerCase().trim());
+    const myName=_rlsMyName();const myNameL=myName.toLowerCase().trim();
+    allSSData=allSSData.filter(r=>(r.teamLead||'')===myName
+      ||(r.requestorName||'').toLowerCase().trim()===myNameL
+      ||(r.swapName||'').toLowerCase().trim()===myNameL
+      ||(r.swapTL||'')===myName
+      ||(r.swapEmail||'').toLowerCase().trim()===_emailL);
     return;
   }
   if(currentUserRole==='agent'){
     const myNameL=_rlsMyName().toLowerCase().trim();
-    allSSData=allSSData.filter(r=>(r.requestorName||'').toLowerCase().trim()===myNameL);
+    allSSData=allSSData.filter(r=>(r.requestorName||'').toLowerCase().trim()===myNameL
+      ||(r.swapName||'').toLowerCase().trim()===myNameL
+      ||(r.swapEmail||'').toLowerCase().trim()===_emailL);
   }
 }
 
@@ -2427,11 +2732,11 @@ function renderEntitlementTable(){
   const tl=document.getElementById("entTL").value;
   const st=document.getElementById("entStatus").value;
   const used={};
-  allLeaveData.filter(r=>{const d=parseDate(r.requestedDate);if(!d||d.getFullYear()!==2026)return false;if(gr&&r.group!==gr)return false;if(!(["vacation leave","halfday vacation leave"].includes((r.leaveType||"").toLowerCase().trim())))return false;return true;}).forEach(r=>{const nm2=(r.name||"").toLowerCase().trim();used[nm2]=(used[nm2]||0)+_useWt(r);});
+  allLeaveData.filter(r=>{const d=parseDate(r.requestedDate);if(!d||d.getFullYear()!==2026)return false;if(gr&&r.group!==gr)return false;if(!(_isVL(r)))return false;return true;}).forEach(r=>{const nm2=(r.name||"").toLowerCase().trim();used[nm2]=(used[nm2]||0)+_useWt(r);});
   const appr2027={};
   allLeaveData.filter(r=>{const d=parseDate(r.requestedDate);return d&&d.getFullYear()===2027&&(r.status||"").toLowerCase()==="approved";}).forEach(r=>{const nm2=(r.name||"").toLowerCase().trim();appr2027[nm2]=(appr2027[nm2]||0)+1;});
   const used2027={};
-  allLeaveData.filter(r=>{const d=parseDate(r.requestedDate);if(!d||d.getFullYear()!==2027)return false;if(gr&&r.group!==gr)return false;if(!(["vacation leave","halfday vacation leave"].includes((r.leaveType||"").toLowerCase().trim())))return false;return true;}).forEach(r=>{const nm2=(r.name||"").toLowerCase().trim();used2027[nm2]=(used2027[nm2]||0)+_useWt(r);});
+  allLeaveData.filter(r=>{const d=parseDate(r.requestedDate);if(!d||d.getFullYear()!==2027)return false;if(gr&&r.group!==gr)return false;if(!(_isVL(r)))return false;return true;}).forEach(r=>{const nm2=(r.name||"").toLowerCase().trim();used2027[nm2]=(used2027[nm2]||0)+_useWt(r);});
   let rows=Object.keys(rlsData)
     .filter(em=>['GY','APA'].includes(rlsData[em].group))
     .filter(em=>rlsData[em].teamLead)
@@ -2509,8 +2814,8 @@ function renderExpiringTable(){
   // Build ALL employees — no urgency gate
   let rows=Object.keys(rlsData).map(em=>{
     const rls=rlsData[em];const nm=(rls.name||"").toLowerCase().trim();
-    const used=allLeaveData.filter(r=>(r.name||"").toLowerCase().trim()===nm&&["vacation leave","halfday vacation leave"].includes((r.leaveType||"").toLowerCase().trim())&&(d=>d&&d.getFullYear()===2026)(parseDate(r.requestedDate))).reduce((a,r)=>a+_useWt(r),0);
-    const used2027=allLeaveData.filter(r=>(r.name||"").toLowerCase().trim()===nm&&["vacation leave","halfday vacation leave"].includes((r.leaveType||"").toLowerCase().trim())&&(d=>d&&d.getFullYear()===2027)(parseDate(r.requestedDate))).reduce((a,r)=>a+_useWt(r),0);
+    const used=allLeaveData.filter(r=>(r.name||"").toLowerCase().trim()===nm&&_isVL(r)&&(d=>d&&d.getFullYear()===2026)(parseDate(r.requestedDate))).reduce((a,r)=>a+_useWt(r),0);
+    const used2027=allLeaveData.filter(r=>(r.name||"").toLowerCase().trim()===nm&&_isVL(r)&&(d=>d&&d.getFullYear()===2027)(parseDate(r.requestedDate))).reduce((a,r)=>a+_useWt(r),0);
     const ent=rls.ent2026??null;const cf=rls.cf2026??null;
     const tot=ent!=null?(ent+(cf||0)):null;const rem=tot!=null?tot-used:null;
     const remaining=Math.max(0,(rem??0)-used2027);
@@ -2885,8 +3190,7 @@ function renderSSFrequency(){
       el.innerHTML=`<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse"><thead><tr><th style="background:var(--sap-navy);color:#fff;padding:5px 8px;font-size:10px;font-weight:600;text-align:right">#</th><th style="background:var(--sap-navy);color:#fff;padding:5px 10px;font-size:10px;font-weight:600;text-align:left;white-space:nowrap">Name</th>${moHdrs}<th style="background:${clr};color:#fff;padding:5px 8px;font-size:10px;font-weight:700;text-align:center;min-width:40px">Total</th></tr></thead><tbody>${bodyRows}</tbody></table></div>`;
     }
     renderTopList('ssFreqTopSlides',topS,'#1B90FF',pmsSlideMonth);
-    const swapClr=document.documentElement.getAttribute('data-theme')==='dark'?'#1B90FF':'#002A86';
-    renderTopList('ssFreqTopSwaps',topW,swapClr,pmsSwapMonth);
+    renderTopList('ssFreqTopSwaps',topW,'#1B90FF',pmsSwapMonth);
     // Day-of-week frequency charts — Mon=0 … Sun=6
     const TCLR=['#1B90FF','#E8552D','#1C8C44','#C4871E','#8B5CF6'];
     const DKEYS=[0,1,2,3,4,5,6];
@@ -2983,28 +3287,24 @@ function ssApplyTableFilters(){
   ssNameFilter=(document.getElementById("ssNameFilter")?.value||"").toLowerCase().trim();
   ssTLFilter=document.getElementById("ssTLFilter")?.value||"";
   ssPlottedFilter=document.getElementById("ssPlottedFilter")?.value||"";
-  ssTableYearFilter=document.getElementById("ssTableYearFilter")?.value||"";
-  ssTableMonthFilter=document.getElementById("ssTableMonthFilter")?.value||"";
-  ssTableTypeFilter=document.getElementById("ssTableTypeFilter")?.value||"";
   ssCurrentPage=1;ssRenderTable();
 }
 function clearSSTableFilters(){
-  ssNameFilter="";ssTLFilter="";ssPlottedFilter="";ssTableYearFilter="";ssTableMonthFilter="";ssTableTypeFilter="";
-  ["ssNameFilter","ssTLFilter","ssPlottedFilter","ssTableYearFilter","ssTableMonthFilter","ssTableTypeFilter"].forEach(id=>{const el=document.getElementById(id);if(el)el.value="";});
+  ssNameFilter="";ssTLFilter="";ssPlottedFilter="";
+  ["ssNameFilter","ssTLFilter","ssPlottedFilter"].forEach(id=>{const el=document.getElementById(id);if(el)el.value="";});
   ssCurrentPage=1;ssRenderTable();
 }
-function ssStatusBadge(s){const st=(s||"").toUpperCase();const cls=st==="APPROVED"?"badge-status-approved":st==="PENDING"?"badge-status-pending":st==="REJECTED"?"badge-status-rejected":st==="CANCELLED"?"badge-status-cancelled":"badge";return`<span class="badge ${cls}">${escHtml(st||"—")}</span>`;}
+function ssStatusBadge(s){const st=(s||"").toUpperCase();const cls=st==="APPROVED"?"badge-status-approved":st==="PENDING"?"badge-status-pending":st==="REJECTED"?"badge-status-rejected":st==="CANCELLED"?"badge-status-cancelled":st==="AWAITING TL APPROVAL"?"badge-status-pending":st==="FOR ACKNOWLEDGEMENT"?"badge-reqtype":"badge";return`<span class="badge ${cls}">${escHtml(st||"—")}</span>`;}
 function ssReqTypeBadge(t){const x=(t||"").trim();const cls=x.toLowerCase()==="slide"?"badge-slide":x.toLowerCase()==="swap"?"badge-swap":"badge-reqtype";return`<span class="badge ${cls}">${escHtml(x||"—")}</span>`;}
 function ssRenderTable(){
   let rows=ssFilteredData
-    .filter(r=>!ssNameFilter||(r.requestorName||"").toLowerCase().includes(ssNameFilter))
+    .filter(r=>!ssNameFilter||(r.requestorName||"").toLowerCase().includes(ssNameFilter)||(r.title||"").toLowerCase().includes(ssNameFilter))
     .filter(r=>!ssTLFilter||(r.teamLead||"")===ssTLFilter)
-    .filter(r=>!ssTableTypeFilter||(r.reqType||"").toLowerCase()===ssTableTypeFilter)
+
     .filter(r=>{
-      if(!ssTableYearFilter&&!ssTableMonthFilter)return true;
+      return true;
       const d=parseDate(r.shiftDate);if(!d)return false;
-      if(ssTableYearFilter&&String(d.getFullYear())!==ssTableYearFilter)return false;
-      if(ssTableMonthFilter&&String(d.getMonth()+1)!==ssTableMonthFilter)return false;
+
       return true;
     })
     .filter(r=>{
@@ -3023,44 +3323,61 @@ function ssRenderTable(){
   tbody.innerHTML=page.map((r,i)=>{
     const idx=allSSData.indexOf(r);
     const editCell=_admin?`<td><button class="btn-edit-record" data-idx="${idx}">Edit</button></td>`:'';
-    return`<tr><td style="color:var(--text-muted)">${start+i+1}</td><td><strong>${escHtml(r.requestorName||r.title)}</strong></td><td>${ssReqTypeBadge(r.reqType)}</td><td>${ssStatusBadge(r.status)}</td><td>${formatDate(r.shiftDate)}</td><td style="white-space:normal;max-width:130px;font-size:12px">${escHtml(r.originalSchedule)}</td><td>${escHtml(r.originalRD)}</td><td style="white-space:normal;max-width:130px;font-size:12px">${escHtml(r.requestedSchedule)}</td><td>${escHtml(r.requestedRD)}</td><td>${escHtml(r.swapName)}</td><td>${escHtml(r.swapAck)}</td><td>${escHtml(r.teamLead)}</td><td style="font-size:11px">${escHtml(r.swapEmail)}</td><td>${plottedBadge(r.plotted)}</td><td style="max-width:140px;white-space:normal;font-size:12px">${escHtml(r.reason)}</td><td style="max-width:140px;white-space:normal;font-size:12px">${escHtml(r.agentRemarks)}</td>${editCell}</tr>`;
+    return`<tr><td style="color:var(--text-muted)">${start+i+1}</td><td style="font-weight:700;color:var(--sap-blue-dark);white-space:nowrap">${escHtml(r.title||'—')}</td><td style="white-space:nowrap"><strong>${escHtml(r.requestorName||r.title)}</strong></td><td style="white-space:nowrap">${ssReqTypeBadge(r.reqType)}</td><td style="white-space:nowrap">${ssStatusBadge(r.status)}</td><td style="white-space:nowrap">${formatDate(r.shiftDate)}</td><td style="white-space:nowrap;font-size:12px">${escHtml(r.originalSchedule)}</td><td style="white-space:nowrap">${escHtml(r.originalRD)}</td><td style="white-space:nowrap;font-size:12px">${escHtml(r.requestedSchedule)}</td><td style="white-space:nowrap">${escHtml(r.requestedRD)}</td><td style="white-space:nowrap"><strong>${escHtml(r.swapName)}</strong></td><td style="white-space:nowrap;font-size:11.5px">${escHtml(fmtSwapAck(r))}</td><td style="white-space:nowrap">${escHtml(r.teamLead)}</td><td style="white-space:nowrap">${plottedBadge(r.plotted)}</td><td style="white-space:nowrap;font-size:12px">${escHtml(r.reason)}</td><td style="white-space:nowrap;font-size:12px">${escHtml(r.agentRemarks)}</td>${editCell}</tr>`;
   }).join("");
   tbody.querySelectorAll(".btn-edit-record[data-idx]").forEach(btn=>btn.addEventListener("click",()=>openSSEditModal(+btn.dataset.idx)));
   renderPagination(document.getElementById("ssTablePagination"),ssCurrentPage,total,(p)=>{ssCurrentPage=p;ssRenderTable();const tw=document.querySelector("#ss-tab-records .table-wrap");if(tw)tw.scrollTop=0;});
 }
 function ssFilterAdminTable(){
   ssAdminSearchQuery=(document.getElementById("ssAdminSearch")?.value||"").toLowerCase();
-  ssAdminYearFilter=document.getElementById("ssAdminYearFilter")?.value||"";
-  ssAdminMonthFilter=document.getElementById("ssAdminMonthFilter")?.value||"";
-  ssAdminTypeFilter=(document.getElementById("ssAdminTypeFilter")?.value||"").toLowerCase();
   ssAdminTLFilter=document.getElementById("ssAdminTLFilter")?.value||"";
   ssAdminPlottedFilter=(document.getElementById("ssAdminPlottedFilter")?.value||"").toLowerCase();
+  ssAdminDateFrom=document.getElementById("ssAdminDateFrom")?.value||"";
+  ssAdminDateTo=document.getElementById("ssAdminDateTo")?.value||"";
   ssAdminPage=1; renderSSAdminTable();
 }
 function clearSSAdminFilters(){
-  ssAdminSearchQuery=""; ssAdminYearFilter=""; ssAdminMonthFilter=""; ssAdminTypeFilter=""; ssAdminTLFilter=""; ssAdminPlottedFilter="";
-  ["ssAdminSearch","ssAdminYearFilter","ssAdminMonthFilter","ssAdminTypeFilter","ssAdminTLFilter","ssAdminPlottedFilter"].forEach(id=>{const el=document.getElementById(id);if(el)el.value="";});
+  ssAdminSearchQuery=""; ssAdminTLFilter=""; ssAdminPlottedFilter=""; ssAdminDateFrom=""; ssAdminDateTo="";
+  ["ssAdminSearch","ssAdminTLFilter","ssAdminPlottedFilter"].forEach(id=>{const el=document.getElementById(id);if(el)el.value="";});
   ssAdminPage=1; renderSSAdminTable();
 }
 function renderSSAdminTable(){
+  // Always rebuild from allSSData so the table is never stale regardless of call order
+  ssAdminData=allSSData.filter(r=>(r.status||'').trim().toUpperCase()==='PENDING');
+  // Read global filter bar values so Pending table stays in sync with top filters
+  const _gyr=document.getElementById("ssFilterYear")?.value||"";
+  const _gmo=document.getElementById("ssFilterMonth")?.value||"";
+  const _gtp=(document.getElementById("ssFilterType")?.value||"").toLowerCase();
+  const _gdf=ssDateFrom||document.getElementById("ssDateFrom")?.value||"";
+  const _gdt=ssDateTo||document.getElementById("ssDateTo")?.value||"";
   const q=ssAdminSearchQuery;
-  let rows=ssAdminData.filter(r=>{
-    if(q&&!(r.requestorName||"").toLowerCase().includes(q)&&!(r.reqType||"").toLowerCase().includes(q)&&!(r.teamLead||"").toLowerCase().includes(q))return false;
-    if(ssAdminYearFilter){const d=parseDate(r.shiftDate);if(!d||String(d.getFullYear())!==ssAdminYearFilter)return false;}
-    if(ssAdminMonthFilter){const d=parseDate(r.shiftDate);if(!d||String(d.getMonth()+1)!==ssAdminMonthFilter)return false;}
-    if(ssAdminTypeFilter&&(r.reqType||"").toLowerCase()!==ssAdminTypeFilter)return false;
+  let rows=ssAdminData.filter(r=>{    if(q&&!(r.requestorName||"").toLowerCase().includes(q)&&!(r.reqType||"").toLowerCase().includes(q)&&!(r.teamLead||"").toLowerCase().includes(q))return false;
     if(ssAdminTLFilter&&(r.teamLead||"")!==ssAdminTLFilter)return false;
     if(ssAdminPlottedFilter){const pv=String(r.plotted??"").toLowerCase();const isY=pv==="yes"||pv==="true"||pv==="1";if(ssAdminPlottedFilter==="yes"&&!isY)return false;if(ssAdminPlottedFilter==="no"&&isY)return false;}
+    if(ssAdminDateFrom){const d=parseDate(r.shiftDate);if(!d||d<new Date(ssAdminDateFrom))return false;}
+    if(ssAdminDateTo){const d=parseDate(r.shiftDate);if(!d||d>new Date(ssAdminDateTo+"T23:59:59"))return false;}
+    // Global filters
+    const _d=parseDate(r.shiftDate);
+    if(_gyr&&(!_d||String(_d.getFullYear())!==_gyr))return false;
+    if(_gmo&&(!_d||String(_d.getMonth()+1)!==_gmo))return false;
+    if(_gtp&&(r.reqType||"").toLowerCase()!==_gtp)return false;
+    if(_gdf&&(!_d||_d<new Date(_gdf)))return false;
+    if(_gdt&&(!_d||_d>new Date(_gdt+"T23:59:59")))return false;
     return true;
   });
   rows=_sortRows(rows,ssAdminSortKey,ssAdminSortDir);
   _updateSortIcons("ssath-",ssAdminSortKey,ssAdminSortDir,["requestorName","reqType","status","shiftDate","originalSchedule","requestedSchedule","swapName","teamLead","reason","plotted"]);
   const cnt=document.getElementById("ssAdminTableCount");if(cnt)cnt.textContent=`${rows.length} record${rows.length!==1?"s":""}`;
+  const btnSel=document.getElementById("btnApproveSelected");if(btnSel)btnSel.style.display="none";
+  const selCnt=document.getElementById("ssAdminSelCount");if(selCnt)selCnt.style.display="none";
+  const selAll=document.getElementById("ssAdminSelectAll");if(selAll)selAll.checked=false;
   const total=Math.ceil(rows.length/SS_ADMIN_PAGE_SIZE)||1;const start=(ssAdminPage-1)*SS_ADMIN_PAGE_SIZE;const page=rows.slice(start,start+SS_ADMIN_PAGE_SIZE);
   const tbody=document.getElementById("ssAdminTableBody");if(!tbody)return;
-  if(!page.length){tbody.innerHTML=`<tr><td colspan="12" class="empty-state"><p>No pending records.</p></td></tr>`;document.getElementById("ssAdminPagination").innerHTML="";return;}
-  tbody.innerHTML=page.map((r,i)=>{const idx=allSSData.indexOf(r);return`<tr><td style="color:var(--text-muted)">${start+i+1}</td><td><strong>${escHtml(r.requestorName||r.title)}</strong></td><td>${ssReqTypeBadge(r.reqType)}</td><td>${ssStatusBadge(r.status)}</td><td>${formatDate(r.shiftDate)}</td><td style="white-space:normal;max-width:120px;font-size:12px">${escHtml(r.originalSchedule)}</td><td style="white-space:normal;max-width:120px;font-size:12px">${escHtml(r.requestedSchedule)}</td><td>${escHtml(r.swapName)}</td><td>${escHtml(r.teamLead)}</td><td style="max-width:130px;white-space:normal;font-size:12px">${escHtml(r.reason)}</td><td>${plottedBadge(r.plotted)}</td><td><button class="btn-edit-record" data-idx="${idx}">Edit</button></td></tr>`;}).join("");
+  if(!page.length){tbody.innerHTML=`<tr><td colspan="13" class="empty-state"><p>No pending records.</p></td></tr>`;document.getElementById("ssAdminPagination").innerHTML="";return;}
+  tbody.innerHTML=page.map((r,i)=>{const idx=allSSData.indexOf(r);return`<tr><td style="text-align:center;width:32px"><input type="checkbox" class="ss-admin-chk" data-idx="${idx}" onchange="ssAdminSelChange()" style="cursor:pointer;accent-color:#1B90FF"/></td><td style="color:var(--text-muted);white-space:nowrap">${start+i+1}</td><td style="white-space:nowrap"><strong>${escHtml(r.requestorName||r.title)}</strong></td><td style="white-space:nowrap">${ssReqTypeBadge(r.reqType)}</td><td style="white-space:nowrap">${ssStatusBadge(r.status)}</td><td style="white-space:nowrap">${formatDate(r.shiftDate)}</td><td style="white-space:nowrap;font-size:12px">${escHtml(r.originalSchedule)}</td><td style="white-space:nowrap;font-size:12px">${escHtml(r.requestedSchedule)}</td><td style="white-space:nowrap"><strong>${escHtml(r.swapName)}</strong></td><td style="white-space:nowrap">${escHtml(r.teamLead)}</td><td style="white-space:nowrap;font-size:12px">${escHtml(r.reason)}</td><td style="white-space:nowrap">${plottedBadge(r.plotted)}</td><td style="white-space:nowrap"><button class="btn-approve-ss" data-appridx="${idx}">Approve</button> <button class="btn-edit-record" data-idx="${idx}">Edit</button> <button class="btn-delete-record" data-delidx="${idx}">Delete</button></td></tr>`;}).join("");
+  tbody.querySelectorAll(".btn-approve-ss[data-appridx]").forEach(btn=>btn.addEventListener("click",()=>approveSSRequest(+btn.dataset.appridx)));
   tbody.querySelectorAll(".btn-edit-record[data-idx]").forEach(btn=>btn.addEventListener("click",()=>openSSEditModal(+btn.dataset.idx)));
+  tbody.querySelectorAll(".btn-delete-record[data-delidx]").forEach(btn=>btn.addEventListener("click",()=>confirmSSDelete(+btn.dataset.delidx)));
   renderPagination(document.getElementById("ssAdminPagination"),ssAdminPage,total,(p)=>{ssAdminPage=p;renderSSAdminTable();});
 }
 
@@ -3085,6 +3402,19 @@ function _updateSortIcons(prefix,key,dir,keys){
 function sortLeaveTable(k){if(leaveSortKey===k)leaveSortDir*=-1;else{leaveSortKey=k;leaveSortDir=1;}currentPage=1;renderTable();}
 function sortAdminTable(k){if(adminSortKey===k)adminSortDir*=-1;else{adminSortKey=k;adminSortDir=1;}renderAdminPendingTable();}
 function sortAllRecordsTable(k){if(allRecordsSortKey===k)allRecordsSortDir*=-1;else{allRecordsSortKey=k;allRecordsSortDir=1;}allRecordsPage=1;renderAllRecordsTable();}
+function goToSSRecord(reqNum){
+  // Navigate to SS → Records tab
+  showSection('slideswap',document.getElementById('snav-slideswap'));
+  const recBtn=document.querySelector('[onclick*="ss-tab-records"]');
+  ssSwitchTab('ss-tab-records',recBtn||null);
+  // Set the name/reqnum search filter
+  ssNameFilter=reqNum.toLowerCase();
+  const inp=document.getElementById('ssNameFilter');
+  if(inp){inp.value=reqNum;}
+  ssCurrentPage=1;ssRenderTable();
+  // Scroll the table into view
+  setTimeout(()=>{const tw=document.querySelector('#ss-tab-records .table-wrap');if(tw)tw.scrollTop=0;},100);
+}
 function sortSSTable(k){if(ssSortKey===k)ssSortDir*=-1;else{ssSortKey=k;ssSortDir=1;}ssCurrentPage=1;ssRenderTable();}
 function sortSSAdminTable(k){if(ssAdminSortKey===k)ssAdminSortDir*=-1;else{ssAdminSortKey=k;ssAdminSortDir=1;}ssAdminPage=1;renderSSAdminTable();}
 
@@ -3149,8 +3479,103 @@ async function saveRecord(){
 }
 
 /* ══════════════ DELETE ══════════════ */
-function confirmDelete(idx){pendingDeleteIdx=idx;document.getElementById("confirmMsg").textContent=`Delete "${allFullData[idx]?.name||"this record"}"? This cannot be undone.`;document.getElementById("confirmModal").classList.add("open");}
-function closeConfirmModal(){document.getElementById("confirmModal").classList.remove("open");pendingDeleteIdx=-1;}
+function confirmDelete(idx){pendingDeleteIdx=idx;document.getElementById("confirmMsg").textContent=`Delete "${allFullData[idx]?.name||"this record"}"? This cannot be undone.`;document.getElementById("btnConfirmDelete").onclick=confirmDeleteAction;document.getElementById("confirmModal").classList.add("open");}
+function closeConfirmModal(){document.getElementById("confirmModal").classList.remove("open");pendingDeleteIdx=-1;pendingSSDeleteIdx=-1;}
+
+/* ── SS Selection helpers ── */
+function ssAdminSelChange(){
+  const chks=[...document.querySelectorAll('.ss-admin-chk')];
+  const checked=chks.filter(c=>c.checked);
+  const btn=document.getElementById('btnApproveSelected');
+  const cnt=document.getElementById('ssAdminSelCount');
+  const selAll=document.getElementById('ssAdminSelectAll');
+  if(btn){btn.style.display=checked.length?'inline-flex':'none';btn.textContent=`Approve Selected (${checked.length})`;}
+  if(cnt){if(checked.length){cnt.textContent=`${checked.length} selected`;cnt.style.display='inline-block';}else{cnt.style.display='none';}}
+  if(selAll){selAll.checked=checked.length===chks.length&&chks.length>0;selAll.indeterminate=checked.length>0&&checked.length<chks.length;}
+}
+function ssAdminToggleAll(val){
+  document.querySelectorAll('.ss-admin-chk').forEach(c=>{c.checked=val;});
+  ssAdminSelChange();
+}
+/* ── SS Approve Selected ── */
+async function approveSelectedSSRequests(){
+  const chks=[...document.querySelectorAll('.ss-admin-chk:checked')];
+  if(!chks.length){showToast('No requests selected.');return;}
+  const toApprove=chks.map(c=>allSSData[+c.dataset.idx]).filter(Boolean).filter(r=>r._itemId);
+  if(!toApprove.length){showToast('Selected records have no SharePoint item ID.');return;}
+  if(!confirm(`Approve ${toApprove.length} selected request${toApprove.length!==1?'s':''}?\nStatus → APPROVED  |  Plotted → Yes`))return;
+  const btn=document.getElementById('btnApproveSelected');
+  if(btn){btn.disabled=true;btn.textContent='Approving…';}
+  let done=0,failed=0;
+  for(const r of toApprove){
+    try{
+      const url=`https://graph.microsoft.com/v1.0/sites/${ssSiteIdCache}/lists/${LIST_SS_ID}/items/${r._itemId}/fields`;
+      await graphPatch(url,{field_2:'APPROVED','Plotted_x003f_':true});
+      r.status='APPROVED'; r.plotted='true';
+      sendSSNotification(r,'APPROVED').catch(()=>{});
+      logSSActivity('Edited',r,'APPROVED','Approved via selection — Plotted set to Yes').catch(()=>{});
+      done++;
+    }catch(e){console.error('Approve failed for',r.title,e);failed++;}
+  }
+  ssAdminData=ssAdminData.filter(r=>r.status!=='APPROVED');
+  renderSSAdminTable();
+  ssApplyFilters();
+  if(btn){btn.disabled=false;}
+  showToast(failed?`${done} approved, ${failed} failed.`:`${done} request${done!==1?'s':''} approved and plotted.`);
+}
+
+/* ── SS Approve All (kept for reference, replaced by selection) ── */
+async function approveAllSSRequests(){approveSelectedSSRequests();}
+
+/* ── SS Approve (single) ── */
+async function approveSSRequest(idx){
+  const r=allSSData[idx];if(!r)return;
+  if(!r._itemId){showToast('Cannot approve: no SharePoint item ID.');return;}
+  if(!confirm(`Approve "${r.requestorName||r.title}" (${r.reqType||''} · ${r.shiftDate||''})?\nStatus → APPROVED  |  Plotted → Yes`))return;
+  const url=`https://graph.microsoft.com/v1.0/sites/${ssSiteIdCache}/lists/${LIST_SS_ID}/items/${r._itemId}/fields`;
+  const fields={field_2:'APPROVED','Plotted_x003f_':true};
+  try{
+    showToast('Approving…');
+    await graphPatch(url,fields);
+    r.status='APPROVED'; r.plotted='true';
+    ssAdminData=ssAdminData.filter(x=>x!==r);
+    sendSSNotification(r,'APPROVED').catch(()=>{});
+    logSSActivity('Edited',r,'APPROVED','Approved via Admin — Plotted set to Yes').catch(()=>{});
+    renderSSAdminTable();
+    ssApplyFilters();
+    showToast('Request approved and plotted.');
+  }catch(e){
+    console.error(e);showToast('Approve failed: '+(e.message||String(e)));
+  }
+}
+
+
+let pendingSSDeleteIdx=-1;
+function confirmSSDelete(idx){
+  const r=allSSData[idx];if(!r)return;
+  pendingSSDeleteIdx=idx;
+  document.getElementById("confirmMsg").textContent=`Delete "${r.requestorName||r.title||"this record"}" (${r.reqType||""} · ${formatDate(r.shiftDate)||""})? This cannot be undone.`;
+  // Swap the confirm button action
+  const btn=document.getElementById("btnConfirmDelete");
+  btn.onclick=confirmSSDeleteAction;
+  document.getElementById("confirmModal").classList.add("open");
+}
+async function confirmSSDeleteAction(){
+  const r=allSSData[pendingSSDeleteIdx];if(!r)return;
+  if(!r._itemId){showToast("Cannot delete: no SharePoint item ID.");closeConfirmModal();return;}
+  const btn=document.getElementById("btnConfirmDelete");btn.disabled=true;btn.textContent="Deleting…";
+  try{
+    await graphDelete(`https://graph.microsoft.com/v1.0/sites/${ssSiteIdCache}/lists/${LIST_SS_ID}/items/${r._itemId}`);
+    allSSData=allSSData.filter(x=>x!==r);
+    ssAdminData=ssAdminData.filter(x=>x!==r);
+    ssFilteredData=ssFilteredData.filter(x=>x!==r);
+    closeConfirmModal();
+    renderSSAdminTable();ssApplyFilters();
+    logSSActivity('Deleted',r,r.status||'','Record permanently deleted').catch(()=>{});
+    showToast("Record deleted."); // No email notification sent on delete — by design
+  }catch(e){console.error(e);document.getElementById("confirmMsg").textContent="Delete failed: "+(e.message||String(e));btn.disabled=false;btn.textContent="Delete";}
+}
+
 async function confirmDeleteAction(){
   const r=allFullData[pendingDeleteIdx];if(!r)return;
   if(!r._itemId){showToast("Cannot delete: record has no SharePoint item ID (CSV source).");closeConfirmModal();return;}
@@ -3209,46 +3634,655 @@ function openSSApplyModal(){
   document.getElementById("arfReqRD").value="";
   document.getElementById("arfReason").value="";
   document.getElementById("arfSwapName").value="";
+  arfSwapHide();
   document.getElementById("arfSwapEmail").value="";
+  document.getElementById("arfSwapTL").innerHTML='<option value="">— Select TL —</option>'+ALLOWED_TLS.map(t=>`<option value="${escHtml(t)}">${escHtml(t)}</option>`).join("");
   document.getElementById("arfSwapTL").value="";
   document.getElementById("arfSwapAck").value="";
   ssApplyTypeChange();
   document.getElementById("arfSaveMsg").textContent="";
   document.getElementById("btnArfSubmit").disabled=false;
+  // Generate initial request number (Slide by default)
+  const numEl=document.getElementById("arfReqNum");
+  if(numEl) numEl.value=generateReqNum("Slide");
   document.getElementById("ssApplyModal").style.display="flex";
 }
+function arfAutoTL(nameVal){
+  const nm=(nameVal||"").trim().toLowerCase();
+  if(!nm) return;
+  const match=Object.values(rlsData).find(r=>(r.name||"").toLowerCase()===nm)
+    || Object.values(rlsData).find(r=>(r.name||"").toLowerCase().startsWith(nm));
+  if(!match) return;
+  const tl=match.teamLead||match.teamLead2026||"";
+  if(!tl) return;
+  const tlEl=document.getElementById("arfTeamLead");
+  if(tlEl&&[...tlEl.options].some(o=>o.value===tl)) tlEl.value=tl;
+}
 function closeSSApplyModal(){document.getElementById("ssApplyModal").style.display="none";}
+function generateReqNum(type){
+  const prefix=(type||'').toLowerCase()==='swap'?'SW':'SL';
+  const digits=String(Math.floor(10000+Math.random()*90000)); // 5-digit random
+  return prefix+digits;
+}
 function ssApplyTypeChange(){
   const isSwap=document.getElementById("arfReqType").value.toLowerCase()==="swap";
   document.getElementById("arfSwapSection").style.display=isSwap?"":"none";
+  // Regenerate request number when type changes
+  const numEl=document.getElementById("arfReqNum");
+  if(numEl) numEl.value=generateReqNum(document.getElementById("arfReqType").value);
 }
+
+/* ══════════════ ACTIVITY HISTORY ══════════════ */
+const HISTORY_FILE = 'Activity History.xlsx';
+const HISTORY_TABLE = 'ActivityLog';
+const HIST_PAGE = 50;
+let ssHistoryData = [];
+let ssHistoryPage = 1;
+
+function switchSSAdminSub(id, btn){
+  document.querySelectorAll('#ssAdminSubNav .admin-sub-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('#ss-tab-admin .admin-sub-pane').forEach(p=>p.classList.remove('active'));
+  const pane=document.getElementById(id);if(pane)pane.classList.add('active');
+  if(btn)btn.classList.add('active');
+}
+
+/* Log one row to Activity History.xlsx */
+async function logSSActivity(activity, rec, status, remarks=''){
+  try{
+    // Ensure siteIdCache is available (leave-site ID)
+    let sid=siteIdCache;
+    if(!sid){
+      sid=await getSiteId();
+      siteIdCache=sid;
+    }
+    if(!sid){console.warn('[HISTORY] siteIdCache not resolved, skipping log.');return;}
+
+    const ts=new Date().toLocaleString('en-US',{timeZone:'Asia/Manila',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false});
+    const newRow=[ts, activity, rec.title||'', rec.reqType||'', rec.requestorName||'', status||'', rec.shiftDate||rec.requestedDate||'', currentUserEmail, remarks];
+
+    const t=await getToken();
+    const baseUrl=`https://graph.microsoft.com/v1.0/sites/${sid}/drive/root:/${encodeURIComponent(CSV_FOLDER)}/${encodeURIComponent(HISTORY_FILE)}:/workbook`;
+
+    // 1. Open a persistent workbook session
+    const sessRes=await fetch(`${baseUrl}/createSession`,{
+      method:'POST',
+      headers:{'Authorization':`Bearer ${t}`,'Content-Type':'application/json'},
+      body:JSON.stringify({persistChanges:true})
+    });
+    if(!sessRes.ok){const tx=await sessRes.text();console.warn('[HISTORY] session create failed:',sessRes.status,tx);return;}
+    const {id:sessionId}=await sessRes.json();
+    const hdrs={'Authorization':`Bearer ${t}`,'Content-Type':'application/json','workbook-session-id':sessionId};
+
+    // 2. Find the last used row so we can append after it
+    const rangeRes=await fetch(`${baseUrl}/worksheets/Sheet1/usedRange(valuesOnly=true)`,{headers:hdrs});
+    let nextRow=2; // default: row 2 (row 1 = headers)
+    if(rangeRes.ok){
+      const rangeData=await rangeRes.json();
+      // rowIndex is 0-based, rowCount gives extent
+      const ri=rangeData.rowIndex??0;
+      const rc=rangeData.rowCount??1;
+      nextRow=ri+rc+1; // 1-based row number after last used row
+    }
+
+    // 3. Write the new row
+    const addr=`A${nextRow}:I${nextRow}`;
+    const writeRes=await fetch(`${baseUrl}/worksheets/Sheet1/range(address='${addr}')`,{
+      method:'PATCH',
+      headers:hdrs,
+      body:JSON.stringify({values:[newRow]})
+    });
+    if(!writeRes.ok){const tx=await writeRes.text();console.warn('[HISTORY] write failed:',writeRes.status,tx);}
+    else console.log('[HISTORY] logged row',nextRow,activity,rec.title||'');
+
+    // 4. Close the session
+    await fetch(`${baseUrl}/closeSession`,{method:'POST',headers:hdrs}).catch(()=>{});
+  }catch(e){console.warn('[HISTORY] error:',e.message);}
+}
+
+/* Load all rows from Activity History.xlsx */
+async function loadSSHistory(){
+  const loadEl=document.getElementById('ssHistoryLoading');
+  const tbody=document.getElementById('ssHistoryBody');
+  if(loadEl)loadEl.style.display='block';
+  if(tbody)tbody.innerHTML='';
+  try{
+    let sid=siteIdCache;
+    if(!sid){sid=await getSiteId();siteIdCache=sid;}
+    if(!sid){throw new Error('Site ID not resolved.');}
+    const t=await getToken();
+    const baseUrl=`https://graph.microsoft.com/v1.0/sites/${sid}/drive/root:/${encodeURIComponent(CSV_FOLDER)}/${encodeURIComponent(HISTORY_FILE)}:/workbook`;
+    // Read all data from Sheet1 using usedRange
+    const res=await fetch(`${baseUrl}/worksheets/Sheet1/usedRange(valuesOnly=true)`,{headers:{'Authorization':`Bearer ${t}`}});
+    if(!res.ok){const tx=await res.text();throw new Error(`${res.status}: ${tx}`);}
+    const data=await res.json();
+    const allVals=data.values||[];
+    // Row 0 = headers, rows 1+ = data
+    ssHistoryData=allVals.slice(1).filter(v=>v[0]||v[1]).map(v=>({
+      timestamp:v[0]||'',activity:v[1]||'',reqNum:v[2]||'',reqType:v[3]||'',
+      requestorName:v[4]||'',status:v[5]||'',shiftDate:v[6]||'',performedBy:v[7]||'',remarks:v[8]||''
+    })).reverse(); // newest first
+    ssHistoryPage=1;
+    renderSSHistory();
+  }catch(e){
+    console.error('[HISTORY] load error:',e);
+    if(tbody)tbody.innerHTML=`<tr><td colspan="10" class="empty-state"><p>Failed to load history: ${escHtml(e.message)}</p></td></tr>`;
+  }finally{if(loadEl)loadEl.style.display='none';}
+}
+
+function clearHistFilters(){
+  ['histActivityFilter','histTypeFilter','histNameFilter'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  ssHistoryPage=1;renderSSHistory();
+}
+
+function renderSSHistory(){
+  const actF=(document.getElementById('histActivityFilter')?.value||'').toLowerCase();
+  const typF=(document.getElementById('histTypeFilter')?.value||'').toLowerCase();
+  const nmF=(document.getElementById('histNameFilter')?.value||'').toLowerCase().trim();
+  const rows=ssHistoryData.filter(r=>{
+    if(actF&&(r.activity||'').toLowerCase()!==actF)return false;
+    if(typF&&(r.reqType||'').toLowerCase()!==typF)return false;
+    if(nmF&&!(r.requestorName||'').toLowerCase().includes(nmF)&&!(r.reqNum||'').toLowerCase().includes(nmF))return false;
+    return true;
+  });
+  const cnt=document.getElementById('ssHistoryCount');
+  if(cnt)cnt.textContent=`${rows.length} entr${rows.length!==1?'ies':'y'}`;
+  const total=Math.ceil(rows.length/HIST_PAGE)||1;
+  if(ssHistoryPage>total)ssHistoryPage=1;
+  const start=(ssHistoryPage-1)*HIST_PAGE;
+  const page=rows.slice(start,start+HIST_PAGE);
+  const tbody=document.getElementById('ssHistoryBody');if(!tbody)return;
+  if(!page.length){tbody.innerHTML=`<tr><td colspan="10" class="empty-state"><p>No history entries found.</p></td></tr>`;document.getElementById('ssHistoryPagination').innerHTML='';return;}
+  tbody.innerHTML=page.map((r,i)=>{
+    const actBadge=r.activity==='Submitted'?'badge-approved':r.activity==='Deleted'?'badge-status-rejected':'badge-reqtype';
+    return`<tr>
+      <td style="color:var(--text-muted)">${start+i+1}</td>
+      <td style="font-size:11px;white-space:nowrap">${escHtml(r.timestamp)}</td>
+      <td><span class="badge ${actBadge}">${escHtml(r.activity)}</span></td>
+      <td style="font-weight:700;color:var(--sap-blue-dark)"><a href="javascript:void(0)" onclick="goToSSRecord('${escHtml(r.reqNum)}')" style="color:var(--sap-blue);font-weight:700;text-decoration:none;cursor:pointer" title="View record in Records tab">${escHtml(r.reqNum)}</a></td>
+      <td>${escHtml(r.reqType)}</td>
+      <td>${escHtml(r.requestorName)}</td>
+      <td><span class="badge badge-leave-type">${escHtml(r.status)}</span></td>
+      <td style="font-size:12px">${escHtml(r.shiftDate)}</td>
+      <td style="font-size:11px;color:var(--text-muted)">${escHtml(r.performedBy)}</td>
+      <td style="max-width:180px;white-space:normal;font-size:12px">${escHtml(r.remarks)}</td>
+    </tr>`;
+  }).join('');
+  renderPagination(document.getElementById('ssHistoryPagination'),ssHistoryPage,total,(p)=>{ssHistoryPage=p;renderSSHistory();});
+}
+
+
+
+/* ── Swap partner searchable dropdown ── */
+let _arfSwapIdx=-1;
+function arfSwapSearch(q){
+  const list=document.getElementById("arfSwapNameList");if(!list)return;
+  const query=(q||"").toLowerCase().trim();
+  _arfSwapIdx=-1;
+  const agents=Object.values(rlsData)
+    .filter(r=>r.name&&(r.group==="GY"||r.group==="APA"))
+    .filter(r=>!query||(r.name||"").toLowerCase().includes(query))
+    .sort((a,b)=>(a.name||"").localeCompare(b.name||""))
+    .slice(0,25);
+  if(!agents.length){list.innerHTML=`<div class="srch-empty">No matches found</div>`;list.style.display="block";return;}
+  list.innerHTML=agents.map((r,i)=>`<div class="srch-list-item" data-idx="${i}" data-name="${escHtml(r.name)}" data-email="${escHtml(r.email||"")}" data-tl="${escHtml(r.teamLead||r.teamLead2026||"")}" onmousedown="arfSwapPick(event)"><span class="srch-name">${escHtml(r.name)}</span><span class="srch-meta">${escHtml(r.group||"")}${r.teamLead?" · "+escHtml(r.teamLead):""}</span></div>`).join("");
+  list.style.display="block";
+}
+function arfSwapPick(e){
+  const item=e.currentTarget||e.target.closest(".srch-list-item");if(!item)return;
+  document.getElementById("arfSwapName").value=item.dataset.name||"";
+  const emailEl=document.getElementById("arfSwapEmail");
+  if(emailEl&&item.dataset.email) emailEl.value=item.dataset.email;
+  const tlEl=document.getElementById("arfSwapTL");
+  if(tlEl&&item.dataset.tl){tlEl.value=item.dataset.tl;}
+  arfSwapHide();
+}
+function arfSwapHide(){const l=document.getElementById("arfSwapNameList");if(l)l.style.display="none";_arfSwapIdx=-1;}
+function arfSwapClear(){
+  document.getElementById("arfSwapName").value="";
+  document.getElementById("arfSwapEmail").value="";
+  const tlEl=document.getElementById("arfSwapTL");
+  if(tlEl){tlEl.value="";}
+  arfSwapHide();
+  document.getElementById("arfSwapName").focus();
+}
+function arfSwapKeyNav(e){
+  const list=document.getElementById("arfSwapNameList");
+  if(!list||list.style.display==="none")return;
+  const items=list.querySelectorAll(".srch-list-item");if(!items.length)return;
+  if(e.key==="ArrowDown"){e.preventDefault();_arfSwapIdx=Math.min(_arfSwapIdx+1,items.length-1);}
+  else if(e.key==="ArrowUp"){e.preventDefault();_arfSwapIdx=Math.max(_arfSwapIdx-1,0);}
+  else if(e.key==="Enter"&&_arfSwapIdx>=0){e.preventDefault();items[_arfSwapIdx].dispatchEvent(new MouseEvent("mousedown"));return;}
+  else if(e.key==="Escape"){arfSwapHide();return;}
+  items.forEach((it,i)=>it.classList.toggle("active",i===_arfSwapIdx));
+  if(_arfSwapIdx>=0)items[_arfSwapIdx].scrollIntoView({block:"nearest"});
+}
+
+/* ── App Notification Strip ── */
+const _NOTIF_VER='usd-mnl-notif-v2.4';
+function appNotifInit(){
+  if(localStorage.getItem(_NOTIF_VER)==='dismissed') return;
+  ['appNotifStrip','appNotifStripSS'].forEach(id=>{
+    const el=document.getElementById(id);if(el)el.style.display='block';
+  });
+}
+function appNotifDismiss(){
+  localStorage.setItem(_NOTIF_VER,'dismissed');
+  ['appNotifStrip','appNotifStripSS'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el){el.style.opacity='0';el.style.transition='opacity .25s';setTimeout(()=>{el.style.display='none';},260);}
+  });
+}
+
+/* ── Header Notification Bell ── */
+const _NOTIF_KEY='usd-mnl-notif-v2.4';
+const _NOTIF_APP_COUNT=5;
+let _notifReqCount=0;
+function notifInit(){
+  const read=localStorage.getItem(_NOTIF_KEY)==='read';
+  for(let i=0;i<_NOTIF_APP_COUNT;i++){const d=document.getElementById('ndot'+i);if(d)d.classList.toggle('read',read);}
+  _notifAppUnread=read?0:_NOTIF_APP_COUNT;
+  _notifRefreshBadge();
+}
+let _notifAppUnread=0;
+function _notifRefreshBadge(){
+  const total=_notifAppUnread+_notifReqCount;
+  const badge=document.getElementById('notifCount');
+  if(!badge)return;
+  if(total>0){badge.textContent=total>9?'9+':total;badge.classList.add('active');}
+  else{badge.textContent='';badge.classList.remove('active');}
+}
+function notifUpdateRequests(){
+  const box=document.getElementById('notifRequests');if(!box)return;
+  const emailL=(currentUserEmail||'').toLowerCase().trim();
+  const myNameL=_rlsMyName().toLowerCase().trim();
+  const items=[];
+  // 1. Swaps awaiting MY acknowledgment (For My Acknowledgment tab)
+  (allSSData||[]).filter(r=>{
+    if((r.reqType||'').toLowerCase()!=='swap')return false;
+    if((r.status||'').toUpperCase().trim()!=='FOR ACKNOWLEDGEMENT')return false;
+    if(isAdmin()||isWFM())return true;
+    const a=_parseAck(r.swapAck),req=_ackRequired(r),mine=_mySlots(r);
+    return mine.some(k=>req[k]&&a[k]!=='Y'&&a[k]!=='N');
+  }).slice(0,5).forEach(r=>{
+    const mine=_mySlots(r).map(_ackLabel).join(', ');
+    items.push({type:'ack',num:r.title||'—',label:escHtml(r.requestorName||'—'),meta:'Swap · '+formatDatePlain(r.shiftDate),action:mine?'Your action needed':'Awaiting acknowledgment',tab:'ss-tab-myack'});
+  });
+  // 2. MY pending requests (own filings not yet resolved)
+  (allSSData||[]).filter(r=>{
+    const st=(r.status||'').toUpperCase();
+    const nm=(r.requestorName||'').toLowerCase().trim();
+    const isOwn=nm===myNameL||(r.agentEmail||'').toLowerCase()===emailL;
+    return isOwn&&(st==='PENDING'||st==='FOR ACKNOWLEDGEMENT');
+  }).slice(0,4).forEach(r=>{
+    const st=(r.status||'').toUpperCase();
+    items.push({type:'pending',num:r.title||'—',label:(r.reqType||'')+(r.swapName?' ↔ '+escHtml(r.swapName):''),meta:formatDatePlain(r.shiftDate),action:st==='FOR ACKNOWLEDGEMENT'?'Awaiting partner ack':'Pending approval',tab:'ss-tab-records'});
+  });
+  // 3. WFM/Admin: all pending WFM approval (status PENDING in admin)
+  if(isAdmin()||isWFM()){
+    (ssAdminData||[]).slice(0,4).forEach(r=>{
+      items.push({type:'wfm',num:r.title||'—',label:escHtml(r.requestorName||'—')+' · '+(r.reqType||''),meta:formatDatePlain(r.shiftDate),action:'Pending WFM approval',tab:'ss-tab-admin'});
+    });
+  }
+  _notifReqCount=items.length;
+  _notifRefreshBadge();
+  if(!items.length){box.innerHTML='<div class="notif-empty-req">No pending requests.</div>';return;}
+  const colors={ack:'ack',pending:'pending',wfm:'wfm'};
+  box.innerHTML=items.map(it=>`<div class="notif-item-req" onclick="navGoSSTab('${it.tab}');document.getElementById('notifPanel').style.display='none'">
+    <div class="notif-req-dot ${colors[it.type]||'pending'}"></div>
+    <div class="notif-req-body">
+      <div style="display:flex;align-items:center;gap:6px;margin-bottom:2px">
+        <span class="notif-req-num">${escHtml(it.num)}</span>
+        <span class="notif-req-action ${colors[it.type]||'view'}">${it.action}</span>
+      </div>
+      <div>${it.label}</div>
+      <div class="notif-req-meta">${it.meta}</div>
+    </div>
+  </div>`).join('');
+}
+function formatDatePlain(s){const d=parseDate(s);if(!d)return s||'—';return d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});}
+function toggleNotifPanel(e){
+  if(e)e.stopPropagation();
+  const p=document.getElementById('notifPanel');
+  if(!p)return;
+  p.style.display=p.style.display==='block'?'none':'block';
+}
+function notifMarkRead(){
+  localStorage.setItem(_NOTIF_KEY,'read');
+  _notifAppUnread=0;
+  for(let i=0;i<_NOTIF_APP_COUNT;i++){const d=document.getElementById('ndot'+i);if(d)d.classList.add('read');}
+  _notifRefreshBadge();
+}
+document.addEventListener('click',function(e){
+  const wrap=document.getElementById('headerNotifWrap');
+  if(wrap&&!wrap.contains(e.target)){const p=document.getElementById('notifPanel');if(p)p.style.display='none';}
+});
+
+/* ══════════════ FOR MY ACKNOWLEDGMENT (Multi-party Swap) ══════════════ */
+/* Acknowledgment slots:  SP = Swap Partner, RTL = Requestor's Team Lead, STL = Swap Partner's Team Lead */
+const _ACK_SLOTS=['SP','RTL','STL'];
+function _ackLabel(k){return k==='SP'?'Swap Partner':k==='RTL'?"Requestor's TL":k==='STL'?"Partner's TL":k;}
+function _parseAck(s){
+  const o={SP:'',RTL:'',STL:''};
+  (s||'').split(';').forEach(p=>{const i=p.indexOf('=');if(i>0){const k=p.slice(0,i).trim();const v=p.slice(i+1).trim();if(o.hasOwnProperty(k))o[k]=v;}});
+  return o;
+}
+function _ackStr(o){return `SP=${o.SP};RTL=${o.RTL};STL=${o.STL}`;}
+/* Which slots are actually required for this record (party must be named) */
+function _ackRequired(r){
+  return {
+    SP:  !!((r.swapName||'').trim()||(r.swapEmail||'').trim()),
+    RTL: !!(r.teamLead||'').trim(),
+    STL: !!(r.swapTL||'').trim()
+  };
+}
+/* Which slots the logged-in user is responsible for */
+function _mySlots(r){
+  const slots=[];
+  const emailL=(currentUserEmail||'').toLowerCase().trim();
+  const myNameL=_rlsMyName().toLowerCase().trim();
+  if((r.swapEmail||'').toLowerCase().trim()===emailL||(r.swapName||'').toLowerCase().trim()===myNameL) slots.push('SP');
+  if((r.teamLead||'').toLowerCase().trim()===myNameL) slots.push('RTL');
+  if((r.swapTL||'').toLowerCase().trim()===myNameL) slots.push('STL');
+  return slots;
+}
+/* Friendly acknowledgment summary for tables & emails */
+function fmtSwapAck(r){
+  if((r.reqType||'').toLowerCase()!=='swap')return r.swapAck||'';
+  const a=_parseAck(r.swapAck),req=_ackRequired(r),parts=[];
+  _ACK_SLOTS.forEach(k=>{if(req[k]){const v=a[k]==='Y'?'Yes':a[k]==='N'?'Declined':'Pending';parts.push(`${_ackLabel(k)}: ${v}`);}});
+  return parts.join(' | ')||(r.swapAck||'—');
+}
+/* A swap appears in MY acknowledgment list when I still owe an acknowledgment,
+   OR when I am WFM / Admin (full visibility over all pending swaps) */
+function _isMySwapToAck(r){
+  if((r.reqType||'').toLowerCase()!=='swap')return false;
+  if((r.status||'').toUpperCase().trim()!=='FOR ACKNOWLEDGEMENT')return false;
+  // WFM and Admin see every pending swap
+  if(isAdmin()||isWFM()) return true;
+  const a=_parseAck(r.swapAck),req=_ackRequired(r),mine=_mySlots(r);
+  return mine.some(k=>req[k]&&a[k]!=='Y'&&a[k]!=='N');
+}
+function clearMyAckFilters(){
+  myAckDateFrom=""; myAckDateTo="";
+  ["myAckDateFrom","myAckDateTo"].forEach(id=>{const el=document.getElementById(id);if(el)el.value="";});
+  renderMyAckTable();
+}
+function updateMyAckCount(){
+  const n=(allSSData||[]).filter(_isMySwapToAck).length;
+  const b=document.getElementById('myAckCount');
+  if(b){ if(n>0){b.textContent=n;b.style.display='inline-block';} else {b.style.display='none';} }
+}
+function renderMyAckTable(){
+  myAckDateFrom=document.getElementById("myAckDateFrom")?.value||"";
+  myAckDateTo=document.getElementById("myAckDateTo")?.value||"";
+  const rows=(allSSData||[]).filter(r=>{
+    if(!_isMySwapToAck(r))return false;
+    if(myAckDateFrom){const d=parseDate(r.shiftDate);if(!d||d<new Date(myAckDateFrom))return false;}
+    if(myAckDateTo){const d=parseDate(r.shiftDate);if(!d||d>new Date(myAckDateTo+"T23:59:59"))return false;}
+    return true;
+  });
+  const cnt=document.getElementById('myAckTableCount');
+  if(cnt)cnt.textContent=`${rows.length} swap${rows.length!==1?'s':''} to acknowledge`;
+  const tbody=document.getElementById('myAckTableBody');if(!tbody)return;
+  if(!rows.length){tbody.innerHTML=`<tr><td colspan="10" class="empty-state"><p>No swaps awaiting your acknowledgment.</p></td></tr>`;updateMyAckCount();return;}
+  tbody.innerHTML=rows.map(r=>{
+    const idx=allSSData.indexOf(r);
+    const theirSched=[r.originalSchedule,r.originalRD].filter(Boolean).join(' || ')||'—';
+    const mySched=[r.requestedSchedule,r.requestedRD].filter(Boolean).join(' || ')||'—';
+    const mine=_mySlots(r).map(_ackLabel).join(', ');
+    return`<tr>
+      <td style="color:var(--text-muted)">${idx+1}</td>
+      <td style="font-weight:700;color:var(--sap-blue-dark);white-space:nowrap">${escHtml(r.title||'—')}</td>
+      <td style="white-space:nowrap"><strong>${escHtml(r.requestorName||'—')}</strong></td>
+      <td style="white-space:nowrap"><strong>${escHtml(r.swapName||'—')}</strong></td>
+      <td style="white-space:nowrap">${formatDate(r.shiftDate)}</td>
+      <td style="white-space:nowrap;font-size:12px">${escHtml(theirSched)}</td>
+      <td style="white-space:nowrap;font-size:12px">${escHtml(mySched)}</td>
+      <td style="max-width:150px;white-space:normal;font-size:11.5px;color:var(--text-muted)">${escHtml(fmtSwapAck(r))}${mine?`<br><em style="color:#0057C2">You: ${escHtml(mine)}</em>`:''}</td>
+      <td style="white-space:nowrap">${ssStatusBadge(r.status)}</td>
+      <td style="white-space:nowrap">
+        ${mine
+          ? `<button class="btn-approve-ss" data-ackidx="${idx}">Approve</button>
+             <button class="btn-delete-record" data-declineidx="${idx}" style="margin-left:4px">Decline</button>`
+          : `<span style="font-size:11px;color:#999;font-style:italic">View only</span>`}
+      </td>
+    </tr>`;
+  }).join('');
+  tbody.querySelectorAll('[data-ackidx]').forEach(b=>b.addEventListener('click',()=>ackSwap(+b.dataset.ackidx,true)));
+  tbody.querySelectorAll('[data-declineidx]').forEach(b=>b.addEventListener('click',()=>ackSwap(+b.dataset.declineidx,false)));
+  updateMyAckCount();
+}
+async function ackSwap(idx, approve){
+  const r=allSSData[idx];if(!r)return;
+  if(!r._itemId){showToast('Cannot update: no SharePoint item ID.');return;}
+  const mine=_mySlots(r);
+  if(!mine.length){showToast('You are not a required acknowledger for this swap.');return;}
+  const roleTxt=mine.map(_ackLabel).join(', ');
+  const action=approve?'approve':'decline';
+  if(!confirm(`Are you sure you want to ${action} this swap request (${r.title||''}) as ${roleTxt}?`))return;
+  const a=_parseAck(r.swapAck),req=_ackRequired(r);
+  let newStatus,remark;
+  if(!approve){
+    mine.forEach(k=>{a[k]='N';});
+    newStatus='REJECTED';
+    remark=`Declined by ${roleTxt}`;
+  } else {
+    mine.forEach(k=>{a[k]='Y';});
+    const allDone=_ACK_SLOTS.every(k=>!req[k]||a[k]==='Y');
+    newStatus=allDone?'PENDING':'FOR ACKNOWLEDGEMENT';
+    remark=allDone?`All parties approved — pending WFM`:`Approved by ${roleTxt}`;
+  }
+  const f={field_2:newStatus, field_9:_ackStr(a)};
+  const url=`https://graph.microsoft.com/v1.0/sites/${ssSiteIdCache}/lists/${LIST_SS_ID}/items/${r._itemId}/fields`;
+  try{
+    showToast('Submitting…');
+    await graphPatch(url,f);
+    r.status=newStatus; r.swapAck=f.field_9;
+    sendSSNotification(r, newStatus).catch(()=>{});
+    logSSActivity('Edited', r, newStatus, remark).catch(()=>{});
+    if(!approve) showToast('Swap declined.');
+    else if(newStatus==='PENDING') showToast('All parties have acknowledged. Now PENDING for WFM approval.');
+    else showToast('Approved. Awaiting the remaining parties.');
+    renderMyAckTable(); ssApplyFilters();
+  }catch(e){
+    console.error(e);showToast('Update failed: '+(e.message||String(e)));
+  }
+}
+
+/* ══════════════ SS EMAIL NOTIFICATION ══════════════ */
+async function sendSSNotification(rec, statusLabel){
+  try{
+    // Resolve requestor from RLS (by email first, then by name)
+    const reqEntry=rlsData[rec.agentEmail?.toLowerCase()]
+      ||Object.values(rlsData).find(r=>(r.name||'').toLowerCase().trim()===(rec.requestorName||'').toLowerCase().trim());
+    const reqEmail=reqEntry?.email||rec.agentEmail||'';
+    // Resolve Team Lead from requestor's RLS entry (not from the record field)
+    const tlNameFromRLS=reqEntry?.teamLead||reqEntry?.teamLead2026||rec.teamLead||'';
+    const tlEntry=Object.values(rlsData).find(r=>(r.name||'').toLowerCase().trim()===tlNameFromRLS.toLowerCase().trim());
+    const tlEmail=tlEntry?.email||'';
+
+    const reqType=(rec.reqType||'Slide');
+    const isSwapType=reqType.toLowerCase()==='swap';
+    const typeName=isSwapType?'Schedule Swap':'Schedule Slide';
+    const reqNum=rec.title||'—';
+    const shiftRaw=rec.shiftDate||rec.requestedDate||'';
+    const shiftDate=(()=>{const d=parseDate(shiftRaw);if(!d)return shiftRaw||'—';return d.toLocaleDateString('en-US',{year:'numeric',month:'2-digit',day:'2-digit'});})();
+    const isPending=statusLabel.toLowerCase()==='pending';
+    const isForAck=statusLabel.toUpperCase()==='FOR ACKNOWLEDGEMENT';
+    const isFiling=isPending||isForAck;
+    const isApproved=statusLabel.toUpperCase()==='APPROVED';
+    const verb=isFiling?'has been filed with':'has been updated with';
+    // Status display label
+    const displayStatus=isForAck?'For Acknowledgement':statusLabel.toUpperCase();
+
+    let body='';
+    if(isSwapType){
+      // ── Swap email format ──────────────────────────────────
+      const origSchedule=[rec.originalSchedule,rec.originalRD].filter(Boolean).join(' || ')||'—';
+      const swapSchedule=[rec.requestedSchedule,rec.requestedRD].filter(Boolean).join(' || ')||'—';
+      const ackVal=fmtSwapAck(rec)||'Pending';
+      body=`<div style="font-family:Arial,Helvetica,sans-serif;font-size:14px;color:#1D2329;line-height:1.4">
+<p>Hi <strong>${escHtml(rec.requestorName||'Team')}</strong>,</p>
+<p>Your <strong>${typeName}</strong> ${verb} the following details:</p>
+<table style="border-collapse:collapse;margin:16px 0;min-width:320px">
+  <tr><td style="padding:2px 16px 2px 0;font-weight:700;color:#00144A;white-space:nowrap">REQUEST NUMBER</td><td style="padding:2px 0">: <strong>${escHtml(reqNum)}</strong></td></tr>
+  <tr><td style="padding:2px 16px 2px 0;font-weight:700;color:#00144A;white-space:nowrap">STATUS</td><td style="padding:2px 0">: <strong>${escHtml(displayStatus)}</strong></td></tr>
+  <tr><td style="padding:2px 16px 2px 0;font-weight:700;color:#00144A;white-space:nowrap">REQUESTED DATE</td><td style="padding:2px 0">: ${escHtml(shiftDate)}</td></tr>
+  <tr><td style="padding:2px 16px 2px 0;font-weight:700;color:#00144A;white-space:nowrap">ACKNOWLEDGED</td><td style="padding:2px 0">: ${escHtml(ackVal)}</td></tr>
+</table>
+<div style="border-top:2px solid #CCCCCC;border-bottom:2px solid #CCCCCC;padding:14px 0;margin:16px 0;font-size:13.5px">
+  <p style="margin-bottom:8px"><strong>NAME</strong> : ${escHtml(rec.requestorName||'—')}<br>
+  <strong>SCHEDULE</strong> : ${escHtml(origSchedule)}</p>
+  <p style="margin:10px 0 8px;font-style:italic;color:#555">Requesting to Swap with:</p>
+  <p style="margin-bottom:0"><strong>NAME</strong> : ${escHtml(rec.swapName||'—')}<br>
+  <strong>REQUESTED SCHEDULE</strong> : ${escHtml(swapSchedule)}</p>
+</div>
+<p>${isForAck?'Kindly go to the system to acknowledge this request. All parties involved — the swap partner and both Team Leaders — must acknowledge in the system. Once all parties have acknowledged, the request will move to <strong>PENDING</strong> for WFM approval.':statusLabel.toUpperCase()==='PENDING'?'All parties have acknowledged. This request is now <strong>PENDING</strong> for WFM approval.':'This is an update on your swap request.'}</p>
+<br>
+<p>You may view this request thru: <a href="https://pages.github.tools.sap/I350663/usdmanilahub/" style="color:#1B90FF;font-weight:700;text-decoration:none">USD MNL - Leave Consumption and Scheduling Tool</a></p>
+<br>
+<p style="color:#666;font-style:italic;font-size:12px">(This is an automated message, please do not reply)</p>
+<br>
+<p>Regards,<br><strong>Workforce Management - USD</strong></p>
+</div>`;
+    } else {
+      // ── Slide email format ─────────────────────────────────
+      const schedule=[rec.requestedSchedule,rec.requestedRD].filter(Boolean).join(' || ')||'—';
+      body=`<div style="font-family:Arial,Helvetica,sans-serif;font-size:14px;color:#1D2329;line-height:1.4">
+<p>Hi <strong>${escHtml(rec.requestorName||'Team')}</strong>,</p>
+<p>Your <strong>${typeName}</strong> ${verb} the following details:</p>
+<table style="border-collapse:collapse;margin:16px 0;min-width:320px">
+  <tr><td style="padding:2px 16px 2px 0;font-weight:700;color:#00144A;white-space:nowrap">REQUEST NUMBER</td><td style="padding:2px 0">: <strong>${escHtml(reqNum)}</strong></td></tr>
+  <tr><td style="padding:2px 16px 2px 0;font-weight:700;color:#00144A;white-space:nowrap">STATUS</td><td style="padding:2px 0">: <strong>${escHtml(displayStatus)}</strong></td></tr>
+  <tr><td style="padding:2px 16px 2px 0;font-weight:700;color:#00144A;white-space:nowrap">REQUESTED DATE</td><td style="padding:2px 0">: ${escHtml(shiftDate)}</td></tr>
+  <tr><td style="padding:2px 16px 2px 0;font-weight:700;color:#00144A;white-space:nowrap">REQUESTED SCHEDULE</td><td style="padding:2px 0">: ${escHtml(schedule)}</td></tr>
+</table>
+<p>You may view this request thru: <a href="https://pages.github.tools.sap/I350663/usdmanilahub/" style="color:#1B90FF;font-weight:700;text-decoration:none">USD MNL - Leave Consumption and Scheduling Tool</a></p>
+<br>
+<p style="color:#666;font-style:italic;font-size:12px">(This is an automated message, please do not reply)</p>
+<br>
+<p>Regards,<br><strong>Workforce Management - USD</strong></p>
+</div>`;
+    }
+
+    const toR=[];
+    if(reqEmail) toR.push({emailAddress:{address:reqEmail}});
+    if(tlEmail&&tlEmail!==reqEmail) toR.push({emailAddress:{address:tlEmail}});
+    // For Swap requests, also add the swap partner and the swap partner's Team Lead
+    if(isSwapType){
+      const _added=new Set(toR.map(x=>(x.emailAddress.address||'').toLowerCase()));
+      // Swap partner email — from record field, else resolve by name from RLS
+      let swapEmail=(rec.swapEmail||'').trim();
+      const swapEntry=Object.values(rlsData).find(r=>(r.name||'').toLowerCase().trim()===(rec.swapName||'').toLowerCase().trim());
+      if(!swapEmail&&swapEntry) swapEmail=swapEntry.email||'';
+      if(swapEmail&&!_added.has(swapEmail.toLowerCase())){toR.push({emailAddress:{address:swapEmail}});_added.add(swapEmail.toLowerCase());}
+      // Swap partner's Team Lead — from record field (name), else from swap partner's RLS entry
+      const swapTLName=(rec.swapTL||swapEntry?.teamLead||swapEntry?.teamLead2026||'').trim();
+      const swapTLEntry=Object.values(rlsData).find(r=>(r.name||'').toLowerCase().trim()===swapTLName.toLowerCase().trim());
+      const swapTLEmail=swapTLEntry?.email||'';
+      if(swapTLEmail&&!_added.has(swapTLEmail.toLowerCase())){toR.push({emailAddress:{address:swapTLEmail}});_added.add(swapTLEmail.toLowerCase());}
+    }
+    if(!toR.length){console.warn('[EMAIL] No recipients resolved, skipping.');return;}
+
+    const REPLY_TO='concur_USD.VLREQUEST@sap.com';
+    const wfmCC=Object.values(rlsData).filter(r=>(r.funcRaw||'').toUpperCase()==='WFM'&&r.email).map(r=>({emailAddress:{address:r.email}}));
+    const payload={message:{
+      subject:isFiling
+        ?`Your ${typeName} is Filed [${reqNum}]`
+        :`Updates on Shift ${reqType} [${reqNum}]`,
+      body:{contentType:'HTML',content:body},
+      toRecipients:toR,
+      ccRecipients:wfmCC,
+      replyTo:[{emailAddress:{address:REPLY_TO}}]
+    }};
+    const t=await getToken();
+    // Send from logged-in user's mailbox (/me/sendMail) — always works.
+    // replyTo is set to concur_USD.VLREQUEST@sap.com so replies route correctly.
+    const res=await fetch('https://graph.microsoft.com/v1.0/me/sendMail',{
+      method:'POST',
+      headers:{'Authorization':`Bearer ${t}`,'Content-Type':'application/json'},
+      body:JSON.stringify(payload)
+    });
+    if(!res.ok){
+      const tx=await res.text();
+      console.warn('[EMAIL] sendMail failed:',res.status,tx);
+      showToast('Email notification failed ('+res.status+'). Check console for details.');
+    } else {
+      console.log('[EMAIL] Notification sent:',reqNum,statusLabel);
+    }
+  }catch(e){console.warn('[EMAIL] Notification error:',e.message);}
+}
+
 async function submitSSRequest(){
   if(!currentUserRole){showToast("Not authorized to submit requests.");return;}
   if(!ssSiteIdCache){showToast("Data not ready. Please wait for the list to finish loading.");return;}
   const nm=_getArfName().trim();
   const rt=document.getElementById("arfReqType").value;
   const sd=document.getElementById("arfShiftDate").value;
+  const reqNum=(document.getElementById("arfReqNum")?.value||generateReqNum(rt)).trim();
   const msg=document.getElementById("arfSaveMsg"),btn=document.getElementById("btnArfSubmit");
-  if(!nm||!rt||!sd){msg.textContent="Name, Type, and Shift Date are required.";msg.style.color="#CC0000";return;}
+  const tl=document.getElementById("arfTeamLead").value.trim();
+  const os=document.getElementById("arfOrigSched").value.trim();
+  const ord=document.getElementById("arfOrigRD").value.trim();
+  const rs=document.getElementById("arfReqSched").value.trim();
+  const rrd=document.getElementById("arfReqRD").value.trim();
+  const re=document.getElementById("arfReason").value.trim();
+  const isSwap=rt.toLowerCase()==="swap";
+  const sn=isSwap?document.getElementById("arfSwapName").value.trim():"x";
+  const se=isSwap?document.getElementById("arfSwapEmail").value.trim():"x";
+  const stl=isSwap?document.getElementById("arfSwapTL").value.trim():"x";
+  const sa=isSwap?document.getElementById("arfSwapAck").value.trim():"x";
+  // Author role bypasses general required-field validation
+  const isAuthor=currentUserRole==='author';
+  if(!isAuthor&&(!nm||!rt||!sd||!tl||!os||!ord||!rs||!rrd||!re||!sn||!se||!stl)){
+    msg.textContent="All fields are required.";msg.style.color="#CC0000";return;
+  } else if(!nm||!rt||!sd){
+    msg.textContent="Name, Type, and Shift Date are required.";msg.style.color="#CC0000";return;
+  }
+  // Reason must not be blank or whitespace-only — applies to ALL roles
+  if(!re){
+    msg.textContent="Reason is required. Please describe the reason for your request.";
+    msg.style.color="#CC0000";
+    const el=document.getElementById("arfReason");
+    if(el){el.style.border="2px solid #CC0000";el.focus();el.addEventListener("input",()=>{el.style.border="";},{ once:true });}
+    return;
+  }
   btn.disabled=true;msg.textContent="Submitting…";msg.style.color="var(--sap-navy)";
-  const f={Title:nm,RequestorName:nm,ReqType:rt,field_2:"PENDING",ShiftDate:sd+"T00:00:00Z"};
-  const os=document.getElementById("arfOrigSched").value.trim();if(os)f.field_3=os;
-  const ord=document.getElementById("arfOrigRD").value.trim();if(ord)f.OriginalRD=ord;
-  const rs=document.getElementById("arfReqSched").value.trim();if(rs)f.field_5=rs;
-  const rrd=document.getElementById("arfReqRD").value.trim();if(rrd)f.RequestedRD=rrd;
-  const tl=document.getElementById("arfTeamLead").value.trim();if(tl)f.field_7=tl;
-  const re=document.getElementById("arfReason").value.trim();if(re)f.Reason=re;
-  if(rt.toLowerCase()==="swap"){
-    const sn=document.getElementById("arfSwapName").value.trim();if(sn)f.field_4=sn;
-    const se=document.getElementById("arfSwapEmail").value.trim();if(se)f.field_6=se;
-    const st=document.getElementById("arfSwapTL").value.trim();if(st)f.field_8=st;
-    const sa=document.getElementById("arfSwapAck").value.trim();if(sa)f.field_9=sa;
+  const _isSwapReq=(rt||"").toLowerCase()==="swap";
+  const f={Title:reqNum,RequestorName:nm,ReqType:rt,field_2:(_isSwapReq?"FOR ACKNOWLEDGEMENT":"PENDING"),ShiftDate:sd+"T00:00:00Z"};
+  if(os)f.field_3=os;
+  if(ord)f.OriginalRD=ord;
+  if(rs)f.field_5=rs;
+  if(rrd)f.RequestedRD=rrd;
+  if(tl)f.field_7=tl;
+  if(re)f.Reason=re;
+  if(isSwap){
+    if(sn)f.field_4=sn;
+    if(se)f.field_6=se;
+    if(stl)f.field_8=stl;
+    // Initialise multi-party acknowledgment tracker (SP / RTL / STL all pending)
+    f.field_9="SP=;RTL=;STL=";
   }
   const url=`https://graph.microsoft.com/v1.0/sites/${ssSiteIdCache}/lists/${LIST_SS_ID}/items`;
   try{
     await graphPost(url,{fields:f});
     msg.textContent="Request submitted successfully!";msg.style.color="#1B7A3A";
     showToast("Your "+rt+" request has been submitted.");
+    // Send Pending email notification
+    const _initStatus=_isSwapReq?'FOR ACKNOWLEDGEMENT':'Pending';
+    const _submittedRec={title:reqNum,requestorName:nm,reqType:rt,shiftDate:sd,
+      originalSchedule:document.getElementById("arfOrigSched").value.trim(),
+      originalRD:document.getElementById("arfOrigRD").value.trim(),
+      requestedSchedule:document.getElementById("arfReqSched").value.trim(),
+      requestedRD:document.getElementById("arfReqRD").value.trim(),
+      teamLead:document.getElementById("arfTeamLead").value.trim(),
+      swapName:(_isSwapReq?document.getElementById("arfSwapName").value.trim():''),
+      swapEmail:(_isSwapReq?document.getElementById("arfSwapEmail").value.trim():''),
+      swapTL:(_isSwapReq?document.getElementById("arfSwapTL").value.trim():''),
+      swapAck:"SP=;RTL=;STL=",
+      agentEmail:(Object.values(rlsData).find(r=>(r.name||'').toLowerCase().trim()===nm.toLowerCase().trim())||{}).email||''};
+    sendSSNotification(_submittedRec,_initStatus).catch(()=>{});
+    logSSActivity('Submitted',_submittedRec,_initStatus,'New request filed').catch(()=>{});
     setTimeout(closeSSApplyModal,1400);
     setTimeout(loadSSData,1600);
   }catch(e){
@@ -3291,6 +4325,7 @@ function openSSEditModal(idx){
   document.getElementById("ssModalTitle").textContent="Edit Slide / Swap Record";
   document.getElementById("ssModalSubtitle").textContent=(r.requestorName||r.title||"")+(r._itemId?"  ·  Item ID: "+r._itemId:"");
   document.getElementById("sfRequestorName").value=r.requestorName||r.title||"";
+  document.getElementById("sfReqNum").value=r.title||"";
   document.getElementById("sfReqType").value=r.reqType||"";
   document.getElementById("sfStatus").value=(r.status||"PENDING").toUpperCase();
   document.getElementById("sfShiftDate").value=isoDate(r.shiftDate);
@@ -3344,6 +4379,12 @@ async function saveSSRecord(){
     Object.assign(editingSSRecord,{reqType:f.ReqType,status:f.field_2,...(f.ShiftDate?{shiftDate:f.ShiftDate}:{}),...(f.field_3?{originalSchedule:f.field_3}:{}),...(f.OriginalRD?{originalRD:f.OriginalRD}:{}),...(f.field_5?{requestedSchedule:f.field_5}:{}),...(f.RequestedRD?{requestedRD:f.RequestedRD}:{}),...(f.field_4?{swapName:f.field_4}:{}),...(f.field_9?{swapAck:f.field_9}:{}),...(f.field_7?{teamLead:f.field_7}:{}),...(f.field_6?{swapEmail:f.field_6}:{}),...(f.field_8?{swapTL:f.field_8}:{}),...(f.Reason?{agentRemarks:f.Reason}:{}),...(f.Remarks?{reason:f.Remarks}:{}),...(pv!==""?{plotted:String(pv==="true")}:{})});
     ssAdminData=allSSData.filter(r=>(r.status||"").trim().toUpperCase()==="PENDING");
     msg.textContent="Saved.";msg.style.color="#1B7A3A";btn.disabled=false;
+    // Send email notification on any save (never triggered by delete)
+    if(pendingSSDeleteIdx===-1){
+      const notifStatus=editingSSRecord.status||f.field_2||'Updated';
+      sendSSNotification(editingSSRecord, notifStatus).catch(()=>{});
+      logSSActivity('Edited',editingSSRecord,notifStatus,'Record updated').catch(()=>{});
+    }
     renderSSAdminTable();ssApplyFilters();
     showToast("Slide/Swap record saved to SharePoint.");
     setTimeout(closeSSEditModal,1400);
@@ -3360,8 +4401,49 @@ function _plotBadge(v){const pv=String(v||"").toLowerCase();const yes=pv==="yes"
 function _openTableWindow(title,filterBar,headers,rowFn,rows){
   const w=window.open("","_blank","width=1200,height=800,scrollbars=yes");
   const rowsHtml=rows.map((r,i)=>rowFn(r,i)).join("");
-  w.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>${_esc(title)}</title><style>body{font-family:'Segoe UI',Arial,sans-serif;font-size:12.5px;color:#1D2329;padding:20px;background:#F5F6F7;}h2{color:#00144A;margin-bottom:4px;}.filter-bar{background:#FFF;border:1px solid #EAECEE;border-radius:6px;padding:10px 16px;margin-bottom:16px;font-size:12px;color:#666;display:flex;align-items:center;gap:12px;flex-wrap:wrap;}.btn-print{background:#1B90FF;color:#FFF;border:none;border-radius:4px;padding:6px 16px;font-size:12px;cursor:pointer;margin-left:auto;}.btn-copy{background:#0070F2;color:#FFF;border:none;border-radius:4px;padding:6px 16px;font-size:12px;cursor:pointer;transition:background .2s;}.btn-copy:hover{background:#0057C2;}.btn-copy.copied{background:#1B7A3A;}table{width:100%;border-collapse:collapse;}thead th{background:#00144A;color:#FFF;padding:8px 12px;text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.04em;white-space:nowrap;}tbody tr{border-bottom:1px solid #EAECEE;}tbody tr:hover{background:#D1EFFF;}tbody td{padding:7px 12px;vertical-align:middle;word-wrap:break-word;overflow-wrap:break-word;max-width:220px;}.badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;}</style></head><body><h2>${_esc(title)}</h2><div class="filter-bar">${filterBar}<button id="btnCopy" class="btn-copy" onclick="copyTable(this)">Copy Table</button><button class="btn-print" onclick="window.print()">Print / Save as PDF</button></div><table><thead><tr>${headers}</tr></thead><tbody>${rowsHtml}</tbody></table>\u003Cscript>function copyTable(btn){const tbl=document.querySelector("table");if(!tbl)return;const rows=[];const ths=tbl.querySelectorAll("thead th");rows.push(Array.from(ths).map(th=>th.textContent.trim()).join("\t"));tbl.querySelectorAll("tbody tr").forEach(tr=>{rows.push(Array.from(tr.querySelectorAll("td")).map(td=>td.textContent.trim()).join("\t"));});const tsv=rows.join("\n");function flash(){const orig=btn.textContent;btn.textContent="Copied!";btn.classList.add("copied");setTimeout(()=>{btn.textContent=orig;btn.classList.remove("copied");},2000);}if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(tsv).then(flash).catch(()=>fallback(tsv,flash));} else {fallback(tsv,flash);}}function fallback(text,cb){const ta=document.createElement("textarea");ta.value=text;ta.style.position="fixed";ta.style.opacity="0";document.body.appendChild(ta);ta.select();try{document.execCommand("copy");}catch(_){}document.body.removeChild(ta);if(cb)cb();}\u003C/script></body></html>`);
+  w.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>${_esc(title)}</title><style>body{font-family:'Segoe UI',Arial,sans-serif;font-size:12.5px;color:#1D2329;padding:20px;background:#F5F6F7;}h2{color:#00144A;margin-bottom:4px;}.filter-bar{background:#FFF;border:1px solid #EAECEE;border-radius:6px;padding:10px 16px;margin-bottom:16px;font-size:12px;color:#666;display:flex;align-items:center;gap:12px;flex-wrap:wrap;}.btn-print{background:#1B90FF;color:#FFF;border:none;border-radius:4px;padding:6px 16px;font-size:12px;cursor:pointer;margin-left:auto;}.btn-copy{background:#0070F2;color:#FFF;border:none;border-radius:4px;padding:6px 16px;font-size:12px;cursor:pointer;transition:background .2s;}.btn-copy:hover{background:#0057C2;}.btn-copy.copied{background:#1B7A3A;}table{width:100%;border-collapse:collapse;}thead th{background:#00144A;color:#FFF;padding:8px 12px;text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.04em;white-space:nowrap;cursor:pointer;user-select:none;}thead th:hover{background:#002A86;}.sort-icon{opacity:.35;font-size:10px;margin-left:4px;font-style:normal;}thead th.asc .sort-icon{opacity:1;}.sort-icon.a::after{content:"▲"}.sort-icon.d::after{content:"▼"}.sort-icon:not(.a):not(.d)::after{content:"⇅"}tbody tr{border-bottom:1px solid #EAECEE;}tbody tr:hover{background:#D1EFFF;}tbody td{padding:7px 12px;vertical-align:middle;word-wrap:break-word;overflow-wrap:break-word;max-width:220px;}.badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;}</style></head><body><h2>${_esc(title)}</h2><div class="filter-bar">${filterBar}<button id="btnCopy" class="btn-copy">Copy Table</button><button class="btn-print" onclick="window.print()">Print / Save as PDF</button></div><table id="mainTable"><thead><tr>${headers}</tr></thead><tbody>${rowsHtml}</tbody></table></body></html>`);
   w.document.close();
+  // Inject sort + copy script after DOM is ready
+  try {
+    const sc = w.document.createElement('script');
+    sc.textContent = [
+      'var _sc=-1,_sd=1;',
+      'var _ths=document.querySelectorAll("#mainTable thead th");',
+      '_ths.forEach(function(th,idx){',
+      '  var ic=document.createElement("i");ic.className="sort-icon";th.appendChild(ic);',
+      '  th.addEventListener("click",function(){',
+      '    if(_sc===idx){_sd*=-1;}else{_sc=idx;_sd=1;}',
+      '    _ths.forEach(function(t){var i=t.querySelector(".sort-icon");if(i){i.className="sort-icon";}});',
+      '    var ico=th.querySelector(".sort-icon");if(ico){ico.className="sort-icon "+(_sd===1?"a":"d");}',
+      '    var tb=document.querySelector("#mainTable tbody");',
+      '    var rs=Array.prototype.slice.call(tb.querySelectorAll("tr"));',
+      '    rs.sort(function(a,b){',
+      '      var at=(a.querySelectorAll("td")[idx]||{}).textContent||"";',
+      '      var bt=(b.querySelectorAll("td")[idx]||{}).textContent||"";',
+      '      at=at.trim();bt=bt.trim();',
+      '      var an=parseFloat(at.replace(/[^0-9.-]/g,""));',
+      '      var bn=parseFloat(bt.replace(/[^0-9.-]/g,""));',
+      '      if(!isNaN(an)&&!isNaN(bn))return(an-bn)*_sd;',
+      '      return at.localeCompare(bt)*_sd;',
+      '    });',
+      '    rs.forEach(function(r){tb.appendChild(r);});',
+      '  });',
+      '});',
+      'document.getElementById("btnCopy").addEventListener("click",function(){',
+      '  var btn=this;var tbl=document.querySelector("table");if(!tbl)return;',
+      '  var out=[];var ths=tbl.querySelectorAll("thead th");',
+      '  out.push(Array.prototype.map.call(ths,function(t){return t.textContent.replace(/[▲▼⇅]/g,"").trim();}).join("\\t"));',
+      '  tbl.querySelectorAll("tbody tr").forEach(function(tr){',
+      '    out.push(Array.prototype.map.call(tr.querySelectorAll("td"),function(td){return td.textContent.trim();}).join("\\t"));',
+      '  });',
+      '  var tsv=out.join("\\n");',
+      '  function flash(){var o=btn.textContent;btn.textContent="Copied!";btn.style.background="#1B7A3A";setTimeout(function(){btn.textContent=o;btn.style.background="";},2000);}',
+      '  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(tsv).then(flash).catch(function(){fb(tsv,flash);});}else{fb(tsv,flash);}',
+      '  function fb(t,c){var ta=document.createElement("textarea");ta.value=t;ta.style.position="fixed";ta.style.opacity="0";document.body.appendChild(ta);ta.select();try{document.execCommand("copy");}catch(e){}document.body.removeChild(ta);if(c)c();}',
+      '});'
+    ].join('');
+    w.document.head.appendChild(sc);
+  } catch(e) { console.warn('Sort inject failed:', e); }
 }
 function viewAllLeave(){
   let rows=filteredData.filter(r=>{
@@ -3385,8 +4467,8 @@ function viewAllExpiring(){
   let rows=Object.keys(rlsData).map(em=>{
     const rls=rlsData[em];
     const nmKey=(rls.name||"").toLowerCase().trim();
-    const used=allLeaveData.filter(r=>(r.name||"").toLowerCase().trim()===nmKey&&["vacation leave","halfday vacation leave"].includes((r.leaveType||"").toLowerCase().trim())&&(d=>d&&d.getFullYear()===2026)(parseDate(r.requestedDate))).reduce((a,r)=>a+_useWt(r),0);
-    const used2027=allLeaveData.filter(r=>(r.name||"").toLowerCase().trim()===nmKey&&["vacation leave","halfday vacation leave"].includes((r.leaveType||"").toLowerCase().trim())&&(d=>d&&d.getFullYear()===2027)(parseDate(r.requestedDate))).reduce((a,r)=>a+_useWt(r),0);
+    const used=allLeaveData.filter(r=>(r.name||"").toLowerCase().trim()===nmKey&&_isVL(r)&&(d=>d&&d.getFullYear()===2026)(parseDate(r.requestedDate))).reduce((a,r)=>a+_useWt(r),0);
+    const used2027=allLeaveData.filter(r=>(r.name||"").toLowerCase().trim()===nmKey&&_isVL(r)&&(d=>d&&d.getFullYear()===2027)(parseDate(r.requestedDate))).reduce((a,r)=>a+_useWt(r),0);
     const ent=rls.ent2026??null;const cf=rls.cf2026??null;
     const tot=ent!=null?(ent+(cf||0)):null;const rem=tot!=null?tot-used:null;
     const remaining=Math.max(0,(rem??0)-used2027);
@@ -3770,8 +4852,8 @@ render();
 }
 function viewAllEntitlement(){
   const yr=document.getElementById("entYear").value,gr=document.getElementById("entGroup").value;
-  const used={};allLeaveData.filter(r=>{const d=parseDate(r.requestedDate);if(!d||d.getFullYear()!==2026)return false;if(gr&&r.group!==gr)return false;if(!(["vacation leave","halfday vacation leave"].includes((r.leaveType||"").toLowerCase().trim())))return false;return true;}).forEach(r=>{const nm2=(r.name||"").toLowerCase().trim();used[nm2]=(used[nm2]||0)+_useWt(r);});
-  const u27map={};allLeaveData.filter(r=>{const d=parseDate(r.requestedDate);if(!d||d.getFullYear()!==2027)return false;if(gr&&r.group!==gr)return false;if(!(["vacation leave","halfday vacation leave"].includes((r.leaveType||"").toLowerCase().trim())))return false;return true;}).forEach(r=>{const nm2=(r.name||"").toLowerCase().trim();u27map[nm2]=(u27map[nm2]||0)+_useWt(r);});
+  const used={};allLeaveData.filter(r=>{const d=parseDate(r.requestedDate);if(!d||d.getFullYear()!==2026)return false;if(gr&&r.group!==gr)return false;if(!(_isVL(r)))return false;return true;}).forEach(r=>{const nm2=(r.name||"").toLowerCase().trim();used[nm2]=(used[nm2]||0)+_useWt(r);});
+  const u27map={};allLeaveData.filter(r=>{const d=parseDate(r.requestedDate);if(!d||d.getFullYear()!==2027)return false;if(gr&&r.group!==gr)return false;if(!(_isVL(r)))return false;return true;}).forEach(r=>{const nm2=(r.name||"").toLowerCase().trim();u27map[nm2]=(u27map[nm2]||0)+_useWt(r);});
   const appr2027={};allLeaveData.filter(r=>{const d=parseDate(r.requestedDate);return d&&d.getFullYear()===2027&&(r.status||"").toLowerCase()==="approved";}).forEach(r=>{const nm2=(r.name||"").toLowerCase().trim();appr2027[nm2]=(appr2027[nm2]||0)+1;});
   let rows=Object.keys(rlsData).filter(em=>['GY','APA'].includes(rlsData[em].group)).filter(em=>rlsData[em].teamLead).filter(em=>!gr||rlsData[em].group===gr).map(em=>{const rls=rlsData[em];const u=used[(rls.name||"").toLowerCase().trim()]||0;const u27=u27map[(rls.name||"").toLowerCase().trim()]||0;const ent2026=rls.ent2026??null;const cf2026=rls.cf2026??null;const ent2027=rls.ent2027??null;const cf2027=rls.cf2027??null;const tot=ent2026!=null?(ent2026+(cf2026||0)):null;const rem=tot!=null?tot-u:null;const pct=tot>0?u/tot:null;const remainingNet=Math.max(0,(rem??0)-u27);const approved2027=appr2027[(rls.name||"").toLowerCase().trim()]||0;return{email:em,name:rls.name,group:rls.group,group2027:rls.group2027||'',teamLead:rls.teamLead,teamLead2027:rls.teamLead2027||'',ent2026,cf2026,ent2027,cf2027,total:tot,used:u,remaining:remainingNet,pct,approved2027};});
   rows=_sortRows(rows,entSortKey,entSortDir);
@@ -3779,8 +4861,8 @@ function viewAllEntitlement(){
 }
 function viewAllEntitlement2027(){
   const yr=document.getElementById("entYear").value,gr=document.getElementById("entGroup").value;
-  const used2026={};allLeaveData.filter(r=>{const d=parseDate(r.requestedDate);if(!d||d.getFullYear()!==2026)return false;if(gr&&r.group!==gr)return false;if(!(["vacation leave","halfday vacation leave"].includes((r.leaveType||"").toLowerCase().trim())))return false;return true;}).forEach(r=>{const nm2=(r.name||"").toLowerCase().trim();used2026[nm2]=(used2026[nm2]||0)+_useWt(r);});
-  const used2027={};allLeaveData.filter(r=>{const d=parseDate(r.requestedDate);if(!d||d.getFullYear()!==2027)return false;if(gr&&r.group!==gr)return false;if(!(["vacation leave","halfday vacation leave"].includes((r.leaveType||"").toLowerCase().trim())))return false;return true;}).forEach(r=>{const nm2=(r.name||"").toLowerCase().trim();used2027[nm2]=(used2027[nm2]||0)+_useWt(r);});
+  const used2026={};allLeaveData.filter(r=>{const d=parseDate(r.requestedDate);if(!d||d.getFullYear()!==2026)return false;if(gr&&r.group!==gr)return false;if(!(_isVL(r)))return false;return true;}).forEach(r=>{const nm2=(r.name||"").toLowerCase().trim();used2026[nm2]=(used2026[nm2]||0)+_useWt(r);});
+  const used2027={};allLeaveData.filter(r=>{const d=parseDate(r.requestedDate);if(!d||d.getFullYear()!==2027)return false;if(gr&&r.group!==gr)return false;if(!(_isVL(r)))return false;return true;}).forEach(r=>{const nm2=(r.name||"").toLowerCase().trim();used2027[nm2]=(used2027[nm2]||0)+_useWt(r);});
   let rows=Object.keys(rlsData).filter(em=>['GY','APA'].includes(rlsData[em].group2027||'')).filter(em=>rlsData[em].teamLead2027).filter(em=>!gr||rlsData[em].group2027===gr).map(em=>{const rls=rlsData[em];const u26=used2026[(rls.name||"").toLowerCase().trim()]||0;const u27=used2027[(rls.name||"").toLowerCase().trim()]||0;const ent2026=rls.ent2026??null;const cf2026=rls.cf2026??null;const tot2026=ent2026!=null?(ent2026+(cf2026||0)):null;const rem2026=tot2026!=null?tot2026-u26:null;const cf2027effective=rem2026!=null?(ent2026!=null?Math.min(Math.max(0,rem2026),Math.floor(ent2026/2)):Math.max(0,rem2026)):0;const ent2027=rls.ent2027??null;const tot2027=ent2027!=null?(ent2027+cf2027effective):null;const rem2027=tot2027!=null?tot2027-u27:null;return{email:em,name:rls.name,group2027:rls.group2027||'',teamLead2027:rls.teamLead2027||'',ent2027,cf2027:cf2027effective,total2027:tot2027,used2027:u27,remaining2027:rem2027};});
   rows=_sortRows(rows,entSortKey,entSortDir);
   _openTableWindow(`2027 Entitlement Details (${rows.length})`,`${gr||"All Groups"} | ${yr||"All Years"}`,'<th>#</th><th>Name</th><th>Group</th><th>Team Lead</th><th>2027 ENT</th><th>2027 CF</th><th>Total</th><th>Used 2027</th><th>Remaining</th>',(r,i)=>{return`<tr><td style="color:#999">${i+1}</td><td><strong>${_esc(r.name||r.email)}</strong></td><td>${_esc(r.group2027)}</td><td>${_esc(r.teamLead2027)}</td><td>${r.ent2027??'—'}</td><td>${r.cf2027??'—'}</td><td>${r.total2027??'—'}</td><td>${r.used2027}</td><td>${r.remaining2027??'—'}</td></tr>`;},rows);
@@ -3802,16 +4884,38 @@ function viewAllAllRecords(){
 }
 function viewAllSS(){
   let rows=_sortRows([...ssFilteredData],ssSortKey,ssSortDir);
-  _openTableWindow(`Slide/Swap Records (${rows.length})`,"All Slide/Swap records",'<th>#</th><th>Requestor</th><th>Type</th><th>Status</th><th>Shift Date</th><th>Orig. Schedule</th><th>Req. Schedule</th><th>Swap Name</th><th>Team Lead</th><th>Plotted</th><th>Reason</th>',(r,i)=>`<tr><td style="color:#999">${i+1}</td><td><strong>${_esc(r.requestorName||r.title)}</strong></td><td>${_esc(r.reqType)}</td><td>${_esc(r.status)}</td><td>${_fmtD(r.shiftDate)}</td><td>${_esc(r.originalSchedule)}</td><td>${_esc(r.requestedSchedule)}</td><td>${_esc(r.swapName)}</td><td>${_esc(r.teamLead)}</td><td>${_plotBadge(r.plotted)}</td><td>${_esc(r.reason)}</td></tr>`,rows);
+  _openTableWindow(`Slide/Swap Records (${rows.length})`,"All Slide/Swap records",'<th>#</th><th>Req. No.</th><th>Requestor</th><th>Type</th><th>Status</th><th>Shift Date</th><th>Orig. Schedule</th><th>Orig. RD</th><th>Req. Schedule</th><th>Req. RD</th><th>Swap Name</th><th>Swap Ack</th><th>Team Lead</th><th>Plotted</th><th>Reason</th><th>Remarks</th>',(r,i)=>`<tr><td style="color:#999">${i+1}</td><td style="font-weight:700;color:#1B90FF;white-space:nowrap">${_esc(r.title||'—')}</td><td style="white-space:nowrap"><strong>${_esc(r.requestorName||r.title)}</strong></td><td>${_esc(r.reqType)}</td><td>${_esc(r.status)}</td><td style="white-space:nowrap">${_fmtD(r.shiftDate)}</td><td style="white-space:nowrap">${_esc(r.originalSchedule)}</td><td style="white-space:nowrap">${_esc(r.originalRD)}</td><td style="white-space:nowrap">${_esc(r.requestedSchedule)}</td><td style="white-space:nowrap">${_esc(r.requestedRD)}</td><td style="white-space:nowrap">${_esc(r.swapName)}</td><td style="white-space:nowrap">${_esc(r.swapAck)}</td><td style="white-space:nowrap">${_esc(r.teamLead)}</td><td>${_plotBadge(r.plotted)}</td><td style="white-space:nowrap">${_esc(r.reason)}</td><td style="white-space:nowrap">${_esc(r.agentRemarks)}</td></tr>`,rows);
 }
 function viewAllSSAdmin(){
   let rows=_sortRows([...ssAdminData],ssAdminSortKey,ssAdminSortDir);
-  _openTableWindow(`Pending Slide/Swap (${rows.length})`,"Pending Slide/Swap requests",'<th>#</th><th>Requestor</th><th>Type</th><th>Status</th><th>Shift Date</th><th>Orig. Schedule</th><th>Req. Schedule</th><th>Swap Name</th><th>Team Lead</th><th>Reason</th><th>Plotted</th>',(r,i)=>`<tr><td style="color:#999">${i+1}</td><td><strong>${_esc(r.requestorName||r.title)}</strong></td><td>${_esc(r.reqType)}</td><td>${_esc(r.status)}</td><td>${_fmtD(r.shiftDate)}</td><td>${_esc(r.originalSchedule)}</td><td>${_esc(r.requestedSchedule)}</td><td>${_esc(r.swapName)}</td><td>${_esc(r.teamLead)}</td><td>${_esc(r.reason)}</td><td>${_plotBadge(r.plotted)}</td></tr>`,rows);
+  _openTableWindow(`Pending Slide/Swap (${rows.length})`,"Pending Slide/Swap requests",'<th>#</th><th>Requestor</th><th>Type</th><th>Status</th><th>Shift Date</th><th>Orig. Schedule</th><th>Req. Schedule</th><th>Swap Name</th><th>Team Lead</th><th>Reason</th><th>Plotted</th>',(r,i)=>`<tr><td style="color:#999">${i+1}</td><td><strong>${_esc(r.requestorName||r.title)}</strong></td><td>${_esc(r.reqType)}</td><td>${_esc(r.status)}</td><td>${_fmtD(r.shiftDate)}</td><td>${_esc(r.originalSchedule)}</td><td>${_esc(r.requestedSchedule)}</td><td><strong>${_esc(r.swapName)}</strong></td><td>${_esc(r.teamLead)}</td><td>${_esc(r.reason)}</td><td>${_plotBadge(r.plotted)}</td></tr>`,rows);
 }
 
 /* ══════════════ VIEW PREVIEW (Admin Role Simulation) ══════════════ */
 let _previewActive=false;
 let _prevLeave,_prevFull,_prevAdmin,_prevCal,_prevSS,_prevRole,_prevEmail,_prevName;
+
+/* Show/hide admin-specific UI elements based on a given role string.
+   Called at login, on preview start, and on preview exit. */
+function _syncAdminUI(role){
+  const simAdmin  = role==='author';
+  // Leave Admin tab + sidenav item
+  const btnTA=document.getElementById("btn-tab-admin");
+  const navA =document.getElementById("snav-navsub-admin");
+  if(btnTA) btnTA.style.display=simAdmin?"inline-block":"none";
+  if(navA)  navA.style.display =simAdmin?"":"none";
+  // SS Admin tab
+  const btnSS=document.getElementById("btn-ss-tab-admin");
+  if(btnSS) btnSS.style.display=simAdmin?"inline-block":"none";
+  // Admin Tools sidenav section — show only for real admins; hidden for non-admins
+  const psec=document.getElementById("snav-preview-section");
+  if(psec) psec.style.display=simAdmin?"":"none";
+  // Access Management and Roster links (inside the section)
+  const toolsAcc=document.getElementById("snav-tools-access");
+  const toolsRos=document.getElementById("snav-tools-roster");
+  if(toolsAcc) toolsAcc.style.display=simAdmin?"":"none";
+  if(toolsRos) toolsRos.style.display="none"; // WFM-only; restored after real exit
+}
 
 function navGoAdminSub(subId){
   showSection('leave',document.getElementById('snav-leave'));
@@ -3882,10 +4986,16 @@ function applyViewPreview(){
   ssPopulateFilters();ssApplyRoleUI();ssApplyFilters();
   calRendered=false;
 
+  // Hide/show admin UI based on simulated role
+  _syncAdminUI(role);
+  // Always keep the Admin Tools section visible during preview so Exit Preview is reachable
+  const _ps=document.getElementById("snav-preview-section");
+  if(_ps)_ps.style.display="";
+
   _previewActive=true;
 
   // Show banners
-  const roleLabel=role==='tl'?'Team Lead':'Agent';
+  const roleLabel=role==='tl'?'Team Lead':role==='manager'?'Manager':'Agent';
   const msg=`Previewing as ${person.name} · ${roleLabel}`;
   const topBar=document.getElementById("previewModeBanner");
   const topLbl=document.getElementById("previewModeLabel");
@@ -3914,6 +5024,11 @@ function exitViewPreview(){
   populateFilters();applyFilters();
   ssPopulateFilters();ssApplyRoleUI();ssApplyFilters();
   calRendered=false;
+
+  // Restore admin UI for the real admin user
+  _syncAdminUI(_prevRole);
+  // Re-show Roster link if the real user is WFM
+  if(isWFM()){const sr=document.getElementById("snav-tools-roster");if(sr)sr.style.display="";}
 
   // Hide banners
   const topBar=document.getElementById("previewModeBanner");
@@ -4114,7 +5229,7 @@ function isWFM(){return (currentUserFunction||'').toUpperCase()==='WFM';}
 
 let rlsEditingEmail=null; // null = add mode, string = edit mode
 let rlsDeleteEmail=null;
-let rlsPageNum=1; const RLS_PAGE=50;
+let rlsPageNum=1; const RLS_PAGE=9999;
 let rlsFilterFn='', rlsFilterTL='', rlsFilterSite='', rlsFilterStatus='';
 let rlsSortKey='name', rlsSortDir=1;
 
