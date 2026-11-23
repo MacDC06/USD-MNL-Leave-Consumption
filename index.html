@@ -4,7 +4,26 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
   <title>USD MNL - Leave Consumption and Scheduling Tool</title>
-  <meta http-equiv="Content-Security-Policy" content="connect-src 'self' https://graph.microsoft.com https://login.microsoftonline.com https://sap.sharepoint.com https://alcdn.msauth.net; frame-src 'self' https://login.microsoftonline.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com"/>
+  <!-- EKX Pages: Microsoft Graph is routed through the callRpc proxy; no direct Graph/MSAL origins needed -->
+  <meta name="x-required-skills" content="529a6c03-cbf4-459e-94cd-1956011f9cf9" />
+  <meta name="x-required-routes" content='[
+    {"rpc_id":"529a6c03-cbf4-459e-94cd-1956011f9cf9","method":"GET","path":"/v1.0/me"},
+    {"rpc_id":"529a6c03-cbf4-459e-94cd-1956011f9cf9","method":"POST","path":"/v1.0/me/sendMail"},
+    {"rpc_id":"529a6c03-cbf4-459e-94cd-1956011f9cf9","method":"GET","path":"/v1.0/sites/{spHost}/sites/208984"},
+    {"rpc_id":"529a6c03-cbf4-459e-94cd-1956011f9cf9","method":"GET","path":"/v1.0/sites/{spHost}/sites/127054"},
+    {"rpc_id":"529a6c03-cbf4-459e-94cd-1956011f9cf9","method":"GET","path":"/v1.0/sites/{siteId}/lists/{listId}/items"},
+    {"rpc_id":"529a6c03-cbf4-459e-94cd-1956011f9cf9","method":"POST","path":"/v1.0/sites/{siteId}/lists/{listId}/items"},
+    {"rpc_id":"529a6c03-cbf4-459e-94cd-1956011f9cf9","method":"PATCH","path":"/v1.0/sites/{siteId}/lists/{listId}/items/{itemId}/fields"},
+    {"rpc_id":"529a6c03-cbf4-459e-94cd-1956011f9cf9","method":"DELETE","path":"/v1.0/sites/{siteId}/lists/{listId}/items/{itemId}"},
+    {"rpc_id":"529a6c03-cbf4-459e-94cd-1956011f9cf9","method":"GET","path":"/v1.0/sites/{siteId}/drive/{driveRoot}/{folder}/{file}"},
+    {"rpc_id":"529a6c03-cbf4-459e-94cd-1956011f9cf9","method":"GET","path":"/v1.0/sites/{siteId}/drive/{driveRoot}/{folder}/{fileColon}/content"},
+    {"rpc_id":"529a6c03-cbf4-459e-94cd-1956011f9cf9","method":"PUT","path":"/v1.0/sites/{siteId}/drive/{driveRoot}/{folder}/{fileColon}/content"},
+    {"rpc_id":"529a6c03-cbf4-459e-94cd-1956011f9cf9","method":"POST","path":"/v1.0/sites/{siteId}/drive/{driveRoot}/{folder}/{fileColon}/workbook/createSession"},
+    {"rpc_id":"529a6c03-cbf4-459e-94cd-1956011f9cf9","method":"POST","path":"/v1.0/sites/{siteId}/drive/{driveRoot}/{folder}/{fileColon}/workbook/closeSession"},
+    {"rpc_id":"529a6c03-cbf4-459e-94cd-1956011f9cf9","method":"GET","path":"/v1.0/sites/{siteId}/drive/{driveRoot}/{folder}/{fileColon}/workbook/worksheets/{sheet}/{operation}"},
+    {"rpc_id":"529a6c03-cbf4-459e-94cd-1956011f9cf9","method":"PATCH","path":"/v1.0/sites/{siteId}/drive/{driveRoot}/{folder}/{fileColon}/workbook/worksheets/{sheet}/{operation}"}
+  ]' />
+  <meta http-equiv="Content-Security-Policy" content="style-src 'self' 'nonce-PLACEHOLDER' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com"/>
   <script>(function(){try{var t=localStorage.getItem("usd_dashboard_theme_v1")||"light";document.documentElement.setAttribute("data-theme",t);}catch(e){}})()</script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
   <style>
@@ -65,7 +84,7 @@
     .btn-logout:hover{background:rgba(255,255,255,.1);}
     .user-info{display:flex;align-items:center;gap:10px;color:var(--sap-blue-light);font-size:12px;}
     #loginScreen{min-height:calc(100vh - 56px);display:flex;align-items:center;justify-content:center;
-      background:#FFFFFF;}
+      background:transparent;}
     .login-card{background:#00144A;border-radius:16px;padding:56px 64px 10px;text-align:center;max-width:600px;width:90%;border:1px solid rgba(27,144,255,.18);box-shadow:0 32px 80px rgba(0,0,20,.55);}
     .login-card .login-icon{display:none;}
     .login-title{font-size:55px;font-weight:900;color:#FFF;letter-spacing:-.01em;line-height:1;margin-bottom:8px;}
@@ -78,7 +97,7 @@
     .login-card .btn-login-main:hover{background:#0070F2;}
     .login-note{margin-top:20px;font-size:11px;color:rgba(255,255,255,.25);letter-spacing:.06em;text-transform:uppercase;}
     #mainContent{display:none;}
-    .app-layout{display:flex;min-height:calc(100vh - 56px);}
+    .app-layout{display:flex;min-height:calc(100vh - 56px);position:relative;z-index:1;}
     .side-panel{width:200px;flex-shrink:0;background:#00144A;border-right:1px solid rgba(255,255,255,.07);
       padding:12px 0 20px;position:sticky;top:56px;height:calc(100vh - 56px);overflow-y:auto;box-shadow:2px 0 12px rgba(0,0,0,.18);}
     [data-theme="dark"] .side-panel{background:#181C24;border-right:1px solid rgba(255,255,255,.06);}
@@ -161,8 +180,7 @@
       90% {background:linear-gradient(135deg,#00245F 0%,#00164A 100%);}
       95% {background:linear-gradient(135deg,#00164A 0%,#000D33 100%);}
       100%{background:linear-gradient(135deg,#000D33 0%,#00164A 100%);}}
-    .page-banner h1{font-size:20px;font-weight:700;margin-bottom:4px;display:inline-block;animation:marquee-slide 20s linear infinite;}
-    @keyframes marquee-slide{0%{transform:translateX(0);}45%{transform:translateX(160px);}50%{transform:translateX(160px);}95%{transform:translateX(0);}100%{transform:translateX(0);}}
+    .page-banner h1{font-size:20px;font-weight:700;margin-bottom:4px;}
     .page-banner p{font-size:13px;opacity:.85;}
     .banner-badge{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);border-radius:20px;
       padding:6px 18px;font-size:12px;font-weight:600;color:#FFF;white-space:nowrap;}
@@ -507,6 +525,240 @@
     .fb-date{font-size:12px;padding:5px 8px;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--bg-card);color:var(--text-main);font-family:var(--font);cursor:pointer;height:32px;}
     .fb-date:focus{outline:none;border-color:var(--sap-blue);box-shadow:0 0 0 2px rgba(27,144,255,.15);}
     .fb-date-wrap{display:flex;align-items:center;gap:5px;font-size:11.5px;color:var(--text-muted);}
+    /* ════════════════════════════════════════════════
+       MOBILE RESPONSIVE  (≤768px)
+       ════════════════════════════════════════════════ */
+
+    /* Hamburger button — hidden on desktop */
+    .mob-hamburger{
+      display:none;background:none;border:none;cursor:pointer;
+      padding:6px;border-radius:4px;color:rgba(255,255,255,.85);
+      flex-direction:column;justify-content:center;align-items:center;gap:4px;
+      transition:background .15s;flex-shrink:0;
+    }
+    .mob-hamburger:hover{background:rgba(255,255,255,.12);}
+    .mob-hamburger span{
+      display:block;width:18px;height:2px;background:currentColor;
+      border-radius:2px;transition:transform .2s,opacity .2s;
+    }
+    .mob-hamburger.open span:nth-child(1){transform:translateY(6px) rotate(45deg);}
+    .mob-hamburger.open span:nth-child(2){opacity:0;}
+    .mob-hamburger.open span:nth-child(3){transform:translateY(-6px) rotate(-45deg);}
+
+    /* Mobile overlay */
+    .mob-overlay{
+      display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);
+      z-index:199;backdrop-filter:blur(1px);
+    }
+    .mob-overlay.active{display:block;}
+
+    @media(max-width:768px){
+
+      /* ── Header ── */
+      .header{padding:0 14px;height:50px;}
+      .mob-hamburger{display:flex;}
+      .header-divider{display:none;}
+      .header-module{
+        font-size:12px;white-space:nowrap;overflow:hidden;
+        text-overflow:ellipsis;max-width:calc(100vw - 220px);
+      }
+      #themeLabel{display:none;}
+      .btn-theme-toggle{padding:6px 8px;margin-right:4px;}
+      .sap-logo-wrap svg{height:26px;}
+
+      /* ── Sidebar — drawer ── */
+      .side-panel{
+        position:fixed;top:50px;left:0;
+        height:calc(100vh - 50px);width:240px !important;
+        z-index:200;
+        transform:translateX(-100%);
+        transition:transform .25s cubic-bezier(.4,0,.2,1);
+        box-shadow:none;
+      }
+      .side-panel.mob-open{
+        transform:translateX(0);
+        box-shadow:4px 0 24px rgba(0,0,0,.35);
+      }
+      /* Desktop collapse button hidden on mobile */
+      .snav-toggle-btn{display:none;}
+
+      /* ── App layout ── */
+      .app-layout{min-height:calc(100vh - 50px);}
+      #mainContent{display:block !important;}
+
+      /* ── Page wrapper ── */
+      .page-wrapper{padding:14px 12px 28px;}
+
+      /* ── Page banner ── */
+      .page-banner{padding:14px 16px;margin-bottom:16px;}
+      .page-banner h1{font-size:16px;margin-bottom:3px;}
+      .page-banner p{font-size:12px;}
+      .banner-badge{font-size:11px;padding:4px 12px;}
+
+      /* ── Login card ── */
+      .login-card{padding:32px 20px 14px;}
+      .login-title{font-size:34px;}
+      .login-card h2{font-size:13px;white-space:normal;}
+      .login-card .btn-login-main{width:90%;}
+      .login-accent{width:140px;}
+
+      /* ── Filter bars ── */
+      .fb{padding:8px 12px;gap:6px;}
+      .fb-global{padding:8px 12px;margin-bottom:12px;}
+      .fb-input{min-width:0;flex:1 1 120px;}
+      .fb-select{min-width:0;flex:1 1 100px;}
+      .fb-date-wrap{flex:1 1 100%;display:flex;gap:4px;align-items:center;}
+      .fb-date-wrap span{font-size:10px;}
+      .fb-date{flex:1;min-width:0;}
+
+      /* ── KPI grid — 2 columns on mobile ── */
+      .kpi-grid{grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:16px;}
+      .kpi-card{padding:14px 12px 10px;}
+      .kpi-value{font-size:22px !important;}
+      .kpi-label{font-size:11px;}
+
+      /* ── Summary strips ── */
+      .ent-summary-strip,.exp-summary-strip,.ss-summary-strip{
+        gap:0;flex-wrap:wrap;
+      }
+      .ent-strip-item{flex:1 1 calc(50% - 1px);padding:10px 8px;}
+      .ent-strip-divider{display:none;}
+
+      /* ── Tab nav — scrollable ── */
+      .tab-nav{
+        overflow-x:auto;-webkit-overflow-scrolling:touch;
+        flex-wrap:nowrap;white-space:nowrap;
+        scrollbar-width:none;
+        padding-bottom:2px;
+      }
+      .tab-nav::-webkit-scrollbar{display:none;}
+      .tab-btn{white-space:nowrap;font-size:12px;padding:9px 14px;}
+
+      /* ── Table card ── */
+      .table-card{border-radius:var(--radius);}
+      .table-header{flex-wrap:wrap;gap:8px;padding:12px 14px;}
+      .table-header strong{font-size:12px;}
+      .table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+      thead th,tbody td{font-size:12px;padding:7px 10px;}
+
+      /* ── Modals — bottom sheet on mobile ── */
+      .modal-overlay{align-items:flex-end;padding:0;}
+      .modal-panel{
+        max-width:100% !important;width:100%;
+        border-radius:16px 16px 0 0;
+        max-height:92vh;
+      }
+      .modal-header{padding:14px 16px;}
+      .modal-body{padding:14px 16px;}
+      .modal-footer{padding:12px 16px;flex-wrap:wrap;gap:8px;}
+      .modal-footer .btn-modal-cancel,
+      .modal-footer .btn-modal-save{flex:1;text-align:center;}
+
+      /* ── Form grid — single column ── */
+      .form-grid{grid-template-columns:1fr !important;}
+      .form-group.full-width{grid-column:span 1 !important;}
+
+      /* ── Confirm modal ── */
+      .confirm-card{width:90%;padding:20px 18px 16px;}
+
+      /* ── Access card ── */
+      .access-card{padding:16px;}
+
+      /* ── Pagination ── */
+      .pagination{flex-wrap:wrap;gap:3px;}
+      .btn-page{padding:4px 9px;font-size:11px;}
+
+      /* ── Toast ── */
+      #toastMsg{
+        bottom:16px;left:12px;right:12px;
+        max-width:none;text-align:center;
+      }
+
+      /* ── Notification panel ── */
+      .notif-panel{width:calc(100vw - 20px);right:-10px;}
+
+      /* ── Calendar ── */
+      .cal-day{min-height:52px !important;}
+      .cal-day-num{font-size:11px;}
+      .cal-event{font-size:9px !important;padding:1px 3px !important;}
+
+      /* ── Admin sub-nav ── */
+      .admin-sub-nav{flex-wrap:wrap;gap:4px;}
+      .admin-sub-btn{font-size:11px;padding:6px 10px;}
+
+      /* ── Add/edit admin row ── */
+      .add-admin-row{flex-wrap:wrap;gap:8px;}
+      .add-admin-input{flex:1 1 100%;}
+
+      /* ── SS Apply form ── */
+      #ssApplyModal .form-grid{grid-template-columns:1fr !important;}
+
+      /* ── Chart wraps ── */
+      .chart-wrap.tall{height:220px !important;}
+
+      /* ── Page banner apply button ── */
+      #btnApplyRequest{font-size:11px;padding:6px 12px;}
+
+      /* ── RLS filter bar ── */
+      #rlsFilterBar{padding:8px 12px;gap:6px;}
+
+      /* ── Entitlement controls ── */
+      .ent-controls{flex-wrap:wrap;}
+    }
+
+    /* ── Extra small phones ≤420px ── */
+    @media(max-width:420px){
+      .header-module{display:none;}
+      .kpi-grid{grid-template-columns:repeat(2,1fr);}
+      .kpi-value{font-size:20px !important;}
+      .page-banner h1{font-size:14px;}
+      .tab-btn{font-size:11px;padding:8px 10px;}
+    }
+
+
+    /* ── Multi-Select Filter Dropdown ── */
+    .ms-wrap{position:relative;display:inline-flex;align-items:center;}
+    .ms-btn{display:flex;align-items:center;gap:6px;border:1px solid var(--border);
+      border-radius:4px;padding:6px 10px;font-size:12px;font-family:var(--font);
+      color:var(--text-primary);background:var(--bg-card);cursor:pointer;
+      white-space:nowrap;min-width:110px;justify-content:space-between;
+      transition:border-color .15s,box-shadow .15s;}
+    .ms-btn:hover{border-color:var(--sap-blue);}
+    .ms-btn.ms-active{border-color:var(--sap-blue);box-shadow:0 0 0 2px rgba(27,144,255,.12);}
+    .ms-btn-label{flex:1;text-align:left;overflow:hidden;text-overflow:ellipsis;}
+    .ms-arrow{font-size:9px;color:var(--text-muted);flex-shrink:0;transition:transform .15s;}
+    .ms-btn.ms-open .ms-arrow{transform:rotate(180deg);}
+    .ms-panel{position:absolute;top:calc(100% + 4px);left:0;min-width:190px;
+      background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);
+      box-shadow:0 6px 18px rgba(0,0,0,.12);z-index:500;overflow:hidden;display:none;}
+    .ms-panel.open{display:block;}
+    .ms-search{padding:7px 10px;border-bottom:1px solid var(--border);}
+    .ms-search input{width:100%;border:1px solid var(--border);border-radius:4px;
+      padding:5px 8px;font-size:12px;font-family:var(--font);background:var(--bg-card);
+      color:var(--text-primary);outline:none;}
+    .ms-search input:focus{border-color:var(--sap-blue);}
+    .ms-scroll{max-height:200px;overflow-y:auto;}
+    .ms-item{display:flex;align-items:center;gap:8px;padding:7px 12px;cursor:pointer;
+      font-size:12.5px;color:var(--text-main);transition:background .1s;user-select:none;}
+    .ms-item:hover{background:var(--bg-secondary);}
+    .ms-item input[type=checkbox]{width:13px;height:13px;accent-color:var(--sap-blue);
+      cursor:pointer;flex-shrink:0;}
+    .ms-divider{height:1px;background:var(--border);margin:2px 0;}
+    .ms-item.ms-all{font-weight:600;color:var(--sap-blue);}
+    .ms-footer{padding:6px 10px;border-top:1px solid var(--border);
+      display:flex;justify-content:flex-end;}
+    .ms-clear-btn{background:none;border:none;font-size:11px;color:var(--text-muted);
+      cursor:pointer;font-family:var(--font);padding:2px 4px;transition:color .15s;}
+    .ms-clear-btn:hover{color:var(--sap-blue);}
+    [data-theme="dark"] .ms-btn{background:var(--bg-card);color:var(--text-primary);}
+    [data-theme="dark"] .ms-panel{background:var(--bg-card);border-color:var(--border);}
+    [data-theme="dark"] .ms-item:hover{background:var(--bg-secondary);}
+
+    /* ── Entitlement table — clickable name cell ── */
+    .ent-name-cell{cursor:pointer;color:var(--sap-blue-dark);text-decoration:none;}
+    .ent-name-cell:hover{text-decoration:underline;color:var(--sap-blue);}
+    tr.ent-row-active td{background:var(--sap-blue-sky)!important;}
+    tr.ent-row-active .ent-name-cell{font-weight:700;}
   </style>
 </head>
 <body>
@@ -519,9 +771,16 @@ function _sapLogoSVG(gid, style='') {
 }
 </script>
 
+<!-- Mobile navigation overlay -->
+<div id="mobOverlay" class="mob-overlay" onclick="closeMobNav()"></div>
+
 <!-- ── Header ── -->
 <header class="header">
   <div class="header-left">
+    <!-- Mobile hamburger -->
+    <button class="mob-hamburger" id="mobHamburger" onclick="toggleMobNav()" aria-label="Toggle navigation">
+      <span></span><span></span><span></span>
+    </button>
     <div class="sap-logo-wrap">
       <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 412.4 204" xml:space="preserve" style="height:32px;width:auto;display:block;">
         <defs><linearGradient id="sapGrad_hdr" gradientUnits="userSpaceOnUse" x1="206.19" y1="206" x2="206.19" y2="2" gradientTransform="matrix(1 0 0 -1 0 206)"><stop offset="0" style="stop-color:#00B8F1"/><stop offset="0.31" style="stop-color:#0D90D9"/><stop offset="0.58" style="stop-color:#1775C8"/><stop offset="1" style="stop-color:#1E5FBB"/></linearGradient></defs>
@@ -550,27 +809,13 @@ function _sapLogoSVG(gid, style='') {
         <span id="notifCount"></span>
       </button>
       <div class="notif-panel" id="notifPanel">
-        <div class="notif-panel-hdr">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.7)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-          <span class="notif-panel-hdr-title">What's New</span>
-          <span class="notif-panel-hdr-ver">v2.4 &nbsp;·&nbsp; Oct 2026</span>
-          <button class="notif-mark-read" onclick="notifMarkRead()">Mark as read</button>
-        </div>
-        <div class="notif-items">
-          <div class="notif-item"><div class="notif-item-dot" id="ndot0"></div><div class="notif-item-body"><span class="notif-item-tag">SWAP</span><strong>Multi-party Acknowledgment</strong> — Swap Partner and both Team Leaders now acknowledge directly in the system via the <em>For My Acknowledgment</em> tab.</div></div>
-          <div class="notif-item"><div class="notif-item-dot" id="ndot1"></div><div class="notif-item-body"><span class="notif-item-tag">SWAP</span><strong>WFM Visibility</strong> — WFM can now monitor all pending swap acknowledgments across the entire team.</div></div>
-          <div class="notif-item"><div class="notif-item-dot" id="ndot2"></div><div class="notif-item-body"><span class="notif-item-tag">FORM</span><strong>Searchable Swap Partner</strong> — Partner Name is now a live search dropdown that auto-fills Email and Team Lead.</div></div>
-          <div class="notif-item"><div class="notif-item-dot" id="ndot3"></div><div class="notif-item-body"><span class="notif-item-tag">LEAVE</span><strong>BIRTHDAY counted as VL</strong> — Status <em>BIRTHDAY + Vacation Leave</em> is now included in entitlement usage calculations.</div></div>
-          <div class="notif-item"><div class="notif-item-dot" id="ndot4"></div><div class="notif-item-body"><span class="notif-item-tag">UI</span><strong>Sortable Popup Tables</strong> — All "View All in New Window" tables now support click-to-sort on every column.</div></div>
-        </div>
-        <!-- Requests section -->
-        <div class="notif-section-label">Slide / Swap Requests</div>
+        <!-- Pending requests -->
         <div id="notifRequests"><div class="notif-empty-req">Loading requests…</div></div>
         <div class="notif-panel-footer">Click a request to navigate directly</div>
       </div>
     </div>
 <div id="headerRight">
-      <button class="btn-login" id="btnHeaderLogin" onclick="signIn()" disabled>Initializing...</button>
+      <button class="btn-login" id="btnHeaderLogin" style="display:none">Sign In</button>
     </div>
   </div>
 </header>
@@ -590,9 +835,9 @@ function _sapLogoSVG(gid, style='') {
     <div class="login-accent"></div>
     <div class="login-rule"></div>
     <h2>Leave Consumption and Scheduling Tool</h2>
-    <button class="btn-login-main" id="btnMainLogin" onclick="signIn()" disabled>Initializing...</button>
+    <button class="btn-login-main" id="btnMainLogin" disabled>Loading your account...</button>
     <p id="loginError" style="display:none;margin-top:12px;color:#ffaaaa;font-size:12px;background:rgba(200,0,0,.15);border:1px solid rgba(200,0,0,.3);border-radius:6px;padding:8px 12px;text-align:left;"></p>
-    <p class="login-note">USD Manila &nbsp;·&nbsp; SAP Concur</p>
+    <p class="login-note">USD Manila &nbsp;·&nbsp; SAP Concur &nbsp;·&nbsp; EKX Pages</p>
   </div>
 </div>
 
@@ -727,7 +972,7 @@ function _sapLogoSVG(gid, style='') {
               <button class="notif-dismiss" onclick="appNotifDismiss()" title="Dismiss">&#215;</button>
             </div>
             <ul class="notif-list">
-              <li><strong>Swap Acknowledgment —</strong> Swap Partner and both Team Leaders now acknowledge directly in the system via the <em>For My Acknowledgment</em> tab.</li>
+              <li><strong>Slide &amp; Swap Acknowledgment —</strong> Slide requests now require Team Lead acknowledgment. Swap Partner and both Team Leaders acknowledge via the <em>For My Acknowledgment</em> tab.</li>
               <li><strong>WFM Visibility —</strong> WFM can monitor all pending swap acknowledgments in one place.</li>
               <li><strong>Swap Filing Form —</strong> Partner Name is now a searchable dropdown with auto-fill for Email and Team Lead.</li>
               <li><strong>BIRTHDAY Leave —</strong> Status <em>BIRTHDAY</em> is now counted as Approved Vacation Leave in entitlement usage.</li>
@@ -797,10 +1042,10 @@ function _sapLogoSVG(gid, style='') {
                 <div class="fb">
                   <span class="fb-label">Filter</span>
                   <input class="fb-input" id="recNameFilter" placeholder="Name…" oninput="applyRecordsFilters()"/>
-                  <select class="fb-select" id="recStatusFilter" onchange="applyRecordsFilters()"><option value="">All Statuses</option></select>
-                  <select class="fb-select" id="recGroupFilter" onchange="applyRecordsFilters()"><option value="">All Groups</option></select>
-                  <select class="fb-select" id="recLeaveTypeFilter" onchange="applyRecordsFilters()"><option value="">All Types</option></select>
-                  <select class="fb-select" id="recTeamLeadFilter" onchange="applyRecordsFilters()"><option value="">All Team Leads</option></select>
+                  <div id="recStatusFilter" class="ms-wrap"></div>
+                  <div id="recGroupFilter" class="ms-wrap"></div>
+                  <div id="recLeaveTypeFilter" class="ms-wrap"></div>
+                  <div id="recTeamLeadFilter" class="ms-wrap"></div>
                   <select class="fb-select" id="recPlottedFilter" onchange="applyRecordsFilters()">
                     <option value="">Plotted: All</option><option value="yes">Plotted</option><option value="no">Not Plotted</option>
                   </select>
@@ -870,6 +1115,7 @@ function _sapLogoSVG(gid, style='') {
                         <th class="th-sortable" onclick="sortEntTable('group')">Group <span class="th-sort-icon" id="enth-group">⇅</span></th>
                         <th class="th-sortable" onclick="sortEntTable('teamLead')">Team Lead <span class="th-sort-icon" id="enth-teamLead">⇅</span></th>
                         <th class="th-sortable tc" onclick="sortEntTable('ent2026')">2026 ENT <span class="th-sort-icon" id="enth-ent2026">⇅</span></th>
+                        <th class="th-sortable tc" onclick="sortEntTable('accrued')" title="Accrued = ENT ÷ 12 × Current Month">Accrued <span class="th-sort-icon" id="enth-accrued">⇅</span></th>
                         <th class="th-sortable tc" onclick="sortEntTable('cf2026')">2026 CF <span class="th-sort-icon" id="enth-cf2026">⇅</span></th>
                         <th class="th-sortable tc" onclick="sortEntTable('total')">Total <span class="th-sort-icon" id="enth-total">⇅</span></th>
                         <th class="th-sortable tc" onclick="sortEntTable('used')">Used 2026 <span class="th-sort-icon" id="enth-used">⇅</span></th>
@@ -880,7 +1126,29 @@ function _sapLogoSVG(gid, style='') {
                   </table>
                 </div>
               </div>
-              <div class="table-card" style="margin-top:20px">
+
+              <!-- ── 2027 Open Month Setting ── -->
+              <div id="openMonthWidget" style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:12px 18px;margin-top:20px;margin-bottom:0;display:flex;align-items:center;flex-wrap:wrap;gap:12px;box-shadow:var(--shadow)">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--sap-blue)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                <span style="font-size:12px;font-weight:700;color:var(--text-secondary);text-transform:uppercase;letter-spacing:.06em">2027 Accrual Open Through</span>
+                <select id="openMonthSelect" onchange="applyOpenMonth2027()" style="border:1px solid var(--border);border-radius:4px;padding:5px 10px;font-size:12px;font-family:var(--font);background:var(--bg-card);color:var(--text-primary);cursor:pointer">
+                  <option value="0">Auto (follows current date)</option>
+                  <option value="1">January</option>
+                  <option value="2">February</option>
+                  <option value="3">March</option>
+                  <option value="4">April</option>
+                  <option value="5">May</option>
+                  <option value="6">June</option>
+                  <option value="7">July</option>
+                  <option value="8">August</option>
+                  <option value="9">September</option>
+                  <option value="10">October</option>
+                  <option value="11">November</option>
+                  <option value="12">December</option>
+                </select>
+                <span id="openMonthStatus" style="font-size:12px;color:var(--text-muted);font-style:italic"></span>
+              </div>
+              <div class="table-card" style="margin-top:12px">
                 <div class="table-header">
                   <strong style="font-size:13px">2027 Entitlement Details</strong>
                   <button class="btn-view-all" style="margin-left:auto;font-size:11px;padding:4px 12px" onclick="viewAllEntitlement2027()">View All in New Window</button>
@@ -894,6 +1162,7 @@ function _sapLogoSVG(gid, style='') {
                         <th class="th-sortable" onclick="sortEntTable('group2027')">Group <span class="th-sort-icon" id="enth27-group2027">⇅</span></th>
                         <th class="th-sortable" onclick="sortEntTable('teamLead2027')">Team Lead <span class="th-sort-icon" id="enth27-teamLead2027">⇅</span></th>
                         <th class="th-sortable tc" onclick="sortEntTable('ent2027')">2027 ENT <span class="th-sort-icon" id="enth27-ent2027">⇅</span></th>
+                        <th class="th-sortable tc" onclick="sortEntTable('accrued2027')" title="Accrued for 2027: 0 until Jan 2027, then ENT ÷ 12 × current month">Accrued <span class="th-sort-icon" id="enth27-accrued2027">⇅</span></th>
                         <th class="th-sortable tc" onclick="sortEntTable('cf2027')">2027 CF <span class="th-sort-icon" id="enth27-cf2027">⇅</span></th>
                         <th class="th-sortable tc" onclick="sortEntTable('total2027')">Total <span class="th-sort-icon" id="enth27-total2027">⇅</span></th>
                         <th class="th-sortable tc" onclick="sortEntTable('used2027')">Used 2027 <span class="th-sort-icon" id="enth27-used2027">⇅</span></th>
@@ -974,6 +1243,7 @@ function _sapLogoSVG(gid, style='') {
                 <button class="admin-sub-btn active" onclick="switchAdminSub('admin-pending',this)">Pending Leave</button>
                 <button class="admin-sub-btn" onclick="switchAdminSub('admin-all-records',this)">All Records</button>
                 <button class="admin-sub-btn" onclick="switchAdminSub('admin-access',this)">Access Management</button>
+                <button class="admin-sub-btn" onclick="openGroupTransitionsModal()" style="color:var(--sap-blue);font-weight:700">&#x21C4; Group Transitions</button>
                 <button class="admin-sub-btn" id="btn-admin-roster" style="display:none" onclick="switchAdminSub('admin-roster',this);renderRLSTable()">Roster</button>
               </div>
 
@@ -1167,7 +1437,15 @@ function _sapLogoSVG(gid, style='') {
             </div>
           </div><!-- /dashboardContent -->
         </div><!-- /page-wrapper -->
-        <div class="footer">USD MNL &nbsp;&middot;&nbsp; Leave Consumption and Scheduling Tool &nbsp;&middot;&nbsp; Powered by Microsoft Graph API</div>
+        <div class="footer">USD MNL &nbsp;&middot;&nbsp; Leave Consumption and Scheduling Tool &nbsp;&middot;&nbsp; EKX Pages Edition &nbsp;&middot;&nbsp; Powered by Microsoft Graph via EKX</div>
+<script>
+// Auto-start: EKX Pages injects viewer credentials — no sign-in step needed.
+// Use a wrapper fn so _ekxInitPage is resolved at call-time, not declaration-time
+// (function references across <script> blocks are not hoisted).
+document.addEventListener("DOMContentLoaded", function() {
+  if (typeof _ekxInitPage === "function") _ekxInitPage();
+});
+</script>
       </div><!-- /section-leave -->
 
       <!-- ════════════════════════════════════
@@ -1337,12 +1615,12 @@ function _sapLogoSVG(gid, style='') {
             <div id="ss-tab-myack" class="tab-pane">
               <div style="background:var(--sap-blue-sky);border:1px solid var(--sap-blue-light);border-radius:var(--radius);padding:10px 16px;margin-bottom:16px;font-size:12px;color:var(--sap-navy);display:flex;align-items:center;gap:8px">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-                Swap requests where you are named as the <strong>&nbsp;swap partner&nbsp;</strong> and your acknowledgment is required.
+                Slide and Swap requests where your acknowledgment is required — as <strong>&nbsp;swap partner&nbsp;</strong>, <strong>&nbsp;team lead&nbsp;</strong>, or acknowledged <strong>&nbsp;on behalf by WFM</strong>.
               </div>
               <div class="table-card">
                 <div class="table-header">
                   <div style="display:flex;align-items:center;gap:10px">
-                    <strong style="font-size:13px">Swaps Awaiting My Acknowledgment</strong>
+                    <strong style="font-size:13px">Slides and Swaps Awaiting My Acknowledgment</strong>
                     <span class="table-count" id="myAckTableCount"></span>
                   </div>
                   <button class="btn-refresh" onclick="renderMyAckTable()">
@@ -1357,6 +1635,7 @@ function _sapLogoSVG(gid, style='') {
                         <th>#</th>
                         <th>Req. No.</th>
                         <th>Requestor</th>
+                        <th>Team Lead</th>
                         <th>Swap Name</th>
                         <th>Shift Date</th>
                         <th>Their Schedule</th>
@@ -1580,7 +1859,7 @@ function _sapLogoSVG(gid, style='') {
             </div><!-- /ss-tab-admin -->
           </div><!-- /ssDashboardContent -->
         </div><!-- /page-wrapper -->
-        <div class="footer">USD MNL &nbsp;&middot;&nbsp; Slide / Swap Scheduling Tool &nbsp;&middot;&nbsp; Powered by Microsoft Graph API</div>
+        <div class="footer">USD MNL &nbsp;&middot;&nbsp; Slide / Swap Scheduling Tool</div>
       </div><!-- /section-slideswap -->
 
     </div><!-- /main-area -->
@@ -1589,56 +1868,26 @@ function _sapLogoSVG(gid, style='') {
 
 <div id="toastMsg"></div>
 
-<!-- ── Leave Edit Modal ── -->
-<div class="modal-overlay" id="editModal" style="display:none" onclick="modalOverlayClick(event)">
-  <div class="modal-panel">
+
+<!-- ── Group Transitions Modal ── -->
+<div class="modal-overlay" id="groupTransitionsModal" style="display:none" onclick="if(event.target.id==='groupTransitionsModal')closeGroupTransitionsModal()">
+  <div class="modal-panel" style="max-width:900px;width:96%">
     <div class="modal-header">
-      <div><h3 id="modalTitle">Edit Leave Record</h3><div class="modal-subtitle" id="modalSubtitle"></div></div>
-      <button class="btn-modal-close" onclick="closeEditModal()">&#215;</button>
+      <div>
+        <h3>&#x21C4;&nbsp; Group Transitions</h3>
+        <div class="modal-subtitle">Employees whose group changes between 2026 and 2027 &nbsp;&middot;&nbsp; sourced from UserRLS roster</div>
+      </div>
+      <button class="btn-modal-close" onclick="closeGroupTransitionsModal()">&#215;</button>
     </div>
-    <div class="modal-body">
-      <div class="form-grid">
-        <div class="form-group"><label class="form-label">Name</label><input class="form-control" id="fName" readonly/></div>
-        <div class="form-group"><label class="form-label">Group</label><input class="form-control" id="fGroup" readonly/></div>
-        <div class="form-group">
-          <label class="form-label">Leave Type</label>
-          <select class="form-control" id="fLeaveType">
-            <option>Annual Leave</option><option>Sick Leave</option><option>Emergency Leave</option>
-            <option>Unpaid Vacation Leave</option><option>Birthday Leave</option>
-            <option>Maternity Leave</option><option>Paternity Leave</option>
-            <option>Solo Parent Leave</option><option>VAWC Leave</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Status</label>
-          <select class="form-control" id="fStatus">
-            <option value="Approved">Approved</option>
-            <option value="Pending">Pending</option>
-            <option value="Rejected">Rejected</option>
-            <option value="Cancelled">Cancelled</option>
-          </select>
-        </div>
-        <div class="form-group"><label class="form-label">Requested Date</label><input class="form-control" id="fRequestedDate" type="date"/></div>
-        <div class="form-group"><label class="form-label">Filed Date</label><input class="form-control" id="fFiledDate" type="date"/></div>
-        <div class="form-group"><label class="form-label">Approved By</label><input class="form-control" id="fApprovedBy" type="text"/></div>
-        <div class="form-group"><label class="form-label">Response Date</label><input class="form-control" id="fResponseDate" type="date"/></div>
-        <div class="form-group">
-          <label class="form-label">Plotted?</label>
-          <select class="form-control" id="fPlotted">
-            <option value="">— Not Set —</option>
-            <option value="true">Yes</option>
-            <option value="false">No</option>
-          </select>
-        </div>
-        <div class="form-group"><label class="form-label">Agent Email</label><input class="form-control" id="fAgentEmail" type="text" readonly/></div>
-        <div class="form-group full-width"><label class="form-label">Reason</label><textarea class="form-control" id="fReason"></textarea></div>
-        <div class="form-group full-width"><label class="form-label">Remarks</label><textarea class="form-control" id="fRemarks"></textarea></div>
+    <div class="modal-body" style="padding:20px 24px">
+      <div id="gtContent" style="display:grid;grid-template-columns:1fr 1fr;gap:20px"></div>
+      <div id="gtEmpty" style="display:none;text-align:center;padding:40px 20px;color:var(--text-muted);font-size:13px">
+        No group transitions found. All employees have the same group in 2026 and 2027.
       </div>
     </div>
-    <div class="modal-footer">
-      <span id="modalSaveMsg" style="font-size:12px;margin-right:auto"></span>
-      <button class="btn-modal-cancel" onclick="closeEditModal()">Cancel</button>
-      <button class="btn-modal-save" id="btnModalSave" onclick="saveRecord()">Save to SharePoint</button>
+    <div class="modal-footer" style="justify-content:flex-end">
+      <span id="gtSummary" style="font-size:12px;color:var(--text-muted);margin-right:auto"></span>
+      <button class="btn-modal-cancel" onclick="closeGroupTransitionsModal()">Close</button>
     </div>
   </div>
 </div>
@@ -1950,9 +2199,9 @@ function _sapLogoSVG(gid, style='') {
 </div>
 
 <script>
-/* ══════════════ CONFIGURATION ══════════════ */
-const CLIENT_ID      = "d929f1e5-738b-4271-ae5b-d1d345c97a97";
-const TENANT_ID      = "42f7676c-f455-423c-82f6-dc2d99791af7";
+/* ══════════════ CONFIGURATION (EKX Pages Edition) ══════════════ */
+// Microsoft Graph is accessed via the EKX callRpc bridge — no MSAL, no tokens needed.
+const MS_APP_ID      = "529a6c03-cbf4-459e-94cd-1956011f9cf9";
 const SITE_HOST      = "sap.sharepoint.com";
 const SITE_PATH      = "/sites/208984";
 const LIST_LEAVE_ID  = "74408493-6DED-4742-926C-5F44D3DDDE09";
@@ -1962,126 +2211,85 @@ const LIST_SS_ID     = "3DBD32E0-DA53-4351-885E-8D57B3EB2EA4";
 const CSV_FOLDER     = "USD New Leave Tool";
 const CSV_FILENAME   = "leave-records-approved.csv";
 const CSV_RLS_FILENAME = "UserRLS.csv";
-const SCOPES         = ["https://graph.microsoft.com/Sites.ReadWrite.All","https://graph.microsoft.com/Mail.Send"];
 const SAP_COLORS     = ["#1B90FF","#0070F2","#002A86","#89D1FF","#00144A","#4CB1FF","#0134BF","#D1EFFF","#6BB8FF","#003DC8"];
 
-/* ══════════════ MSAL ══════════════ */
-function loadMsalScript() {
-  const CDNS = [
-    "https://cdn.jsdelivr.net/npm/@azure/msal-browser@2.39.0/lib/msal-browser.min.js",
-    "https://unpkg.com/@azure/msal-browser@2.39.0/lib/msal-browser.min.js",
-    "https://alcdn.msauth.net/browser/2.39.0/js/msal-browser.min.js"
-  ];
-  function tryLoad(i) {
-    return new Promise((res, rej) => {
-      if (i >= CDNS.length) { rej(new Error("All MSAL CDN sources failed.")); return; }
-      const s = document.createElement("script");
-      s.src = CDNS[i];
-      s.onload = () => res();
-      s.onerror = () => { document.head.removeChild(s); tryLoad(i+1).then(res).catch(rej); };
-      document.head.appendChild(s);
-    });
+/* ══════════════ EKX MICROSOFT BRIDGE ══════════════ */
+// EKX Pages handles authentication automatically via window.__pageContext.callRpc.
+// No MSAL, no tokens, no sign-in needed. The viewer's identity is injected by EKX.
+
+function _callGraph(path, method, bodyObj, extraHeaders) {
+  // Strip full Graph base URL if present; ensure proxy/ prefix
+  const p = "proxy" + path.replace("https://graph.microsoft.com", "");
+  const init = { method: method || "GET" };
+  const h = { "Content-Type": "application/json", ...(extraHeaders || {}) };
+  init.headers = h;
+  if (bodyObj !== undefined && bodyObj !== null) {
+    init.body = typeof bodyObj === "string" ? bodyObj : JSON.stringify(bodyObj);
   }
-  return tryLoad(0);
+  return window.__pageContext.callRpc(MS_APP_ID, p, init);
 }
-function msalTimeout(p, ms, lbl) {
-  return Promise.race([p, new Promise((_,rej) => setTimeout(() => rej(new Error(`${lbl} timed out after ${ms/1000}s`)), ms))]);
+
+async function graphGet(url) {
+  const res = await _callGraph(url, "GET");
+  if (!res.ok) { const tx = await res.text(); throw new Error(`Graph API error ${res.status}: ${tx}`); }
+  return res.json();
 }
-const msalReady = (async () => {
+async function graphPost(url, body) {
+  const res = await _callGraph(url, "POST", body);
+  if (!res.ok) { const tx = await res.text(); throw new Error(`Graph POST ${res.status}: ${tx}`); }
+  return res.json().catch(() => ({}));
+}
+async function graphPatch(url, body) {
+  const res = await _callGraph(url, "PATCH", body);
+  if (!res.ok) {
+    const tx = await res.text();
+    if (res.status === 403) throw new Error("Permission denied (403). Check SharePoint permissions.");
+    throw new Error(`Graph PATCH ${res.status}: ${tx}`);
+  }
+  return res.json().catch(() => ({}));
+}
+async function graphDelete(url) {
+  const res = await _callGraph(url, "DELETE");
+  if (!res.ok) { const tx = await res.text(); throw new Error(`Graph DELETE ${res.status}: ${tx}`); }
+}
+
+// signIn / signOut are no-ops in EKX Pages (auth is handled by the platform)
+function signIn() { _ekxInitPage(); }
+function signOut() { showToast("Sign-out is managed by EKX. Close the page or browser session."); }
+
+// Auto-initialise when the page loads — fetch /v1.0/me to get the viewer's identity
+async function _ekxInitPage() {
   const btnMain = document.getElementById("btnMainLogin");
-  const btnHdr  = document.getElementById("btnHeaderLogin");
-  function enableBtns() {
-    if (btnMain) { btnMain.disabled=false; btnMain.textContent="Sign In with Microsoft"; }
-    if (btnHdr)  { btnHdr.disabled=false;  btnHdr.textContent="Sign In"; }
-  }
+  const errEl   = document.getElementById("loginError");
+  if (btnMain) { btnMain.disabled = true; btnMain.textContent = "Loading your account..."; }
   try {
-    await msalTimeout(loadMsalScript(), 15000, "MSAL script load");
-    const cfg = { auth:{ clientId:CLIENT_ID, authority:`https://login.microsoftonline.com/${TENANT_ID}`, redirectUri:"https://macdc06.github.io/USD-MNL-Leave-Consumption/" }, cache:{ cacheLocation:"sessionStorage", storeAuthStateInCookie:false }, system:{ allowRedirectInIframe:true } };
-    const inst = new msal.PublicClientApplication(cfg);
-    if (typeof inst.initialize === "function") await msalTimeout(inst.initialize(), 10000, "MSAL initialize");
-    try {
-      const resp = await msalTimeout(inst.handleRedirectPromise(), 10000, "handleRedirectPromise");
-      if (resp) { onLoginSuccess(resp.account); }
-      else { const a = inst.getAllAccounts(); if (a.length) onLoginSuccess(a[0]); }
-    } catch(e) { console.error("Redirect handling error:", e); }
-    enableBtns();
-    return inst;
+    const me = await graphGet("https://graph.microsoft.com/v1.0/me");
+    currentUserEmail = (me.mail || me.userPrincipalName || "").toLowerCase();
+    currentUserName  = me.displayName || me.userPrincipalName || "";
+    document.getElementById("loginScreen").style.display = "none";
+    document.getElementById("mainContent").style.display = "block";
+    loadData();
   } catch(e) {
-    console.error("MSAL init failed:", e);
-    const el = document.getElementById("loginError");
-    if (el) { el.textContent="Sign-in could not be initialized. Please refresh. ("+( e.message||e)+")"; el.style.display="block"; }
-    if (btnMain) { btnMain.disabled=false; btnMain.textContent="Retry Sign In"; }
-    if (btnHdr)  { btnHdr.disabled=false;  btnHdr.textContent="Sign In"; }
-    throw e;
+    console.error("EKX init failed:", e);
+    if (errEl) { errEl.textContent = "Could not load your account: " + (e.message || e); errEl.style.display = "block"; }
+    if (btnMain) { btnMain.disabled = false; btnMain.textContent = "Retry"; }
   }
-})();
-
-async function signIn() {
-  const inst = await msalReady;
-  // If running inside an iframe or popup, use redirect instead of popup
-  const inIframe = window !== window.top;
-  try {
-    if (inIframe) {
-      inst.loginRedirect({ scopes: SCOPES });
-      return; // redirect navigates away — no further code runs
-    }
-    const resp = await inst.loginPopup({ scopes: SCOPES });
-    onLoginSuccess(resp.account);
-  } catch(e) {
-    const code = e.errorCode||"";
-    // block_nested_popups, popup_window_error, empty_window_error → fall back to redirect
-    if (code==="block_nested_popups"||code==="popup_window_error"||code==="empty_window_error") {
-      inst.loginRedirect({ scopes: SCOPES });
-    } else if (code!=="user_cancelled") {
-      showToast("Sign-in failed: "+(e.message||String(e)));
-    }
-  }
-}
-async function signOut() { const inst=await msalReady; await inst.logoutPopup(); location.reload(); }
-async function getToken() {
-  const inst=await msalReady; const acct=inst.getAllAccounts()[0];
-  const req={scopes:SCOPES,account:acct};
-  try { return (await inst.acquireTokenSilent(req)).accessToken; }
-  catch { return (await inst.acquireTokenPopup(req)).accessToken; }
 }
 
-function onLoginSuccess(account) {
-  currentUserEmail=(account.username||"").toLowerCase();
-  currentUserName=account.name||account.username||"";
-  document.getElementById("loginScreen").style.display="none";
-  document.getElementById("mainContent").style.display="block";
-  loadData();
-}
+function onLoginSuccess() {} // kept for compatibility; not called in EKX version
 function _applyHeaderBadge(){
   const ROLE_LABELS={author:'Admin',manager:'Manager',tl:'Team Lead',agent:'Agent'};
   const badge=currentUserRole?`<span style="background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.32);border-radius:10px;padding:2px 9px;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-left:2px">${ROLE_LABELS[currentUserRole]||currentUserRole}</span>`:"";
-  const _hdr=document.getElementById("headerRight");_hdr.innerHTML=`<div class="user-info"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>${escHtml(currentUserName)}${badge}</div>`;const _btnOut=document.createElement("button");_btnOut.className="btn-logout";_btnOut.textContent="Sign Out";_btnOut.addEventListener("click",signOut);_hdr.querySelector(".user-info").appendChild(_btnOut);
+  const _hdr=document.getElementById("headerRight");_hdr.innerHTML=`<div class="user-info"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>${escHtml(currentUserName)}${badge}</div>`;
+  // Hide the old header login button (not needed in EKX Pages)
+  const _btnHdr=document.getElementById("btnHeaderLogin");if(_btnHdr)_btnHdr.style.display="none";
 }
 
-/* ══════════════ GRAPH HELPERS ══════════════ */
-async function graphGet(url) {
-  const t=await getToken();
-  const r=await fetch(url,{headers:{Authorization:`Bearer ${t}`}});
-  if(!r.ok){const tx=await r.text();throw new Error(`Graph API error ${r.status}: ${tx}`);}
-  return r.json();
-}
-async function graphPost(url,body) {
-  const t=await getToken();
-  const r=await fetch(url,{method:"POST",headers:{Authorization:`Bearer ${t}`,"Content-Type":"application/json"},body:JSON.stringify(body)});
-  if(!r.ok){const tx=await r.text();throw new Error(`Graph POST ${r.status}: ${tx}`);}
-  return r.json().catch(()=>({}));
-}
-async function graphPatch(url,body) {
-  const t=await getToken();
-  const r=await fetch(url,{method:"PATCH",headers:{Authorization:`Bearer ${t}`,"Content-Type":"application/json"},body:JSON.stringify(body)});
-  if(!r.ok){const tx=await r.text();if(r.status===403)throw new Error("Permission denied (403). Ensure the Azure AD app has Sites.ReadWrite.All delegated permission.");throw new Error(`Graph PATCH ${r.status}: ${tx}`);}
-  return r.json().catch(()=>({}));
-}
-async function graphDelete(url) {
-  const t=await getToken();
-  const r=await fetch(url,{method:"DELETE",headers:{Authorization:`Bearer ${t}`}});
-  if(!r.ok){const tx=await r.text();throw new Error(`Graph DELETE ${r.status}: ${tx}`);}
-}
+/* ══════════════ GRAPH HELPERS (EKX callRpc) ══════════════ */
+// graphGet/Post/Patch/Delete are defined above in the EKX MICROSOFT BRIDGE section.
+// getAllPages, getSiteId, getListItems remain functionally identical — they call graphGet()
+// which now routes through callRpc automatically.
+
 async function getAllPages(url) {
   let items=[],next=url;
   while(next){const d=await graphGet(next);items=items.concat(d.value||[]);next=d["@odata.nextLink"]||null;}
@@ -2094,25 +2302,23 @@ async function getListItems(siteId,listId,sel) {
   return getAllPages(`https://graph.microsoft.com/v1.0/sites/${siteId}/lists/${listId}/items${q}`);
 }
 
-/* ══════════════ CSV HELPERS ══════════════ */
-// Fetches a CSV file from the SharePoint folder using the resolved site ID.
-// getSiteId() is a single metadata call (GET /sites/{host}:{path}) — it does not
-// access any SharePoint list.  The resolved ID is required to build a valid drive URL.
+/* ══════════════ CSV HELPERS (EKX callRpc) ══════════════ */
+// File downloads are routed through the callRpc proxy which handles SharePoint redirects.
 async function fetchCSVFile(filename){
-  const t=await getToken();
-  const url=`https://graph.microsoft.com/v1.0/sites/${siteIdCache}/drive/root:/${CSV_FOLDER}/${filename}:/content`;
-  const r=await fetch(url,{headers:{Authorization:`Bearer ${t}`}});
-  if(!r.ok){const tx=await r.text();throw new Error(`CSV fetch error (${filename}) ${r.status}: ${tx}`);}
-  return r.text();
+  const path=`/v1.0/sites/${siteIdCache}/drive/root:/${CSV_FOLDER}/${filename}:/content`;
+  const res=await _callGraph(`https://graph.microsoft.com${path}`,"GET");
+  if(!res.ok){const tx=await res.text();throw new Error(`CSV fetch error (${filename}) ${res.status}: ${tx}`);}
+  return res.text();
 }
 async function fetchLeaveCSVText(){return fetchCSVFile(CSV_FILENAME);}
 async function fetchRLSCSVText(){return fetchCSVFile(CSV_RLS_FILENAME);}
 async function fetchLeaveCSVMeta(){
-  const t=await getToken();
-  const url=`https://graph.microsoft.com/v1.0/sites/${siteIdCache}/drive/root:/${CSV_FOLDER}/${CSV_FILENAME}`;
-  const r=await fetch(url,{headers:{Authorization:`Bearer ${t}`}});
-  if(!r.ok)return null;
-  return r.json();
+  try{
+    const path=`/v1.0/sites/${siteIdCache}/drive/root:/${CSV_FOLDER}/${CSV_FILENAME}`;
+    const res=await _callGraph(`https://graph.microsoft.com${path}`,"GET");
+    if(!res.ok)return null;
+    return res.json();
+  }catch(e){return null;}
 }
 function parseTSVLine(line){
   const result=[];let cur='';let inQ=false;
@@ -2211,7 +2417,7 @@ let pendingDeleteIdx=-1;
 let leaveSortKey="",leaveSortDir=1,adminSortKey="",adminSortDir=1;
 let allRecordsSortKey="",allRecordsSortDir=1,ssSortKey="",ssSortDir=1,ssAdminSortKey="",ssAdminSortDir=1;
 let expSortKey="",expSortDir=1,entSortKey="",entSortDir=1;
-let tableNameFilter="",tableGroupFilter="",tableLeaveTypeFilter="",tableTeamLeadFilter="",tableApprovedByFilter="",tablePlottedFilter="",tableStatusFilter="";
+let tableNameFilter="",tableGroupFilters=[],tableLeaveTypeFilters=[],tableTeamLeadFilters=[],tableApprovedByFilter="",tablePlottedFilter="",tableStatusFilters=[];
 let adminPendingNameFilter="",adminPendingGroupFilter="",adminPendingLeaveTypeFilter="",adminPendingTLFilter="";
 let allRecordsTLFilter="";
 
@@ -2376,6 +2582,7 @@ async function loadData() {
     populateFilters(); applyFilters(); initEntitlementTab(); initExpiringTab(); initCalendarTab(); populateRecordsFilterDropdowns();
     document.getElementById("bannerSubtitle").textContent=`USD MNL  |  Leave Consumption and Scheduling Tool  |  CSV  |  ${allLeaveData.length} approved records  ·  ${Object.keys(rlsData).length} RLS entries`;
     notifInit();
+  initOpenMonth2027();
     appNotifInit();
     document.getElementById("approvedBadge").textContent=`${allLeaveData.length} Approved`;
     showLoading(false);
@@ -2653,29 +2860,34 @@ const MONTHS=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov",
 /* ══════════════ RECORDS TAB ══════════════ */
 function applyRecordsFilters(){
   tableNameFilter=(document.getElementById("recNameFilter").value||"").toLowerCase().trim();
-  tableStatusFilter=document.getElementById("recStatusFilter").value||"";
-  tableGroupFilter=document.getElementById("recGroupFilter").value||"";
-  tableLeaveTypeFilter=document.getElementById("recLeaveTypeFilter").value||"";
-  tableTeamLeadFilter=document.getElementById("recTeamLeadFilter").value||"";
+  tableStatusFilters=_ms.get("recStatusFilter")?.getValues()||[];
+  tableGroupFilters=_ms.get("recGroupFilter")?.getValues()||[];
+  tableLeaveTypeFilters=_ms.get("recLeaveTypeFilter")?.getValues()||[];
+  tableTeamLeadFilters=_ms.get("recTeamLeadFilter")?.getValues()||[];
   tablePlottedFilter=document.getElementById("recPlottedFilter").value||"";
   currentPage=1; renderTable();
 }
 function clearRecordsFilters(){
-  tableNameFilter=tableStatusFilter=tableGroupFilter=tableLeaveTypeFilter=tableTeamLeadFilter=tablePlottedFilter="";
-  ["recNameFilter","recStatusFilter","recGroupFilter","recLeaveTypeFilter","recTeamLeadFilter","recPlottedFilter"].forEach(id=>{const el=document.getElementById(id);if(el)el.value="";});
+  tableNameFilter="";tableStatusFilters=[];tableGroupFilters=[];tableLeaveTypeFilters=[];tableTeamLeadFilters=[];tablePlottedFilter="";
+  const nf=document.getElementById("recNameFilter");if(nf)nf.value="";
+  ["recStatusFilter","recGroupFilter","recLeaveTypeFilter","recTeamLeadFilter"].forEach(id=>_ms.get(id)?.clear());
+  const pf=document.getElementById("recPlottedFilter");if(pf)pf.value="";
   currentPage=1; renderTable();
 }
 function populateRecordsFilterDropdowns(){
   const src=allFullData;
-  const stSel=document.getElementById("recStatusFilter");
-  if(stSel){const p=stSel.value;const s=[...new Set(src.map(r=>r.status).filter(Boolean))].sort();stSel.innerHTML='<option value="">All Statuses</option>'+s.map(x=>`<option value="${escHtml(x)}">${escHtml(x)}</option>`).join("");stSel.value=s.includes(p)?p:"";}
-  const ltSel=document.getElementById("recLeaveTypeFilter");
-  if(ltSel){const p=ltSel.value;const t=[...new Set(src.map(r=>r.leaveType).filter(Boolean))].sort();ltSel.innerHTML='<option value="">All Types</option>'+t.map(x=>`<option value="${escHtml(x)}">${escHtml(x)}</option>`).join("");ltSel.value=t.includes(p)?p:"";}
-  const tlSel=document.getElementById("recTeamLeadFilter");
-  if(tlSel){const p=tlSel.value;tlSel.innerHTML='<option value="">All Team Leads</option>'+ALLOWED_TLS.map(x=>`<option value="${escHtml(x)}">${escHtml(x)}</option>`).join("");tlSel.value=ALLOWED_TLS.includes(p)?p:"";}
-  const gSel=document.getElementById("recGroupFilter");
-  if(gSel){const p=gSel.value;const g=[...new Set(src.map(r=>r.group).filter(Boolean))].sort();gSel.innerHTML='<option value="">All Groups</option>'+g.map(x=>`<option value="${escHtml(x)}">${escHtml(x)}</option>`).join("");gSel.value=g.includes(p)?p:"";}
-}
+  const _init=id=>!document.querySelector(`#${id} .ms-btn`);
+  const statuses=[...new Set(src.map(r=>r.status).filter(Boolean))].sort();
+  if(_init("recStatusFilter")) _ms.create("recStatusFilter","All Statuses",applyRecordsFilters);
+  _ms.get("recStatusFilter")?.setOptions(statuses);
+  const types=[...new Set(src.map(r=>r.leaveType).filter(Boolean))].sort();
+  if(_init("recLeaveTypeFilter")) _ms.create("recLeaveTypeFilter","All Types",applyRecordsFilters);
+  _ms.get("recLeaveTypeFilter")?.setOptions(types);
+  if(_init("recTeamLeadFilter")) _ms.create("recTeamLeadFilter","All Team Leads",applyRecordsFilters);
+  _ms.get("recTeamLeadFilter")?.setOptions(ALLOWED_TLS.slice());
+  const groups=[...new Set(src.map(r=>r.group).filter(Boolean))].sort();
+  if(_init("recGroupFilter")) _ms.create("recGroupFilter","All Groups",applyRecordsFilters);
+  _ms.get("recGroupFilter")?.setOptions(groups);}
 function renderTable(){
   // ── Global filter bar values ──────────────────────────────
   const _gyr=(document.getElementById("filterYear")||{value:""}).value||"";
@@ -2690,10 +2902,10 @@ function renderTable(){
     if(_ggr&&r.group!==_ggr) return false;
     if(_glt&&r.leaveType!==_glt) return false;
     if(tableNameFilter&&!(r.name||"").toLowerCase().includes(tableNameFilter))return false;
-    if(tableStatusFilter&&(r.status||"").toLowerCase()!==tableStatusFilter.toLowerCase())return false;
-    if(tableGroupFilter&&r.group!==tableGroupFilter)return false;
-    if(tableLeaveTypeFilter&&r.leaveType!==tableLeaveTypeFilter)return false;
-    if(tableTeamLeadFilter){const tl=(rlsData[(r.agentEmail||"").toLowerCase()]||{}).teamLead||r.tlEmail||"";if(tl!==tableTeamLeadFilter)return false;}
+    if(tableStatusFilters.length&&!tableStatusFilters.some(f=>(r.status||"").toLowerCase()===f.toLowerCase()))return false;
+    if(tableGroupFilters.length&&!tableGroupFilters.includes(r.group))return false;
+    if(tableLeaveTypeFilters.length&&!tableLeaveTypeFilters.includes(r.leaveType))return false;
+    if(tableTeamLeadFilters.length){const tl=(rlsData[(r.agentEmail||"").toLowerCase()]||{}).teamLead||r.tlEmail||"";if(!tableTeamLeadFilters.includes(tl))return false;}
     if(tablePlottedFilter){const pv=String(r.plotted??"").toLowerCase();const isY=pv==="yes"||pv==="true"||pv==="1";if(tablePlottedFilter==="yes"&&!isY)return false;if(tablePlottedFilter==="no"&&isY)return false;}
     return true;
   });
@@ -2724,7 +2936,30 @@ function initEntitlementTab(){
   tlEl.innerHTML='<option value="">All TLs</option>'+ALLOWED_TLS.map(t=>`<option>${escHtml(t)}</option>`).join("");
   renderEntitlementTable();
 }
+/* Entitlement name-click filter helpers */
+function _entFilterByName(name){
+  const el=document.getElementById('entName');if(!el)return;
+  if(el.value.toLowerCase().trim()===name.toLowerCase().trim()){
+    /* second click = clear filter */
+    el.value='';
+  } else {
+    el.value=name;
+  }
+  renderEntitlementTable();
+  /* scroll filter bar into view */
+  el.scrollIntoView({behavior:'smooth',block:'nearest'});
+  el.focus();
+}
+function _entIsFiltered(name){
+  const el=document.getElementById('entName');if(!el||!el.value.trim())return false;
+  return (name||'').toLowerCase().trim()===el.value.toLowerCase().trim();
+}
+
+/* Format number to 1 decimal place, stripping trailing .0 where whole */
+function _fmt(v){if(v==null)return'—';if(typeof v!=='number')return v;const r=+v.toFixed(1);return r;}
+
 function renderEntitlementTable(){
+  const _curMo=new Date().getMonth()+1; /* 1=Jan … 12=Dec */
   const yr=document.getElementById("entYear")?.value||"";
   // Prefer per-tab entGroup; fall back to global filterGroup so the global bar always works
   const gr=(document.getElementById("entGroup")?.value||"")||(document.getElementById("filterGroup")?.value||"");
@@ -2749,13 +2984,28 @@ function renderEntitlementTable(){
       const rls=rlsData[em];const u=used[(rls.name||"").toLowerCase().trim()]||0;
       const ent2026=rls.ent2026??null;const cf2026=rls.cf2026??null;
       const ent2027=rls.ent2027??null;
+      const accrued=ent2026!=null?Math.round((ent2026/12)*_curMo*10)/10:null;
+      /* 2027 accrual: respects Open Month setting if configured by WFM */
+      const _curYear=new Date().getFullYear();
+      const _openMo2027=parseInt(localStorage.getItem('usd_ent_open_mo_2027')||'0')||0;
+      const _autoMo2027=_curYear<2027?0:(_curYear===2027?_curMo:12);
+      const _mo2027=_openMo2027>0?_openMo2027:_autoMo2027;
+      const accrued2027=ent2027!=null?Math.round((ent2027/12)*_mo2027*10)/10:null;
       const tot=ent2026!=null?(ent2026+(cf2026||0)):null;const rem=tot!=null?tot-u:null;const pct=tot>0?u/tot:null;
       const u27=used2027[(rls.name||"").toLowerCase().trim()]||0;
       const cf2027effective=rem!=null?(ent2026!=null?Math.min(Math.max(0,rem),Math.floor(ent2026/2)):Math.max(0,rem)):0;
-      const tot2027=ent2027!=null?(ent2027+cf2027effective):null;const rem2027=tot2027!=null?tot2027-u27:null;
-      const remainingNet=Math.max(0,(rem??0)-u27);
+      const tot2027=ent2027!=null?(ent2027+cf2027effective):null;
+      /* Remaining 2027: used draws from Accrued first, then CF — future unearned ENT is not yet available */
+      /* rem2027 clamped at 0 — any deficit is pushed back to 2026 Remaining */
+      const rem2027=accrued2027!=null?Math.max(0,(accrued2027+cf2027effective)-u27):(tot2027!=null?Math.max(0,tot2027-u27):null);
+      /* Only the CF2027 bucket consumed reduces 2026 Remaining.
+         Accrued portion and any excess beyond CF do NOT flow back to 2026. */
+      /* Floor accrued2027 before computing CF draw-down so that fractional
+         accrual days do NOT carry a decimal into the 2026 Remaining count. */
+      const _cf2027Used=Math.max(0,u27-Math.floor(accrued2027!=null?accrued2027:0));
+      const remainingNet=Math.max(0,cf2027effective-_cf2027Used);
       const approved2027=appr2027[(rls.name||"").toLowerCase().trim()]||0;
-      return {email:em,name:rls.name,group:rls.group,group2027:rls.group2027||'',teamLead:rls.teamLead,teamLead2027:rls.teamLead2027||'',ent2026,cf2026,ent2027,cf2027:cf2027effective,total:tot,used:u,remaining:remainingNet,pct,used2027:u27,total2027:tot2027,remaining2027:rem2027,approved2027};
+      return {email:em,name:rls.name,group:rls.group,group2027:rls.group2027||'',teamLead:rls.teamLead,teamLead2027:rls.teamLead2027||'',ent2026,cf2026,accrued,ent2027,cf2027:cf2027effective,accrued2027,total:tot,used:u,remaining:remainingNet,pct,used2027:u27,total2027:tot2027,remaining2027:rem2027,approved2027};
     })
     .filter(r=>{
       if(!st)return true;
@@ -2766,23 +3016,28 @@ function renderEntitlementTable(){
       return true;
     });
   rows=_sortRows(rows,entSortKey,entSortDir);
-  _updateSortIcons("enth-",entSortKey,entSortDir,["name","group","teamLead","ent2026","cf2026","total","used","remaining"]);
-  _updateSortIcons("enth27-",entSortKey,entSortDir,["name","group2027","teamLead2027","ent2027","cf2027","total2027","used2027","remaining2027"]);
+  _updateSortIcons("enth-",entSortKey,entSortDir,["name","group","teamLead","ent2026","accrued","cf2026","total","used","remaining"]);
+  _updateSortIcons("enth27-",entSortKey,entSortDir,["name","group2027","teamLead2027","ent2027","accrued2027","cf2027","total2027","used2027","remaining2027"]);
   const strip=rows.reduce((a,r)=>{a.ent+=(r.ent2026||0);a.used+=r.used;a.rem+=(r.remaining||0);return a;},{ent:0,used:0,rem:0});
   document.getElementById("entStripEmployees").textContent=rows.length;
   document.getElementById("entStripTotalEnt").textContent=strip.ent;
   document.getElementById("entStripUsed").textContent=strip.used;
   document.getElementById("entStripRemaining").textContent=strip.rem;
   const tbody=document.getElementById("entTableBody");if(!tbody)return;
-  if(!rows.length){tbody.innerHTML=`<tr><td colspan="9" class="empty-state"><p>No data.</p></td></tr>`;return;}
+  if(!rows.length){tbody.innerHTML=`<tr><td colspan="10" class="empty-state"><p>No data.</p></td></tr>`;return;}
   tbody.innerHTML=rows.map((r,i)=>{
-    return`<tr><td style="color:var(--text-muted)">${i+1}</td><td><strong>${escHtml(r.name||r.email)}</strong></td><td><span class="badge badge-group">${escHtml(r.group)}</span></td><td>${escHtml(r.teamLead)}</td><td class="tc">${r.ent2026??'—'}</td><td class="tc">${r.cf2026??'—'}</td><td class="tc">${r.total??'—'}</td><td class="tc">${r.used}</td><td class="tc">${r.remaining??'—'}</td></tr>`;
+    const _nm=r.name||r.email;
+    return`<tr class="${_entIsFiltered(_nm)?'ent-row-active':''}"><td style="color:var(--text-muted)">${i+1}</td><td><span class="ent-name-cell" data-entname="${escHtml(_nm)}" title="Click to filter by this name"><strong>${escHtml(_nm)}</strong></span></td><td><span class="badge badge-group">${escHtml(r.group)}</span></td><td>${escHtml(r.teamLead)}</td><td class="tc">${_fmt(r.ent2026)}</td><td class="tc" style="color:var(--sap-blue-dark);font-weight:600">${_fmt(r.accrued)}</td><td class="tc">${_fmt(r.cf2026)}</td><td class="tc">${_fmt(r.total)}</td><td class="tc">${_fmt(r.used)}</td><td class="tc">${_fmt(r.remaining)}</td></tr>`;
   }).join("");
+  /* Wire name-click filter on 2026 table */
+  tbody.querySelectorAll(".ent-name-cell[data-entname]").forEach(el=>{
+    el.addEventListener("click",()=>_entFilterByName(el.dataset.entname));
+  });
   const tbody2027=document.getElementById("entTableBody2027");if(!tbody2027)return;
   const rows2027=rows.filter(r=>r.group2027);
-  if(!rows2027.length){tbody2027.innerHTML=`<tr><td colspan="9" class="empty-state"><p>No 2027 data.</p></td></tr>`;return;}
+  if(!rows2027.length){tbody2027.innerHTML=`<tr><td colspan="10" class="empty-state"><p>No 2027 data.</p></td></tr>`;return;}
   tbody2027.innerHTML=rows2027.map((r,i)=>{
-    return`<tr><td style="color:var(--text-muted)">${i+1}</td><td><strong>${escHtml(r.name||r.email)}</strong></td><td><span class="badge badge-group">${escHtml(r.group2027)}</span></td><td>${escHtml(r.teamLead2027||r.teamLead)}</td><td class="tc">${r.ent2027??'—'}</td><td class="tc">${r.cf2027??'—'}</td><td class="tc">${r.total2027??'—'}</td><td class="tc">${r.used2027}</td><td class="tc">${r.remaining2027??'—'}</td></tr>`;
+    return`<tr><td style="color:var(--text-muted)">${i+1}</td><td><strong>${escHtml(r.name||r.email)}</strong></td><td><span class="badge badge-group">${escHtml(r.group2027)}</span></td><td>${escHtml(r.teamLead2027||r.teamLead)}</td><td class="tc">${_fmt(r.ent2027)}</td><td class="tc" style="color:var(--sap-blue-dark);font-weight:600">${_fmt(r.accrued2027)}</td><td class="tc">${_fmt(r.cf2027)}</td><td class="tc">${_fmt(r.total2027)}</td><td class="tc">${_fmt(r.used2027)}</td><td class="tc">${_fmt(r.remaining2027)}</td></tr>`;
   }).join("");
 }
 function sortEntTable(key){if(entSortKey===key)entSortDir*=-1;else{entSortKey=key;entSortDir=1;}renderEntitlementTable();}
@@ -2851,7 +3106,7 @@ function renderExpiringTable(){
     const cf2027Cell=r.cf2027!=null?`<strong>${r.cf2027}</strong>`:"—";
     const forfCell=r.forfNum>0?`<span class="forf-flag forf-flag-${r.urgency}">${r.forfNum}</span>`:hasExp?'<span class="forf-flag-none">0</span>':"—";
     const urgCell=hasExp?`<span class="badge ${urgCls}">${urgLbl}</span>`:"<span style='color:var(--text-muted)'>—</span>";
-    return`<tr${rowCls}><td style="color:var(--text-muted)">${i+1}</td><td><strong>${escHtml(r.name||r.email)}</strong></td><td><span class="badge badge-group">${escHtml(r.group)}</span></td><td>${escHtml(r.teamLead)}</td><td class="tc">${r.entitlement??'—'}</td><td class="tc">${r.carryForward??'—'}</td><td class="tc">${r.total??'—'}</td><td class="tc">${r.used}</td><td class="tc">${r.remaining??'—'}</td><td class="tc">${cf2027Cell}</td><td class="tc">${forfCell}</td></tr>`;
+    return`<tr${rowCls}><td style="color:var(--text-muted)">${i+1}</td><td><strong>${escHtml(r.name||r.email)}</strong></td><td><span class="badge badge-group">${escHtml(r.group)}</span></td><td>${escHtml(r.teamLead)}</td><td class="tc">${_fmt(r.entitlement)}</td><td class="tc">${_fmt(r.carryForward)}</td><td class="tc">${_fmt(r.total)}</td><td class="tc">${_fmt(r.used)}</td><td class="tc">${_fmt(r.remaining)}</td><td class="tc">${cf2027Cell}</td><td class="tc">${forfCell}</td></tr>`;
   }).join("");
 }
 function sortExpTable(key){if(expSortKey===key)expSortDir*=-1;else{expSortKey=key;expSortDir=1;}renderExpiringTable();}
@@ -3374,10 +3629,10 @@ function renderSSAdminTable(){
   const total=Math.ceil(rows.length/SS_ADMIN_PAGE_SIZE)||1;const start=(ssAdminPage-1)*SS_ADMIN_PAGE_SIZE;const page=rows.slice(start,start+SS_ADMIN_PAGE_SIZE);
   const tbody=document.getElementById("ssAdminTableBody");if(!tbody)return;
   if(!page.length){tbody.innerHTML=`<tr><td colspan="13" class="empty-state"><p>No pending records.</p></td></tr>`;document.getElementById("ssAdminPagination").innerHTML="";return;}
-  tbody.innerHTML=page.map((r,i)=>{const idx=allSSData.indexOf(r);return`<tr><td style="text-align:center;width:32px"><input type="checkbox" class="ss-admin-chk" data-idx="${idx}" onchange="ssAdminSelChange()" style="cursor:pointer;accent-color:#1B90FF"/></td><td style="color:var(--text-muted);white-space:nowrap">${start+i+1}</td><td style="white-space:nowrap"><strong>${escHtml(r.requestorName||r.title)}</strong></td><td style="white-space:nowrap">${ssReqTypeBadge(r.reqType)}</td><td style="white-space:nowrap">${ssStatusBadge(r.status)}</td><td style="white-space:nowrap">${formatDate(r.shiftDate)}</td><td style="white-space:nowrap;font-size:12px">${escHtml(r.originalSchedule)}</td><td style="white-space:nowrap;font-size:12px">${escHtml(r.requestedSchedule)}</td><td style="white-space:nowrap"><strong>${escHtml(r.swapName)}</strong></td><td style="white-space:nowrap">${escHtml(r.teamLead)}</td><td style="white-space:nowrap;font-size:12px">${escHtml(r.reason)}</td><td style="white-space:nowrap">${plottedBadge(r.plotted)}</td><td style="white-space:nowrap"><button class="btn-approve-ss" data-appridx="${idx}">Approve</button> <button class="btn-edit-record" data-idx="${idx}">Edit</button> <button class="btn-delete-record" data-delidx="${idx}">Delete</button></td></tr>`;}).join("");
+  tbody.innerHTML=page.map((r,i)=>{const idx=allSSData.indexOf(r);return`<tr><td style="text-align:center;width:32px"><input type="checkbox" class="ss-admin-chk" data-idx="${idx}" onchange="ssAdminSelChange()" style="cursor:pointer;accent-color:#1B90FF"/></td><td style="color:var(--text-muted);white-space:nowrap">${start+i+1}</td><td style="white-space:nowrap"><strong>${escHtml(r.requestorName||r.title)}</strong></td><td style="white-space:nowrap">${ssReqTypeBadge(r.reqType)}</td><td style="white-space:nowrap">${ssStatusBadge(r.status)}</td><td style="white-space:nowrap">${formatDate(r.shiftDate)}</td><td style="white-space:nowrap;font-size:12px">${escHtml(r.originalSchedule)}</td><td style="white-space:nowrap;font-size:12px">${escHtml(r.requestedSchedule)}</td><td style="white-space:nowrap"><strong>${escHtml(r.swapName)}</strong></td><td style="white-space:nowrap">${escHtml(r.teamLead)}</td><td style="white-space:nowrap;font-size:12px">${escHtml(r.reason)}</td><td style="white-space:nowrap">${plottedBadge(r.plotted)}</td><td style="white-space:nowrap"><button class="btn-approve-ss" data-appridx="${idx}">Approve</button> <button class="btn-edit-record" data-idx="${idx}">Edit</button>${currentUserRole!=='tl'?` <button class="btn-delete-record" data-delidx="${idx}">Delete</button>`:''}</td></tr>`;}).join("");
   tbody.querySelectorAll(".btn-approve-ss[data-appridx]").forEach(btn=>btn.addEventListener("click",()=>approveSSRequest(+btn.dataset.appridx)));
   tbody.querySelectorAll(".btn-edit-record[data-idx]").forEach(btn=>btn.addEventListener("click",()=>openSSEditModal(+btn.dataset.idx)));
-  tbody.querySelectorAll(".btn-delete-record[data-delidx]").forEach(btn=>btn.addEventListener("click",()=>confirmSSDelete(+btn.dataset.delidx)));
+  if(currentUserRole!=='tl') tbody.querySelectorAll(".btn-delete-record[data-delidx]").forEach(btn=>btn.addEventListener("click",()=>confirmSSDelete(+btn.dataset.delidx)));
   renderPagination(document.getElementById("ssAdminPagination"),ssAdminPage,total,(p)=>{ssAdminPage=p;renderSSAdminTable();});
 }
 
@@ -3421,6 +3676,7 @@ function sortSSAdminTable(k){if(ssAdminSortKey===k)ssAdminSortDir*=-1;else{ssAdm
 /* ══════════════ EDIT MODALS ══════════════ */
 let editingRecord=null,editingRecordSource=null;
 function openEditModal(idx,source){
+  if(!isAdmin()&&!isWFM()){showToast('Leave records are read-only. Only WFM can edit leave data.');return;}
   const arr=source==="admin"?allAdminData:allFullData;
   const r=arr[idx];if(!r)return;
   editingRecord=r; editingRecordSource=source;
@@ -3446,6 +3702,7 @@ function openEditModal(idx,source){
 function closeEditModal(){document.getElementById("editModal").style.display="none";editingRecord=null;}
 function modalOverlayClick(e){if(e.target.id==="editModal")closeEditModal();}
 async function saveRecord(){
+  if(!isAdmin()&&!isWFM()){showToast('Leave records are read-only. Only WFM can edit leave data.');return;}
   if(!editingRecord)return;
   if(!editingRecord._itemId){showToast("Cannot save: item ID missing.");return;}
   if(!siteIdCache){showToast("Cannot save: site ID not cached.");return;}
@@ -3700,42 +3957,32 @@ async function logSSActivity(activity, rec, status, remarks=''){
     const ts=new Date().toLocaleString('en-US',{timeZone:'Asia/Manila',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false});
     const newRow=[ts, activity, rec.title||'', rec.reqType||'', rec.requestorName||'', status||'', rec.shiftDate||rec.requestedDate||'', currentUserEmail, remarks];
 
-    const t=await getToken();
     const baseUrl=`https://graph.microsoft.com/v1.0/sites/${sid}/drive/root:/${encodeURIComponent(CSV_FOLDER)}/${encodeURIComponent(HISTORY_FILE)}:/workbook`;
 
-    // 1. Open a persistent workbook session
-    const sessRes=await fetch(`${baseUrl}/createSession`,{
-      method:'POST',
-      headers:{'Authorization':`Bearer ${t}`,'Content-Type':'application/json'},
-      body:JSON.stringify({persistChanges:true})
-    });
+    // 1. Open a persistent workbook session via callRpc
+    const sessRes=await _callGraph(`${baseUrl}/createSession`,'POST',{persistChanges:true});
     if(!sessRes.ok){const tx=await sessRes.text();console.warn('[HISTORY] session create failed:',sessRes.status,tx);return;}
     const {id:sessionId}=await sessRes.json();
-    const hdrs={'Authorization':`Bearer ${t}`,'Content-Type':'application/json','workbook-session-id':sessionId};
+    const sessionHdrs={'workbook-session-id':sessionId};
 
     // 2. Find the last used row so we can append after it
-    const rangeRes=await fetch(`${baseUrl}/worksheets/Sheet1/usedRange(valuesOnly=true)`,{headers:hdrs});
-    let nextRow=2; // default: row 2 (row 1 = headers)
+    const rangeRes=await _callGraph(`${baseUrl}/worksheets/Sheet1/usedRange(valuesOnly=true)`,'GET',null,sessionHdrs);
+    let nextRow=2;
     if(rangeRes.ok){
       const rangeData=await rangeRes.json();
-      // rowIndex is 0-based, rowCount gives extent
       const ri=rangeData.rowIndex??0;
       const rc=rangeData.rowCount??1;
-      nextRow=ri+rc+1; // 1-based row number after last used row
+      nextRow=ri+rc+1;
     }
 
     // 3. Write the new row
     const addr=`A${nextRow}:I${nextRow}`;
-    const writeRes=await fetch(`${baseUrl}/worksheets/Sheet1/range(address='${addr}')`,{
-      method:'PATCH',
-      headers:hdrs,
-      body:JSON.stringify({values:[newRow]})
-    });
+    const writeRes=await _callGraph(`${baseUrl}/worksheets/Sheet1/range(address='${addr}')`,'PATCH',{values:[newRow]},sessionHdrs);
     if(!writeRes.ok){const tx=await writeRes.text();console.warn('[HISTORY] write failed:',writeRes.status,tx);}
     else console.log('[HISTORY] logged row',nextRow,activity,rec.title||'');
 
     // 4. Close the session
-    await fetch(`${baseUrl}/closeSession`,{method:'POST',headers:hdrs}).catch(()=>{});
+    _callGraph(`${baseUrl}/closeSession`,'POST').catch(()=>{});
   }catch(e){console.warn('[HISTORY] error:',e.message);}
 }
 
@@ -3749,10 +3996,9 @@ async function loadSSHistory(){
     let sid=siteIdCache;
     if(!sid){sid=await getSiteId();siteIdCache=sid;}
     if(!sid){throw new Error('Site ID not resolved.');}
-    const t=await getToken();
     const baseUrl=`https://graph.microsoft.com/v1.0/sites/${sid}/drive/root:/${encodeURIComponent(CSV_FOLDER)}/${encodeURIComponent(HISTORY_FILE)}:/workbook`;
-    // Read all data from Sheet1 using usedRange
-    const res=await fetch(`${baseUrl}/worksheets/Sheet1/usedRange(valuesOnly=true)`,{headers:{'Authorization':`Bearer ${t}`}});
+    // Read all data from Sheet1 using usedRange via callRpc
+    const res=await _callGraph(`${baseUrl}/worksheets/Sheet1/usedRange(valuesOnly=true)`,'GET');
     if(!res.ok){const tx=await res.text();throw new Error(`${res.status}: ${tx}`);}
     const data=await res.json();
     const allVals=data.values||[];
@@ -3875,7 +4121,7 @@ function appNotifDismiss(){
 
 /* ── Header Notification Bell ── */
 const _NOTIF_KEY='usd-mnl-notif-v2.4';
-const _NOTIF_APP_COUNT=5;
+const _NOTIF_APP_COUNT=0;
 let _notifReqCount=0;
 function notifInit(){
   const read=localStorage.getItem(_NOTIF_KEY)==='read';
@@ -3898,14 +4144,15 @@ function notifUpdateRequests(){
   const items=[];
   // 1. Swaps awaiting MY acknowledgment (For My Acknowledgment tab)
   (allSSData||[]).filter(r=>{
-    if((r.reqType||'').toLowerCase()!=='swap')return false;
+    const _rt2=(r.reqType||'').toLowerCase();if(_rt2!=='swap'&&_rt2!=='slide')return false;
     if((r.status||'').toUpperCase().trim()!=='FOR ACKNOWLEDGEMENT')return false;
     if(isAdmin()||isWFM())return true;
     const a=_parseAck(r.swapAck),req=_ackRequired(r),mine=_mySlots(r);
     return mine.some(k=>req[k]&&a[k]!=='Y'&&a[k]!=='N');
   }).slice(0,5).forEach(r=>{
     const mine=_mySlots(r).map(_ackLabel).join(', ');
-    items.push({type:'ack',num:r.title||'—',label:escHtml(r.requestorName||'—'),meta:'Swap · '+formatDatePlain(r.shiftDate),action:mine?'Your action needed':'Awaiting acknowledgment',tab:'ss-tab-myack'});
+    const _reqLabel=(r.reqType||'').charAt(0).toUpperCase()+(r.reqType||'').slice(1).toLowerCase();
+    items.push({type:'ack',num:r.title||'—',label:escHtml(r.requestorName||'—'),meta:_reqLabel+' · '+formatDatePlain(r.shiftDate),action:mine?'Your action needed':'Awaiting acknowledgment',tab:'ss-tab-myack'});
   });
   // 2. MY pending requests (own filings not yet resolved)
   (allSSData||[]).filter(r=>{
@@ -3987,7 +4234,8 @@ function _mySlots(r){
 }
 /* Friendly acknowledgment summary for tables & emails */
 function fmtSwapAck(r){
-  if((r.reqType||'').toLowerCase()!=='swap')return r.swapAck||'';
+  const _rt=(r.reqType||'').toLowerCase();
+  if(_rt!=='swap'&&_rt!=='slide')return r.swapAck||'';
   const a=_parseAck(r.swapAck),req=_ackRequired(r),parts=[];
   _ACK_SLOTS.forEach(k=>{if(req[k]){const v=a[k]==='Y'?'Yes':a[k]==='N'?'Declined':'Pending';parts.push(`${_ackLabel(k)}: ${v}`);}});
   return parts.join(' | ')||(r.swapAck||'—');
@@ -3995,7 +4243,8 @@ function fmtSwapAck(r){
 /* A swap appears in MY acknowledgment list when I still owe an acknowledgment,
    OR when I am WFM / Admin (full visibility over all pending swaps) */
 function _isMySwapToAck(r){
-  if((r.reqType||'').toLowerCase()!=='swap')return false;
+  const _rt=(r.reqType||'').toLowerCase();
+  if(_rt!=='swap'&&_rt!=='slide')return false;
   if((r.status||'').toUpperCase().trim()!=='FOR ACKNOWLEDGEMENT')return false;
   // WFM and Admin see every pending swap
   if(isAdmin()||isWFM()) return true;
@@ -4022,27 +4271,37 @@ function renderMyAckTable(){
     return true;
   });
   const cnt=document.getElementById('myAckTableCount');
-  if(cnt)cnt.textContent=`${rows.length} swap${rows.length!==1?'s':''} to acknowledge`;
+  if(cnt)cnt.textContent=`${rows.length} request${rows.length!==1?'s':''} to acknowledge`;
   const tbody=document.getElementById('myAckTableBody');if(!tbody)return;
-  if(!rows.length){tbody.innerHTML=`<tr><td colspan="10" class="empty-state"><p>No swaps awaiting your acknowledgment.</p></td></tr>`;updateMyAckCount();return;}
+  if(!rows.length){tbody.innerHTML=`<tr><td colspan="10" class="empty-state"><p>No requests awaiting your acknowledgment.</p></td></tr>`;updateMyAckCount();return;}
   tbody.innerHTML=rows.map(r=>{
     const idx=allSSData.indexOf(r);
     const theirSched=[r.originalSchedule,r.originalRD].filter(Boolean).join(' || ')||'—';
     const mySched=[r.requestedSchedule,r.requestedRD].filter(Boolean).join(' || ')||'—';
+    const _ackTL=(rlsData[(r.agentEmail||'').toLowerCase()]||{}).teamLead||r.teamLead||'—';
     const mine=_mySlots(r).map(_ackLabel).join(', ');
+    /* WFM: can act on pending TL slots even though not personally named */
+    const _pendingTLSlots=(()=>{
+      if(mine||!isWFM())return [];
+      const _a=_parseAck(r.swapAck),_req=_ackRequired(r);
+      return ['RTL','STL'].filter(k=>_req[k]&&_a[k]!=='Y'&&_a[k]!=='N');
+    })();
+    const _canAct=mine||_pendingTLSlots.length>0;
+    const _ackLabel2=mine||(isWFM()&&_pendingTLSlots.length?'TL (on behalf of WFM)':'');
     return`<tr>
       <td style="color:var(--text-muted)">${idx+1}</td>
       <td style="font-weight:700;color:var(--sap-blue-dark);white-space:nowrap">${escHtml(r.title||'—')}</td>
       <td style="white-space:nowrap"><strong>${escHtml(r.requestorName||'—')}</strong></td>
+      <td style="white-space:nowrap;font-size:12px">${escHtml(_ackTL)}</td>
       <td style="white-space:nowrap"><strong>${escHtml(r.swapName||'—')}</strong></td>
       <td style="white-space:nowrap">${formatDate(r.shiftDate)}</td>
       <td style="white-space:nowrap;font-size:12px">${escHtml(theirSched)}</td>
       <td style="white-space:nowrap;font-size:12px">${escHtml(mySched)}</td>
-      <td style="max-width:150px;white-space:normal;font-size:11.5px;color:var(--text-muted)">${escHtml(fmtSwapAck(r))}${mine?`<br><em style="color:#0057C2">You: ${escHtml(mine)}</em>`:''}</td>
+      <td style="max-width:150px;white-space:normal;font-size:11.5px;color:var(--text-muted)">${escHtml(fmtSwapAck(r))}${_ackLabel2?`<br><em style="color:#0057C2">You: ${escHtml(_ackLabel2)}</em>`:''}</td>
       <td style="white-space:nowrap">${ssStatusBadge(r.status)}</td>
       <td style="white-space:nowrap">
-        ${mine
-          ? `<button class="btn-approve-ss" data-ackidx="${idx}">Approve</button>
+        ${_canAct
+          ? `<button class="btn-approve-ss" data-ackidx="${idx}">Acknowledge</button>
              <button class="btn-delete-record" data-declineidx="${idx}" style="margin-left:4px">Decline</button>`
           : `<span style="font-size:11px;color:#999;font-style:italic">View only</span>`}
       </td>
@@ -4055,11 +4314,22 @@ function renderMyAckTable(){
 async function ackSwap(idx, approve){
   const r=allSSData[idx];if(!r)return;
   if(!r._itemId){showToast('Cannot update: no SharePoint item ID.');return;}
-  const mine=_mySlots(r);
-  if(!mine.length){showToast('You are not a required acknowledger for this swap.');return;}
-  const roleTxt=mine.map(_ackLabel).join(', ');
+  let mine=_mySlots(r);
+  let _wfmOnBehalf=false;
+  /* WFM can acknowledge pending TL slots (RTL / STL) on behalf of the Team Lead */
+  if(!mine.length&&isWFM()){
+    const _a=_parseAck(r.swapAck),_req=_ackRequired(r);
+    mine=['RTL','STL'].filter(k=>_req[k]&&_a[k]!=='Y'&&_a[k]!=='N');
+    if(!mine.length){showToast('All Team Lead slots are already acknowledged.');return;}
+    _wfmOnBehalf=true;
+  }
+  if(!mine.length){showToast('You are not a required acknowledger for this request.');return;}
+  const roleTxt=_wfmOnBehalf
+    ?mine.map(k=>_ackLabel(k)+' (WFM on behalf)').join(', ')
+    :mine.map(_ackLabel).join(', ');
   const action=approve?'approve':'decline';
-  if(!confirm(`Are you sure you want to ${action} this swap request (${r.title||''}) as ${roleTxt}?`))return;
+  const _typeLabel=(r.reqType||'request').charAt(0).toUpperCase()+(r.reqType||'').slice(1).toLowerCase();
+  if(!confirm(`Are you sure you want to ${action} this ${_typeLabel} request (${r.title||''}) as ${roleTxt}?`))return;
   const a=_parseAck(r.swapAck),req=_ackRequired(r);
   let newStatus,remark;
   if(!approve){
@@ -4070,7 +4340,7 @@ async function ackSwap(idx, approve){
     mine.forEach(k=>{a[k]='Y';});
     const allDone=_ACK_SLOTS.every(k=>!req[k]||a[k]==='Y');
     newStatus=allDone?'PENDING':'FOR ACKNOWLEDGEMENT';
-    remark=allDone?`All parties approved — pending WFM`:`Approved by ${roleTxt}`;
+    remark=allDone?`All parties acknowledged — pending WFM`:_wfmOnBehalf?`TL slots acknowledged by WFM on behalf — ${roleTxt}`:`Approved by ${roleTxt}`;
   }
   const f={field_2:newStatus, field_9:_ackStr(a)};
   const url=`https://graph.microsoft.com/v1.0/sites/${ssSiteIdCache}/lists/${LIST_SS_ID}/items/${r._itemId}/fields`;
@@ -4078,11 +4348,11 @@ async function ackSwap(idx, approve){
     showToast('Submitting…');
     await graphPatch(url,f);
     r.status=newStatus; r.swapAck=f.field_9;
-    sendSSNotification(r, newStatus).catch(()=>{});
+    sendSSNotification(r, newStatus, {wfmOnBehalf:_wfmOnBehalf}).catch(()=>{});
     logSSActivity('Edited', r, newStatus, remark).catch(()=>{});
-    if(!approve) showToast('Swap declined.');
-    else if(newStatus==='PENDING') showToast('All parties have acknowledged. Now PENDING for WFM approval.');
-    else showToast('Approved. Awaiting the remaining parties.');
+    if(!approve) showToast((r.reqType||'Request')+' declined.');
+    else if(newStatus==='PENDING') showToast('All parties have acknowledged. Now PENDING for approval.');
+    else showToast(_wfmOnBehalf?'TL slots acknowledged on behalf by WFM.':'Acknowledged. Awaiting the remaining parties.');
     renderMyAckTable(); ssApplyFilters();
   }catch(e){
     console.error(e);showToast('Update failed: '+(e.message||String(e)));
@@ -4090,7 +4360,7 @@ async function ackSwap(idx, approve){
 }
 
 /* ══════════════ SS EMAIL NOTIFICATION ══════════════ */
-async function sendSSNotification(rec, statusLabel){
+async function sendSSNotification(rec, statusLabel, opts={}){
   try{
     // Resolve requestor from RLS (by email first, then by name)
     const reqEntry=rlsData[rec.agentEmail?.toLowerCase()]
@@ -4111,6 +4381,7 @@ async function sendSSNotification(rec, statusLabel){
     const isForAck=statusLabel.toUpperCase()==='FOR ACKNOWLEDGEMENT';
     const isFiling=isPending||isForAck;
     const isApproved=statusLabel.toUpperCase()==='APPROVED';
+    const isWFMAck=!!(opts&&opts.wfmOnBehalf);
     const verb=isFiling?'has been filed with':'has been updated with';
     // Status display label
     const displayStatus=isForAck?'For Acknowledgement':statusLabel.toUpperCase();
@@ -4138,8 +4409,9 @@ async function sendSSNotification(rec, statusLabel){
   <strong>REQUESTED SCHEDULE</strong> : ${escHtml(swapSchedule)}</p>
 </div>
 <p>${isForAck?'Kindly go to the system to acknowledge this request. All parties involved — the swap partner and both Team Leaders — must acknowledge in the system. Once all parties have acknowledged, the request will move to <strong>PENDING</strong> for WFM approval.':statusLabel.toUpperCase()==='PENDING'?'All parties have acknowledged. This request is now <strong>PENDING</strong> for WFM approval.':'This is an update on your swap request.'}</p>
+${isWFMAck?'<p style="background:#EAF4FF;border-left:4px solid #1B90FF;padding:10px 14px;border-radius:0 4px 4px 0;font-size:13px;margin-top:8px"><strong>&#x2139; Note:</strong> Team Lead acknowledgment for this request was completed on behalf by <strong>WFM</strong>.</p><br>':''}
 <br>
-<p>You may view this request thru: <a href="https://pages.github.tools.sap/I350663/usdmanilahub/" style="color:#1B90FF;font-weight:700;text-decoration:none">USD MNL - Leave Consumption and Scheduling Tool</a></p>
+<p>You may view this request thru: <a href="https://macdc06.github.io/USD-MNL-Leave-Consumption/" style="color:#1B90FF;font-weight:700;text-decoration:none">USD MNL - Leave Consumption and Scheduling Tool</a></p>
 <br>
 <p style="color:#666;font-style:italic;font-size:12px">(This is an automated message, please do not reply)</p>
 <br>
@@ -4157,7 +4429,9 @@ async function sendSSNotification(rec, statusLabel){
   <tr><td style="padding:2px 16px 2px 0;font-weight:700;color:#00144A;white-space:nowrap">REQUESTED DATE</td><td style="padding:2px 0">: ${escHtml(shiftDate)}</td></tr>
   <tr><td style="padding:2px 16px 2px 0;font-weight:700;color:#00144A;white-space:nowrap">REQUESTED SCHEDULE</td><td style="padding:2px 0">: ${escHtml(schedule)}</td></tr>
 </table>
-<p>You may view this request thru: <a href="https://pages.github.tools.sap/I350663/usdmanilahub/" style="color:#1B90FF;font-weight:700;text-decoration:none">USD MNL - Leave Consumption and Scheduling Tool</a></p>
+${isForAck?'<p>Kindly log in to the system and go to the <strong>For My Acknowledgment</strong> tab to acknowledge this Slide request. Once acknowledged, the request will move to <strong>PENDING</strong> for approval.</p><br>':''}
+${isWFMAck?'<p style="background:#EAF4FF;border-left:4px solid #1B90FF;padding:10px 14px;border-radius:0 4px 4px 0;font-size:13px;margin-bottom:8px"><strong>&#x2139; Note:</strong> Team Lead acknowledgment for this request was completed on behalf by <strong>WFM</strong>.</p><br>':''}
+<p>You may view this request thru: <a href="https://macdc06.github.io/USD-MNL-Leave-Consumption/" style="color:#1B90FF;font-weight:700;text-decoration:none">USD MNL - Leave Consumption and Scheduling Tool</a></p>
 <br>
 <p style="color:#666;font-style:italic;font-size:12px">(This is an automated message, please do not reply)</p>
 <br>
@@ -4195,14 +4469,9 @@ async function sendSSNotification(rec, statusLabel){
       ccRecipients:wfmCC,
       replyTo:[{emailAddress:{address:REPLY_TO}}]
     }};
-    const t=await getToken();
-    // Send from logged-in user's mailbox (/me/sendMail) — always works.
+    // Send from logged-in user's mailbox (/me/sendMail) via callRpc.
     // replyTo is set to concur_USD.VLREQUEST@sap.com so replies route correctly.
-    const res=await fetch('https://graph.microsoft.com/v1.0/me/sendMail',{
-      method:'POST',
-      headers:{'Authorization':`Bearer ${t}`,'Content-Type':'application/json'},
-      body:JSON.stringify(payload)
-    });
+    const res=await _callGraph('https://graph.microsoft.com/v1.0/me/sendMail','POST',payload);
     if(!res.ok){
       const tx=await res.text();
       console.warn('[EMAIL] sendMail failed:',res.status,tx);
@@ -4247,21 +4516,36 @@ async function submitSSRequest(){
     if(el){el.style.border="2px solid #CC0000";el.focus();el.addEventListener("input",()=>{el.style.border="";},{ once:true });}
     return;
   }
+  // Block agents from re-filing over an existing active request (edit prevention)
+  if(currentUserRole==='agent'){
+    const _dup=allSSData.filter(r=>{
+      const nm2=(r.requestorName||'').toLowerCase().trim();
+      const myNm=(nm||'').toLowerCase().trim();
+      const dateMatch=(r.shiftDate||'').slice(0,10)===(sd||'').slice(0,10);
+      const typeMatch=(r.reqType||'').toLowerCase()===(rt||'').toLowerCase();
+      const locked=['FOR ACKNOWLEDGEMENT','PENDING','APPROVED'].includes((r.status||'').toUpperCase().trim());
+      return (nm2===myNm)&&dateMatch&&typeMatch&&locked;
+    });
+    if(_dup.length){
+      msg.textContent='You already have an active '+rt+' request for '+sd+'. Filed requests cannot be edited or replaced.';
+      msg.style.color='#CC0000';btn.disabled=false;return;
+    }
+  }
   btn.disabled=true;msg.textContent="Submitting…";msg.style.color="var(--sap-navy)";
   const _isSwapReq=(rt||"").toLowerCase()==="swap";
-  const f={Title:reqNum,RequestorName:nm,ReqType:rt,field_2:(_isSwapReq?"FOR ACKNOWLEDGEMENT":"PENDING"),ShiftDate:sd+"T00:00:00Z"};
+  const f={Title:reqNum,RequestorName:nm,ReqType:rt,field_2:"FOR ACKNOWLEDGEMENT",ShiftDate:sd+"T00:00:00Z"};
   if(os)f.field_3=os;
   if(ord)f.OriginalRD=ord;
   if(rs)f.field_5=rs;
   if(rrd)f.RequestedRD=rrd;
   if(tl)f.field_7=tl;
   if(re)f.Reason=re;
+  // Initialise acknowledgment tracker for both Slide and Swap
+  f.field_9="SP=;RTL=;STL=";
   if(isSwap){
     if(sn)f.field_4=sn;
     if(se)f.field_6=se;
     if(stl)f.field_8=stl;
-    // Initialise multi-party acknowledgment tracker (SP / RTL / STL all pending)
-    f.field_9="SP=;RTL=;STL=";
   }
   const url=`https://graph.microsoft.com/v1.0/sites/${ssSiteIdCache}/lists/${LIST_SS_ID}/items`;
   try{
@@ -4269,7 +4553,7 @@ async function submitSSRequest(){
     msg.textContent="Request submitted successfully!";msg.style.color="#1B7A3A";
     showToast("Your "+rt+" request has been submitted.");
     // Send Pending email notification
-    const _initStatus=_isSwapReq?'FOR ACKNOWLEDGEMENT':'Pending';
+    const _initStatus='FOR ACKNOWLEDGEMENT';
     const _submittedRec={title:reqNum,requestorName:nm,reqType:rt,shiftDate:sd,
       originalSchedule:document.getElementById("arfOrigSched").value.trim(),
       originalRD:document.getElementById("arfOrigRD").value.trim(),
@@ -4320,9 +4604,28 @@ function _cleanInjectedOptions(){
   });
 }
 function openSSEditModal(idx){
-  if(!isAdmin()&&!isWFM()){showToast("Access denied: WFM or Author role required.");return;}
+  if(!isAdmin()&&!isWFM()){showToast("Access denied: only WFM and Admins can edit filed requests.");return;}
   const r=allSSData[idx];if(!r)return; editingSSRecord=r;
   document.getElementById("ssModalTitle").textContent="Edit Slide / Swap Record";
+  /* WFM can edit all fields; others are restricted to Status/TL/Plotted/Ack/Remarks */
+  const _wfmFullEdit=isWFM();
+  // For non-WFM: lock core request-detail fields
+  ['sfShiftDate','sfOriginalSchedule','sfOriginalRD','sfRequestedSchedule','sfRequestedRD',
+   'sfSwapName','sfSwapEmail','sfSwapTL','sfReason'].forEach(id=>{
+    const el=document.getElementById(id);if(!el)return;
+    if(_wfmFullEdit){
+      el.readOnly=false;el.disabled=false;
+      el.style.background='';el.style.cursor='';el.style.opacity='';
+    } else {
+      el.readOnly=true;el.disabled=true;
+      el.style.background='var(--bg-secondary,#F5F6F7)';el.style.cursor='not-allowed';el.style.opacity='.7';
+    }
+  });
+  // Status, TL, Plotted, and WFM Remarks always editable
+  ['sfStatus','sfTeamLead','sfPlotted','sfAgentRemarks','sfSwapAck','sfReqType'].forEach(id=>{
+    const el=document.getElementById(id);if(el){el.disabled=false;el.readOnly=false;
+      el.style.background='';el.style.cursor='';el.style.opacity='';}
+  });
   document.getElementById("ssModalSubtitle").textContent=(r.requestorName||r.title||"")+(r._itemId?"  ·  Item ID: "+r._itemId:"");
   document.getElementById("sfRequestorName").value=r.requestorName||r.title||"";
   document.getElementById("sfReqNum").value=r.title||"";
@@ -4357,20 +4660,23 @@ async function saveSSRecord(){
   btn.disabled=true;msg.textContent="Saving...";msg.style.color="var(--sap-navy)";
   const toISO=v=>v?v+"T00:00:00Z":null;
   const f={};
-  f.ReqType=document.getElementById("sfReqType").value;
   f.field_2=document.getElementById("sfStatus").value;
-  const sd=document.getElementById("sfShiftDate").value;if(sd)f.ShiftDate=toISO(sd);
-  const os=document.getElementById("sfOriginalSchedule").value.trim();if(os)f.field_3=os;
-  const or_=document.getElementById("sfOriginalRD").value.trim();if(or_)f.OriginalRD=or_;
-  const rs=document.getElementById("sfRequestedSchedule").value.trim();if(rs)f.field_5=rs;
-  const rr=document.getElementById("sfRequestedRD").value.trim();if(rr)f.RequestedRD=rr;
-  const sn=document.getElementById("sfSwapName").value.trim();if(sn)f.field_4=sn;
-  const sa=document.getElementById("sfSwapAck").value.trim();if(sa)f.field_9=sa;
   const tl=document.getElementById("sfTeamLead").value.trim();if(tl)f.field_7=tl;
-  const se=document.getElementById("sfSwapEmail").value.trim();if(se)f.field_6=se;
-  const st=document.getElementById("sfSwapTL").value.trim();if(st)f.field_8=st;
+  const sa=document.getElementById("sfSwapAck").value.trim();if(sa)f.field_9=sa;
   const ar=document.getElementById("sfAgentRemarks").value.trim();if(ar)f.Reason=ar;
-  const re=document.getElementById("sfReason").value.trim();if(re)f.Remarks=re;
+  /* WFM can save all request details */
+  if(isWFM()){
+    const sd=document.getElementById("sfShiftDate").value;if(sd)f.ShiftDate=sd+"T00:00:00Z";
+    const os=document.getElementById("sfOriginalSchedule").value.trim();if(os)f.field_3=os;
+    const ord=document.getElementById("sfOriginalRD").value.trim();if(ord)f.OriginalRD=ord;
+    const rs=document.getElementById("sfRequestedSchedule").value.trim();if(rs)f.field_5=rs;
+    const rrd=document.getElementById("sfRequestedRD").value.trim();if(rrd)f.RequestedRD=rrd;
+    const sn=document.getElementById("sfSwapName").value.trim();if(sn)f.field_4=sn;
+    const se=document.getElementById("sfSwapEmail").value.trim();if(se)f.field_6=se;
+    const st=document.getElementById("sfSwapTL").value.trim();if(st)f.field_8=st;
+    const re=document.getElementById("sfReason").value.trim();if(re)f.Remarks=re;
+    f.ReqType=document.getElementById("sfReqType").value;
+  }
   const pv=document.getElementById("sfPlotted").value;
   if(pv==="true")f["Plotted_x003f_"]=true;else if(pv==="false")f["Plotted_x003f_"]=false;
   const url=`https://graph.microsoft.com/v1.0/sites/${ssSiteIdCache}/lists/${LIST_SS_ID}/items/${editingSSRecord._itemId}/fields`;
@@ -4448,10 +4754,10 @@ function _openTableWindow(title,filterBar,headers,rowFn,rows){
 function viewAllLeave(){
   let rows=filteredData.filter(r=>{
     if(tableNameFilter&&!(r.name||"").toLowerCase().includes(tableNameFilter))return false;
-    if(tableGroupFilter&&r.group!==tableGroupFilter)return false;
-    if(tableLeaveTypeFilter&&r.leaveType!==tableLeaveTypeFilter)return false;
+    if(tableGroupFilters.length&&!tableGroupFilters.includes(r.group))return false;
+    if(tableLeaveTypeFilters.length&&!tableLeaveTypeFilters.includes(r.leaveType))return false;
 
-    if(tableTeamLeadFilter){const tl=(rlsData[(r.agentEmail||"").toLowerCase()]||{}).teamLead||r.tlEmail||"";if(tl!==tableTeamLeadFilter)return false;}
+    if(tableTeamLeadFilters.length){const tl=(rlsData[(r.agentEmail||"").toLowerCase()]||{}).teamLead||r.tlEmail||"";if(!tableTeamLeadFilters.includes(tl))return false;}
     if(tablePlottedFilter){const pv=String(r.plotted??"").toLowerCase();const isY=pv==="yes"||pv==="true"||pv==="1";if(tablePlottedFilter==="yes"&&!isY)return false;if(tablePlottedFilter==="no"&&isY)return false;}
     return true;
   });
@@ -4494,7 +4800,7 @@ function viewAllExpiring(){
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>Expiring Leave Credits \u2014 USD MNL ${yr}</title>
+<title>Expiring Leave Credits - USD MNL ${yr}</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap');
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
@@ -4857,7 +5163,7 @@ function viewAllEntitlement(){
   const appr2027={};allLeaveData.filter(r=>{const d=parseDate(r.requestedDate);return d&&d.getFullYear()===2027&&(r.status||"").toLowerCase()==="approved";}).forEach(r=>{const nm2=(r.name||"").toLowerCase().trim();appr2027[nm2]=(appr2027[nm2]||0)+1;});
   let rows=Object.keys(rlsData).filter(em=>['GY','APA'].includes(rlsData[em].group)).filter(em=>rlsData[em].teamLead).filter(em=>!gr||rlsData[em].group===gr).map(em=>{const rls=rlsData[em];const u=used[(rls.name||"").toLowerCase().trim()]||0;const u27=u27map[(rls.name||"").toLowerCase().trim()]||0;const ent2026=rls.ent2026??null;const cf2026=rls.cf2026??null;const ent2027=rls.ent2027??null;const cf2027=rls.cf2027??null;const tot=ent2026!=null?(ent2026+(cf2026||0)):null;const rem=tot!=null?tot-u:null;const pct=tot>0?u/tot:null;const remainingNet=Math.max(0,(rem??0)-u27);const approved2027=appr2027[(rls.name||"").toLowerCase().trim()]||0;return{email:em,name:rls.name,group:rls.group,group2027:rls.group2027||'',teamLead:rls.teamLead,teamLead2027:rls.teamLead2027||'',ent2026,cf2026,ent2027,cf2027,total:tot,used:u,remaining:remainingNet,pct,approved2027};});
   rows=_sortRows(rows,entSortKey,entSortDir);
-  _openTableWindow(`2026 Entitlement Details (${rows.length})`,`${gr||"All Groups"} | ${yr||"All Years"}`,'<th>#</th><th>Name</th><th>Group</th><th>Team Lead</th><th>2026 ENT</th><th>2026 CF</th><th>Total</th><th>Used 2026</th><th>Remaining</th>',(r,i)=>{return`<tr><td style="color:#999">${i+1}</td><td><strong>${_esc(r.name||r.email)}</strong></td><td>${_esc(r.group)}</td><td>${_esc(r.teamLead)}</td><td>${r.ent2026??'—'}</td><td>${r.cf2026??'—'}</td><td>${r.total??'—'}</td><td>${r.used}</td><td>${r.remaining??'—'}</td></tr>`;},rows);
+  _openTableWindow(`2026 Entitlement Details (${rows.length})`,`${gr||"All Groups"} | ${yr||"All Years"}`,'<th>#</th><th>Name</th><th>Group</th><th>Team Lead</th><th>2026 ENT</th><th>2026 CF</th><th>Total</th><th>Used 2026</th><th>Remaining</th>',(r,i)=>{return`<tr><td style="color:#999">${i+1}</td><td><strong>${_esc(r.name||r.email)}</strong></td><td>${_esc(r.group)}</td><td>${_esc(r.teamLead)}</td><td>${_fmt(r.ent2026)}</td><td>${_fmt(r.cf2026)}</td><td>${_fmt(r.total)}</td><td>${_fmt(r.used)}</td><td>${_fmt(r.remaining)}</td></tr>`;},rows);
 }
 function viewAllEntitlement2027(){
   const yr=document.getElementById("entYear").value,gr=document.getElementById("entGroup").value;
@@ -4865,7 +5171,7 @@ function viewAllEntitlement2027(){
   const used2027={};allLeaveData.filter(r=>{const d=parseDate(r.requestedDate);if(!d||d.getFullYear()!==2027)return false;if(gr&&r.group!==gr)return false;if(!(_isVL(r)))return false;return true;}).forEach(r=>{const nm2=(r.name||"").toLowerCase().trim();used2027[nm2]=(used2027[nm2]||0)+_useWt(r);});
   let rows=Object.keys(rlsData).filter(em=>['GY','APA'].includes(rlsData[em].group2027||'')).filter(em=>rlsData[em].teamLead2027).filter(em=>!gr||rlsData[em].group2027===gr).map(em=>{const rls=rlsData[em];const u26=used2026[(rls.name||"").toLowerCase().trim()]||0;const u27=used2027[(rls.name||"").toLowerCase().trim()]||0;const ent2026=rls.ent2026??null;const cf2026=rls.cf2026??null;const tot2026=ent2026!=null?(ent2026+(cf2026||0)):null;const rem2026=tot2026!=null?tot2026-u26:null;const cf2027effective=rem2026!=null?(ent2026!=null?Math.min(Math.max(0,rem2026),Math.floor(ent2026/2)):Math.max(0,rem2026)):0;const ent2027=rls.ent2027??null;const tot2027=ent2027!=null?(ent2027+cf2027effective):null;const rem2027=tot2027!=null?tot2027-u27:null;return{email:em,name:rls.name,group2027:rls.group2027||'',teamLead2027:rls.teamLead2027||'',ent2027,cf2027:cf2027effective,total2027:tot2027,used2027:u27,remaining2027:rem2027};});
   rows=_sortRows(rows,entSortKey,entSortDir);
-  _openTableWindow(`2027 Entitlement Details (${rows.length})`,`${gr||"All Groups"} | ${yr||"All Years"}`,'<th>#</th><th>Name</th><th>Group</th><th>Team Lead</th><th>2027 ENT</th><th>2027 CF</th><th>Total</th><th>Used 2027</th><th>Remaining</th>',(r,i)=>{return`<tr><td style="color:#999">${i+1}</td><td><strong>${_esc(r.name||r.email)}</strong></td><td>${_esc(r.group2027)}</td><td>${_esc(r.teamLead2027)}</td><td>${r.ent2027??'—'}</td><td>${r.cf2027??'—'}</td><td>${r.total2027??'—'}</td><td>${r.used2027}</td><td>${r.remaining2027??'—'}</td></tr>`;},rows);
+  _openTableWindow(`2027 Entitlement Details (${rows.length})`,`${gr||"All Groups"} | ${yr||"All Years"}`,'<th>#</th><th>Name</th><th>Group</th><th>Team Lead</th><th>2027 ENT</th><th>2027 CF</th><th>Total</th><th>Used 2027</th><th>Remaining</th>',(r,i)=>{return`<tr><td style="color:#999">${i+1}</td><td><strong>${_esc(r.name||r.email)}</strong></td><td>${_esc(r.group2027)}</td><td>${_esc(r.teamLead2027)}</td><td>${_fmt(r.ent2027)}</td><td>${_fmt(r.cf2027)}</td><td>${_fmt(r.total2027)}</td><td>${_fmt(r.used2027)}</td><td>${_fmt(r.remaining2027)}</td></tr>`;},rows);
 }
 function viewAllAdmin(){
   let rows=_sortRows([...allAdminData],adminSortKey,adminSortDir);
@@ -5088,10 +5394,10 @@ function renderRLSTable(){
       <td>${roleBadge}</td>
       <td style="font-size:12px">${escHtml(r.teamLead2026||'—')}</td>
       <td style="font-size:12px">${escHtml(r.teamLead2027||'—')}</td>
-      <td class="tc">${r.ent2026??'—'}</td>
-      <td class="tc">${r.cf2026??'—'}</td>
-      <td class="tc">${r.ent2027??'—'}</td>
-      <td class="tc">${r.cf2027??'—'}</td>
+      <td class="tc">${_fmt(r.ent2026)}</td>
+      <td class="tc">${_fmt(r.cf2026)}</td>
+      <td class="tc">${_fmt(r.ent2027)}</td>
+      <td class="tc">${_fmt(r.cf2027)}</td>
       <td>${escHtml(r.site||'—')}</td>
       <td class="tc">${stBadge}</td>
       <td style="white-space:nowrap">
@@ -5204,9 +5510,8 @@ async function saveRLSToSharePoint(){
   msgEl.style.display='none';
   try{
     const csvText=buildRLSCSVText();
-    const t=await getToken();
-    const url=`https://graph.microsoft.com/v1.0/sites/${siteIdCache}/drive/root:/${CSV_FOLDER}/${CSV_RLS_FILENAME}:/content`;
-    const res=await fetch(url,{method:'PUT',headers:{Authorization:`Bearer ${t}`,'Content-Type':'text/csv'},body:csvText});
+    const path=`/v1.0/sites/${siteIdCache}/drive/root:/${CSV_FOLDER}/${CSV_RLS_FILENAME}:/content`;
+    const res=await _callGraph(`https://graph.microsoft.com${path}`,'PUT',csvText,{'Content-Type':'text/csv'});
     if(!res.ok){const tx=await res.text();throw new Error(`Upload failed ${res.status}: ${tx}`);}
     msgEl.style.cssText='display:block;background:#EAF6EC;border:1px solid #A3D9A5;color:#1B6B2B;border-radius:6px;padding:8px 14px;font-size:12px;margin-bottom:12px';
     msgEl.textContent=`Roster saved to SharePoint — ${Object.keys(rlsData).length} entries written.`;
@@ -5283,10 +5588,10 @@ function renderRLSTable(){
       <td>${roleBadge}</td>
       <td style="font-size:12px">${escHtml(r.teamLead2026||'—')}</td>
       <td style="font-size:12px">${escHtml(r.teamLead2027||'—')}</td>
-      <td class="tc">${r.ent2026??'—'}</td>
-      <td class="tc">${r.cf2026??'—'}</td>
-      <td class="tc">${r.ent2027??'—'}</td>
-      <td class="tc">${r.cf2027??'—'}</td>
+      <td class="tc">${_fmt(r.ent2026)}</td>
+      <td class="tc">${_fmt(r.cf2026)}</td>
+      <td class="tc">${_fmt(r.ent2027)}</td>
+      <td class="tc">${_fmt(r.cf2027)}</td>
       <td>${escHtml(r.site||'—')}</td>
       <td class="tc">${stBadge}</td>
       <td style="white-space:nowrap">
@@ -5447,9 +5752,8 @@ async function saveRLSToSharePoint(){
   msg.style.display='block';msg.style.background='var(--sap-blue-sky)';msg.style.color='var(--sap-navy)';msg.textContent='Uploading UserRLS.csv to SharePoint…';
   try{
     const csv=buildRLSCSVText();
-    const t=await getToken();
-    const url=`https://graph.microsoft.com/v1.0/sites/${siteIdCache}/drive/root:/${CSV_FOLDER}/${CSV_RLS_FILENAME}:/content`;
-    const r=await fetch(url,{method:'PUT',headers:{Authorization:`Bearer ${t}`,'Content-Type':'text/csv'},body:csv});
+    const path=`/v1.0/sites/${siteIdCache}/drive/root:/${CSV_FOLDER}/${CSV_RLS_FILENAME}:/content`;
+    const r=await _callGraph(`https://graph.microsoft.com${path}`,'PUT',csv,{'Content-Type':'text/csv'});
     if(!r.ok){const tx=await r.text();throw new Error(`Upload failed (${r.status}): ${tx}`);}
     msg.style.background='#E6F9EE';msg.style.color='#1A6E3A';msg.textContent='UserRLS.csv saved to SharePoint successfully.';
     showToast('UserRLS.csv updated.');
@@ -5562,5 +5866,509 @@ function statusBadge(s){const st=(s||"").trim().toLowerCase();const cls=st==="ap
     </div>
   </div>
 </div>
+
+<script>
+/* ==========================================================================
+   PARTICLE NETWORK BACKGROUND  (v2 - sparse, clean, mouse-grab)
+   Sparse drifting dots connected by thin fading lines. Moving the mouse
+   fans bright links out to the nearby nodes (classic "grab" effect).
+   Crisp solid dots, no glow halos, royal-blue, light/dark aware.
+========================================================================== */
+(function(){
+  'use strict';
+
+  /* -- canvas -- */
+  var cvs = document.createElement('canvas');
+  cvs.id = 'nodeBg';
+  cvs.setAttribute('aria-hidden','true');
+  cvs.style.cssText='position:fixed;top:0;left:0;width:100vw;height:100vh;pointer-events:none;z-index:0;';
+  document.body.insertBefore(cvs, document.body.firstChild);
+  var ctx = cvs.getContext('2d');
+
+  /* -- state -- */
+  var W=0, H=0, nodes=[];
+  var mouse={x:-9999,y:-9999,active:false};
+
+  /* -- tunables -- */
+  var LINK_MAX = 160;   /* max px between nodes to draw a connection */
+  var MOUSE_R  = 220;   /* radius of mouse grab                     */
+
+  /* density: sparse, scales with viewport area */
+  function targetCount(){
+    return Math.min(105, Math.max(36, Math.round(W*H/26000)));
+  }
+
+  /* -- build nodes -- */
+  function spawn(){
+    nodes=[];
+    var N=targetCount();
+    for(var i=0;i<N;i++){
+      /* depth 0=far(small,slow,faint)  1=near(large,bright) */
+      var d  = Math.pow(Math.random(),1.5);
+      var spd= 0.07 + d*0.26;
+      var ang= Math.random()*Math.PI*2;
+      nodes.push({
+        x : Math.random()*W,
+        y : Math.random()*H,
+        vx: Math.cos(ang)*spd,
+        vy: Math.sin(ang)*spd,
+        depth:d,
+        r : 1.3 + d*3.0
+      });
+    }
+  }
+
+  function resize(){
+    W = cvs.width  = window.innerWidth;
+    H = cvs.height = window.innerHeight;
+  }
+
+  function isDark(){ return document.documentElement.getAttribute('data-theme')==='dark'; }
+
+  /* -- render loop -- */
+  function frame(){
+    requestAnimationFrame(frame);
+    ctx.clearRect(0,0,W,H);
+    var dk = isDark();
+
+    /* soft top-right corner vignette (echoes reference) */
+    var vg=ctx.createRadialGradient(W,0,0,W,0,Math.max(W,H)*0.55);
+    vg.addColorStop(0, dk?'rgba(255,255,255,0.045)':'rgba(12,22,64,0.05)');
+    vg.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle=vg; ctx.fillRect(0,0,W,H);
+
+    /* royal-blue palette — lighter base, darker on hover */
+    var NR = dk?120:105, NG = dk?180:140, NB = dk?255:248;   /* node (light: soft periwinkle) */
+    var LR = dk?110:115, LG = dk?160:148, LB = dk?255:250;   /* link */
+    var HNR= dk? 70:8,   HNG= dk?140:38,  HNB= dk?240:168;   /* hover-dark (grab fan + near nodes) */
+
+    var N=nodes.length;
+
+    /* -- drift -- */
+    for(var i=0;i<N;i++){
+      var n=nodes[i];
+      n.x+=n.vx; n.y+=n.vy;
+      if(n.x<-10)n.x=W+10; else if(n.x>W+10)n.x=-10;
+      if(n.y<-10)n.y=H+10; else if(n.y>H+10)n.y=-10;
+    }
+
+    /* -- node-to-node links -- */
+    for(var i=0;i<N;i++){
+      var a=nodes[i];
+      for(var j=i+1;j<N;j++){
+        var b=nodes[j];
+        var dx=a.x-b.x, dy=a.y-b.y;
+        var d=Math.sqrt(dx*dx+dy*dy);
+        if(d>LINK_MAX) continue;
+        var avgD=(a.depth+b.depth)*0.5;
+        var fade=1-d/LINK_MAX;
+        var al=fade*(dk?0.26:0.19)*(0.28+avgD*0.72);
+        ctx.beginPath();
+        ctx.moveTo(a.x,a.y);
+        ctx.lineTo(b.x,b.y);
+        ctx.strokeStyle='rgba('+LR+','+LG+','+LB+','+al.toFixed(3)+')';
+        ctx.lineWidth=0.5+avgD*0.55;
+        ctx.stroke();
+      }
+    }
+
+    /* -- mouse grab: fan bright links to nearby nodes -- */
+    if(mouse.active){
+      for(var i=0;i<N;i++){
+        var a=nodes[i];
+        var dx=a.x-mouse.x, dy=a.y-mouse.y;
+        var d=Math.sqrt(dx*dx+dy*dy);
+        if(d>MOUSE_R) continue;
+        var ma=(1-d/MOUSE_R)*(dk?0.60:0.55);
+        ctx.beginPath();
+        ctx.moveTo(a.x,a.y);
+        ctx.lineTo(mouse.x,mouse.y);
+        ctx.strokeStyle='rgba('+HNR+','+HNG+','+HNB+','+ma.toFixed(3)+')';
+        ctx.lineWidth=0.7+a.depth*0.6;
+        ctx.stroke();
+      }
+    }
+
+    /* -- nodes: crisp solid dots (darker fill when near cursor) -- */
+    for(var i=0;i<N;i++){
+      var n=nodes[i];
+      var ao=(dk?0.88:0.82)*(0.32+n.depth*0.68);
+      /* blend toward hover-dark based on proximity to mouse */
+      var dr2=(n.x-mouse.x)*(n.x-mouse.x)+(n.y-mouse.y)*(n.y-mouse.y);
+      var hov=(mouse.active && dr2<MOUSE_R*MOUSE_R) ? (1-Math.sqrt(dr2)/MOUSE_R) : 0;
+      var cR=NR+Math.round((HNR-NR)*hov);
+      var cG=NG+Math.round((HNG-NG)*hov);
+      var cB=NB+Math.round((HNB-NB)*hov);
+      ctx.beginPath();
+      ctx.arc(n.x,n.y,Math.max(0.6,n.r),0,Math.PI*2);
+      ctx.fillStyle='rgba('+cR+','+cG+','+cB+','+ao.toFixed(3)+')';
+      ctx.fill();
+    }
+  }
+
+  /* -- bootstrap -- */
+  resize();
+  spawn();
+  requestAnimationFrame(frame);
+
+  window.addEventListener('resize',function(){
+    clearTimeout(window._nbResizeT);
+    window._nbResizeT=setTimeout(function(){ resize(); spawn(); },120);
+  });
+
+  document.addEventListener('mousemove',function(e){ mouse.x=e.clientX; mouse.y=e.clientY; mouse.active=true; });
+  document.addEventListener('mouseleave',function(){ mouse.active=false; });
+  document.addEventListener('touchmove',function(e){ var t=e.touches[0]; mouse.x=t.clientX; mouse.y=t.clientY; mouse.active=true; },{passive:true});
+  document.addEventListener('touchend',function(){ mouse.active=false; });
+})();
+</script>
+<script>
+
+/* ══════════════════════════════════════════════════════
+   2027 OPEN MONTH SETTING
+   WFM/Admin can fix the accrual window for 2027 to a
+   specific month (e.g. "open through February" = month 2).
+   Stored in localStorage; 0 = auto (follows real date).
+   ══════════════════════════════════════════════════════ */
+const _OM_KEY = 'usd_ent_open_mo_2027';
+const _MONTH_NAMES = ['','January','February','March','April','May','June','July','August','September','October','November','December'];
+
+function initOpenMonth2027(){
+  const sel = document.getElementById('openMonthSelect');
+  const lbl = document.getElementById('openMonthStatus');
+  if(!sel) return;
+  const stored = parseInt(localStorage.getItem(_OM_KEY)||'0')||0;
+  sel.value = stored;
+  _updateOpenMonthStatus(stored, lbl);
+}
+
+function applyOpenMonth2027(){
+  const sel = document.getElementById('openMonthSelect');
+  const lbl = document.getElementById('openMonthStatus');
+  if(!sel) return;
+  const mo = parseInt(sel.value)||0;
+  if(mo === 0) localStorage.removeItem(_OM_KEY);
+  else         localStorage.setItem(_OM_KEY, mo);
+  _updateOpenMonthStatus(mo, lbl);
+  renderEntitlementTable();
+}
+
+function _updateOpenMonthStatus(mo, lbl){
+  if(!lbl) return;
+  if(mo === 0){
+    lbl.textContent = 'Using current date';
+    lbl.style.color = 'var(--text-muted)';
+  } else {
+    lbl.textContent = 'Accrual fixed at ' + _MONTH_NAMES[mo];
+    lbl.style.color = 'var(--sap-blue-dark)';
+    lbl.style.fontWeight = '600';
+    lbl.style.fontStyle = 'normal';
+  }
+}
+
+
+/* ══════════════════════════════════════════════════════
+   GROUP TRANSITIONS MODAL
+   Shows employees whose group changes between 2026→2027.
+   Data sourced from rlsData + allLeaveData.
+   ══════════════════════════════════════════════════════ */
+function openGroupTransitionsModal(){
+  const gyToApa=[], apaToGy=[];
+
+  /* Build 2027 approved leaves index keyed by normalised name */
+  const leaves2027={};
+  (allLeaveData||[]).forEach(r=>{
+    const d=parseDate(r.requestedDate);
+    if(!d||d.getFullYear()!==2027) return;
+    if(!_isVL(r)&&(r.status||'').toLowerCase()!=='approved') return;
+    const key=(r.name||'').toLowerCase().trim();
+    if(!leaves2027[key]) leaves2027[key]=[];
+    leaves2027[key].push(r);
+  });
+
+  Object.values(rlsData).forEach(r=>{
+    const g26=(r.group||r.group2026||'').trim();
+    const g27=(r.group2027||'').trim();
+    if(!g26||!g27||g26===g27) return;
+    const key=(r.name||'').toLowerCase().trim();
+    const entry={
+      name:r.name||r.email||'—', g26, g27,
+      tl:r.teamLead||r.teamLead2026||'—',
+      tl27:r.teamLead2027||r.teamLead||'—',
+      leaves2027:(leaves2027[key]||[]).sort((a,b)=>(a.requestedDate||'').localeCompare(b.requestedDate||''))
+    };
+    if(g26==='GY'&&g27==='APA')      gyToApa.push(entry);
+    else if(g26==='APA'&&g27==='GY') apaToGy.push(entry);
+  });
+
+  gyToApa.sort((a,b)=>(a.name||'').localeCompare(b.name||''));
+  apaToGy.sort((a,b)=>(a.name||'').localeCompare(b.name||''));
+
+  const total=gyToApa.length+apaToGy.length;
+  document.getElementById('gtSummary').textContent=
+    `${total} transition${total!==1?'s':''}  \u00b7  GY\u2192APA: ${gyToApa.length}  \u00b7  APA\u2192GY: ${apaToGy.length}`;
+
+  const content=document.getElementById('gtContent');
+  const empty  =document.getElementById('gtEmpty');
+  if(!total){ content.style.display='none'; empty.style.display='block'; }
+  else {
+    content.style.display='grid'; empty.style.display='none';
+    content.innerHTML = _gtTable(gyToApa,'GY','APA','#0057C2','#1B90FF')
+                      + _gtTable(apaToGy,'APA','GY','#1B7A3A','#2E7D32');
+    /* wire expand toggles */
+    content.querySelectorAll('.gt-expand-btn').forEach(btn=>{
+      btn.addEventListener('click',()=>{
+        const panel=document.getElementById(btn.dataset.target);
+        if(!panel) return;
+        const open=panel.style.display!=='none';
+        panel.style.display=open?'none':'block';
+        btn.textContent=open?'\u25B6 Show 2027 leaves':'\u25BC Hide';
+        btn.style.color=open?'var(--sap-blue)':'var(--text-muted)';
+      });
+    });
+  }
+  document.getElementById('groupTransitionsModal').style.display='flex';
+}
+
+function _gtTable(rows,from,to,clrFrom,clrTo){
+  const arrow=`<span style="color:#999;margin:0 4px">\u2192</span>`;
+  const fromBadge=`<span style="background:${clrFrom}22;color:${clrFrom};border:1px solid ${clrFrom}55;border-radius:20px;padding:1px 8px;font-size:11px;font-weight:700">${from}</span>`;
+  const toBadge  =`<span style="background:${clrTo}22;color:${clrTo};border:1px solid ${clrTo}55;border-radius:20px;padding:1px 8px;font-size:11px;font-weight:700">${to}</span>`;
+
+  if(!rows.length) return`<div style="background:var(--bg-secondary);border:1px solid var(--border);border-radius:var(--radius);padding:20px 16px;text-align:center;color:var(--text-muted);font-size:13px">${fromBadge}${arrow}${toBadge}<br><br>No transitions found</div>`;
+
+  const uid=from+to; /* unique prefix for DOM ids */
+  const header=`<div style="background:var(--bg-header);color:#FFF;padding:11px 14px;border-radius:var(--radius) var(--radius) 0 0;display:flex;align-items:center;gap:10px">
+    <strong style="font-size:13px">${fromBadge}${arrow}${toBadge}</strong>
+    <span style="margin-left:auto;background:rgba(255,255,255,.15);border-radius:20px;padding:2px 10px;font-size:11px;font-weight:700;color:#FFF">${rows.length} employee${rows.length!==1?'s':''}</span>
+  </div>`;
+
+  const body=rows.map((r,i)=>{
+    const rowId=`gt-leaves-${uid}-${i}`;
+    const bg=i%2===0?'var(--bg-card)':'var(--bg-secondary)';
+    const leaveCnt=r.leaves2027.length;
+    const cntBadge=leaveCnt>0
+      ?`<span style="background:var(--sap-blue);color:#FFF;border-radius:20px;padding:1px 7px;font-size:10px;font-weight:700;margin-left:6px">${leaveCnt}</span>`
+      :`<span style="color:var(--text-muted);font-size:11px;margin-left:6px">none yet</span>`;
+
+    /* Build 2027 leave rows */
+    const leaveRows=leaveCnt===0
+      ?`<tr><td colspan="3" style="padding:10px 14px;font-size:12px;color:var(--text-muted);font-style:italic;text-align:center">No 2027 approved leave records yet</td></tr>`
+      :r.leaves2027.map(lv=>`<tr>
+          <td style="padding:6px 10px;font-size:12px;border-bottom:1px solid var(--border)">${formatDate(lv.requestedDate)}</td>
+          <td style="padding:6px 10px;font-size:12px;border-bottom:1px solid var(--border)">${escHtml(lv.leaveType||'—')}</td>
+          <td style="padding:6px 10px;font-size:12px;border-bottom:1px solid var(--border);color:var(--text-muted)">${escHtml(lv.approvedBy||'—')}</td>
+        </tr>`).join('');
+
+    const expandPanel=`<div id="${rowId}" style="display:none;border-top:1px solid var(--border);background:var(--bg-card)">
+      <table style="width:100%;border-collapse:collapse">
+        <thead><tr>
+          <th style="padding:7px 10px;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text-muted);text-align:left;background:var(--bg-secondary);border-bottom:1px solid var(--border)">Date</th>
+          <th style="padding:7px 10px;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text-muted);text-align:left;background:var(--bg-secondary);border-bottom:1px solid var(--border)">Leave Type</th>
+          <th style="padding:7px 10px;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text-muted);text-align:left;background:var(--bg-secondary);border-bottom:1px solid var(--border)">Approved By</th>
+        </tr></thead>
+        <tbody>${leaveRows}</tbody>
+      </table>
+    </div>`;
+
+    return`<div style="border-bottom:1px solid var(--border)">
+      <div style="display:grid;grid-template-columns:1fr auto;align-items:center;padding:9px 14px;background:${bg}">
+        <div>
+          <div style="font-weight:700;color:var(--text-main);font-size:13px">${escHtml(r.name)}</div>
+          <div style="font-size:11.5px;color:var(--text-muted);margin-top:2px">
+            TL: ${escHtml(r.tl)}${r.tl27!==r.tl?`&nbsp;\u2192&nbsp;<span style="color:var(--sap-blue);font-weight:600">${escHtml(r.tl27)}</span>`:''}
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <span style="font-size:11px">${fromBadge}${arrow}${toBadge}</span>
+          <button class="gt-expand-btn" data-target="${rowId}"
+            style="background:none;border:none;cursor:pointer;font-size:11px;color:var(--sap-blue);font-weight:600;padding:3px 6px;white-space:nowrap;font-family:var(--font)">
+            \u25B6 Show 2027 leaves${cntBadge}
+          </button>
+        </div>
+      </div>
+      ${expandPanel}
+    </div>`;
+  }).join('');
+
+  const footer=`<div style="padding:8px 14px;background:var(--bg-secondary);border-top:2px solid var(--border);border-radius:0 0 var(--radius) var(--radius);font-size:11px;color:var(--text-muted)">
+    Effective 2027 &nbsp;\u00b7&nbsp; Source: UserRLS.csv &nbsp;\u00b7&nbsp; Click employee to expand 2027 leaves
+  </div>`;
+
+  return`<div style="border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow)">${header}${body}${footer}</div>`;
+}
+
+function closeGroupTransitionsModal(){
+  document.getElementById('groupTransitionsModal').style.display='none';
+}
+
+
+/* ══════════════════════════════════════════════════════
+   MULTI-SELECT MANAGER  (_ms)
+   Reusable checkbox-dropdown for filter bars.
+   Usage:  _ms.create(containerId, placeholder, onChange)
+           _ms.get(id).setOptions(['a','b','c'])
+           _ms.get(id).getValues()   → ['a']
+           _ms.get(id).clear()
+   ══════════════════════════════════════════════════════ */
+const _ms=(()=>{
+  const _reg={};
+
+  /* Close all open panels */
+  document.addEventListener('click',()=>{
+    document.querySelectorAll('.ms-panel.open').forEach(p=>{
+      p.classList.remove('open');
+      p.previousElementSibling?.classList.remove('ms-open');
+    });
+  });
+
+  function create(cid, placeholder, onChange){
+    const wrap=document.getElementById(cid);
+    if(!wrap)return null;
+    wrap.className='ms-wrap';
+    wrap.innerHTML=`
+      <button class="ms-btn" type="button">
+        <span class="ms-btn-label">${placeholder}</span>
+        <span class="ms-arrow">&#9660;</span>
+      </button>
+      <div class="ms-panel">
+        <div class="ms-search"><input type="text" placeholder="Search…" oninput="this.closest('.ms-panel').querySelector('.ms-scroll')&&_msFilter(this)"/></div>
+        <div class="ms-scroll">
+          <label class="ms-item ms-all"><input type="checkbox" class="ms-all-chk"/> All</label>
+          <div class="ms-divider"></div>
+          <div class="ms-options"></div>
+        </div>
+        <div class="ms-footer"><button class="ms-clear-btn" type="button">Clear</button></div>
+      </div>`;
+
+    const btn=wrap.querySelector('.ms-btn');
+    const panel=wrap.querySelector('.ms-panel');
+    const allChk=wrap.querySelector('.ms-all-chk');
+    const optCont=wrap.querySelector('.ms-options');
+    const clearBtn=wrap.querySelector('.ms-clear-btn');
+    let sel=new Set(), allOpts=[];
+
+    btn.addEventListener('click',e=>{
+      e.stopPropagation();
+      const isOpen=panel.classList.contains('open');
+      document.querySelectorAll('.ms-panel.open').forEach(p=>{
+        p.classList.remove('open');
+        p.previousElementSibling?.classList.remove('ms-open');
+      });
+      if(!isOpen){panel.classList.add('open');btn.classList.add('ms-open');}
+    });
+    panel.addEventListener('click',e=>e.stopPropagation());
+
+    allChk.addEventListener('change',()=>{
+      if(allChk.checked){ sel=new Set(allOpts); optCont.querySelectorAll('input').forEach(c=>c.checked=true); }
+      else{ sel.clear(); optCont.querySelectorAll('input').forEach(c=>c.checked=false); }
+      _syncAllChk(); _updateBtn(); onChange();
+    });
+
+    clearBtn.addEventListener('click',()=>{ inst.clear(); onChange(); });
+
+    function _syncAllChk(){
+      allChk.checked=sel.size===allOpts.length&&allOpts.length>0;
+      allChk.indeterminate=sel.size>0&&sel.size<allOpts.length;
+    }
+
+    function _updateBtn(){
+      const lbl=wrap.querySelector('.ms-btn-label');
+      if(sel.size===0){ lbl.textContent=placeholder; btn.classList.remove('ms-active'); }
+      else if(sel.size===allOpts.length){ lbl.textContent=placeholder; btn.classList.add('ms-active'); }
+      else{ lbl.textContent=sel.size===1?[...sel][0]:`${sel.size} selected`; btn.classList.add('ms-active'); }
+    }
+
+    const inst={
+      setOptions(opts){
+        allOpts=opts;
+        const prev=new Set([...sel].filter(v=>opts.includes(v)));
+        sel=prev;
+        optCont.innerHTML=opts.map(o=>`<label class="ms-item"><input type="checkbox" value="${escHtml(o)}"${sel.has(o)?' checked':''}/>${escHtml(o)}</label>`).join('');
+        optCont.querySelectorAll('input').forEach(chk=>{
+          chk.addEventListener('change',()=>{
+            if(chk.checked)sel.add(chk.value); else sel.delete(chk.value);
+            _syncAllChk(); _updateBtn(); onChange();
+          });
+        });
+        _syncAllChk(); _updateBtn();
+      },
+      getValues(){ return [...sel]; },
+      clear(){
+        sel.clear();
+        optCont.querySelectorAll('input').forEach(c=>c.checked=false);
+        allChk.checked=false; allChk.indeterminate=false;
+        wrap.querySelector('.ms-btn-label').textContent=placeholder;
+        btn.classList.remove('ms-active');
+        /* also clear search box */
+        const si=wrap.querySelector('.ms-search input');
+        if(si){si.value='';optCont.querySelectorAll('.ms-item').forEach(i=>i.style.display='');}
+      }
+    };
+    _reg[cid]=inst;
+    return inst;
+  }
+
+  function _msFilter(inp){
+    const q=inp.value.toLowerCase();
+    inp.closest('.ms-panel').querySelectorAll('.ms-options .ms-item').forEach(item=>{
+      item.style.display=item.textContent.toLowerCase().includes(q)?'':'none';
+    });
+  }
+  window._msFilter=_msFilter;
+
+  return{ create, get(id){return _reg[id];} };
+})();
+
+/* ══════════════════════════════════════════════════
+   MOBILE NAV TOGGLE
+   ══════════════════════════════════════════════════ */
+function toggleMobNav(){
+  var panel   = document.querySelector('.side-panel');
+  var overlay = document.getElementById('mobOverlay');
+  var burger  = document.getElementById('mobHamburger');
+  if(!panel) return;
+  var isOpen = panel.classList.contains('mob-open');
+  if(isOpen){
+    panel.classList.remove('mob-open');
+    overlay.classList.remove('active');
+    burger.classList.remove('open');
+    document.body.style.overflow = '';
+  } else {
+    panel.classList.add('mob-open');
+    overlay.classList.add('active');
+    burger.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+}
+function closeMobNav(){
+  var panel   = document.querySelector('.side-panel');
+  var overlay = document.getElementById('mobOverlay');
+  var burger  = document.getElementById('mobHamburger');
+  if(!panel) return;
+  panel.classList.remove('mob-open');
+  overlay.classList.remove('active');
+  if(burger) burger.classList.remove('open');
+  document.body.style.overflow = '';
+}
+/* Close sidebar when a nav item is clicked on mobile */
+(function(){
+  document.addEventListener('click', function(e){
+    var isMobile = window.innerWidth <= 768;
+    if(!isMobile) return;
+    var panel = document.querySelector('.side-panel');
+    if(!panel || !panel.classList.contains('mob-open')) return;
+    var navItem = e.target.closest('.snav-item,.snav-sub-item');
+    if(navItem) closeMobNav();
+  });
+  /* Reset overflow on desktop resize */
+  window.addEventListener('resize', function(){
+    if(window.innerWidth > 768){
+      document.body.style.overflow = '';
+      closeMobNav();
+    }
+  });
+})();
+</script>
 </body>
 </html>
